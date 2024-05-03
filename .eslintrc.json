@@ -10,7 +10,9 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    "no-console": 1, 
-    "prettier/prettier": 2 
+    "no-console": 1,
+    "prettier/prettier": 2,
+    "camelcase": 1,
+    "react/jsx-pascal-case": 2
   }
 }
