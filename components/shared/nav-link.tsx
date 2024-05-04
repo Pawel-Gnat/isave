@@ -3,15 +3,13 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/className';
 
-// import { IconType } from 'react-icons';
-
 interface NavLinkProps {
   href: string;
   label: string;
-  //   icon?: IconType;
+  icon?: React.ReactElement;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, icon, label }) => {
   const currentRoute = usePathname();
 
   return (
@@ -22,7 +20,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => {
         currentRoute === href && 'text-tetriary bg-accent',
       )}
     >
-      {/* {Icon && <Icon size={20} />} */}
+      {icon}
       <span className="hidden md:block">{label}</span>
     </Link>
   );
