@@ -21,7 +21,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, icon, label }) => {
       )}
     >
       {icon}
-      <span className="hidden md:block">{label}</span>
+      <span className="hidden w-fit text-nowrap md:block">{label}</span>
     </Link>
   );
 };

@@ -10,19 +10,19 @@ import { Button } from '@/components/ui/button';
 
 import NavLink from './shared/nav-link';
 
-import { Coins, PiggyBank, Power, Wallet } from 'lucide-react';
+import { AreaChart, Coins, PiggyBank, Power } from 'lucide-react';
 
 const PAGES = [
-  { src: '/', label: 'Dashboard', icon: <Wallet /> },
+  { src: '/', label: 'Dashboard', icon: <AreaChart className="mr-2" /> },
   {
-    src: '/personal-budget',
+    src: '/personal',
     label: 'Budżet osobisty',
-    icon: <PiggyBank />,
+    icon: <PiggyBank className="mr-2" />,
   },
   {
-    src: '/group-budget',
+    src: '/group',
     label: 'Budżet grupowy',
-    icon: <Coins />,
+    icon: <Coins className="mr-2" />,
   },
 ];
 
@@ -30,14 +30,14 @@ const Navbar = () => {
   return (
     <nav className="sticky flex h-screen flex-col items-center gap-4 p-6">
       <Link href="/" className="hidden p-2 lg:block">
-        <Image
+        {/* <Image
           src={Logo}
           alt=""
           aria-hidden="true"
           width={30}
           height={30}
           className="min-w-[30px]"
-        />
+        /> */}
       </Link>
 
       <ul className="mt-16 flex flex-col gap-4 text-left">
@@ -49,7 +49,7 @@ const Navbar = () => {
       </ul>
 
       <Button className="mt-auto w-full" onClick={() => signOut()} size="lg">
-        <Power size={20} /> Log out
+        <Power size={20} className="mr-2" /> Wyloguj się
       </Button>
     </nav>
   );

@@ -18,28 +18,22 @@ import { Input } from '@/components/ui/input';
 
 import { LoadingButton } from '@/components/shared/loading-button';
 
-const formSchema = z.object({
-  email: z.string().trim().email(),
-  password: z.string().trim().min(2, {
-    message: 'Hasło musi mieć przynajmniej 4 znaki.',
-  }),
-});
+import { LoginFormSchema } from '@/utils/validations';
 
 const LoginForm = () => {
   const [loading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     if (loading) return;
-
     setIsLoading(true);
 
     signIn('credentials', { ...values, redirect: false }).then((callback) => {
@@ -47,7 +41,7 @@ const LoginForm = () => {
 
       if (callback?.ok) {
         router.push('/');
-        toast('Zalogowano');
+        toast('Pomyślnie zalogowano');
       }
 
       if (callback?.error) {
