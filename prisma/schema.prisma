@@ -7,3 +7,78 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model Account {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String   @db.ObjectId
+  @@unique([provider, providerAccountId])
+}
+
+model User {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  email             String          @unique
+  emailVerified     DateTime?
+  hashedPassword    String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  accounts          Account[]
+  personalBudget    PersonalBudget?
+  personalBudgetId  String          @db.ObjectId
+}
+
+model PersonalBudget {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String     @db.ObjectId
+  income      Income[]
+  receipt     Receipt[]
+  @@unique(userId)
+}
+
+model Receipt {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  date              DateTime
+  expense           Expense[]  
+  personalBudget    PersonalBudget? @relation(fields: [personalBudgetId], references: [id], onDelete: Cascade)
+  personalBudgetId  String          @db.ObjectId
+}
+
+model Income {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  value             Int
+  category          String
+  date              DateTime
+  personalBudget    PersonalBudget? @relation(fields: [personalBudgetId], references: [id], onDelete: Cascade)
+  personalBudgetId  String          @db.ObjectId
+}
+
+model Expense {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  value       Int
+  category    String
+  receipt     Receipt?   @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  receiptId   String     @db.ObjectId
+}
