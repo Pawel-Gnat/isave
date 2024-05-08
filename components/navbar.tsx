@@ -13,7 +13,7 @@ import NavLink from './shared/nav-link';
 import { AreaChart, Coins, PiggyBank, Power } from 'lucide-react';
 
 const PAGES = [
-  { src: '/', label: 'Dashboard', icon: <AreaChart className="mr-2" /> },
+  { src: '/', label: 'Podsumowanie', icon: <AreaChart className="mr-2" /> },
   {
     src: '/personal',
     label: 'Transakcje osobiste',
