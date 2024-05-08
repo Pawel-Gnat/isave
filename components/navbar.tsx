@@ -16,12 +16,12 @@ const PAGES = [
   { src: '/', label: 'Dashboard', icon: <AreaChart className="mr-2" /> },
   {
     src: '/personal',
-    label: 'Budżet osobisty',
+    label: 'Transakcje osobiste',
     icon: <PiggyBank className="mr-2" />,
   },
   {
     src: '/group',
-    label: 'Budżet grupowy',
+    label: 'Transakcje grupowe',
     icon: <Coins className="mr-2" />,
   },
 ];
@@ -38,6 +38,7 @@ const Navbar = () => {
           height={30}
           className="min-w-[30px]"
         /> */}
+        iSave
       </Link>
 
       <ul className="mt-16 flex flex-col gap-4 text-left">
