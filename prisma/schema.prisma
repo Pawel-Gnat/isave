@@ -26,59 +26,57 @@ model Account {
 }
 
 model User {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
-  email             String          @unique
-  emailVerified     DateTime?
-  hashedPassword    String
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  accounts          Account[]
-  personalBudget    PersonalBudget?
-  personalBudgetId  String          @db.ObjectId
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String
+  email                  String               @unique
+  emailVerified          DateTime?
+  hashedPassword         String
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  accounts               Account[]
+  personalTransaction    PersonalTransaction?
+  personalTransactionId  String               @db.ObjectId
 }
 
-model PersonalBudget {
+model PersonalTransaction {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String     @db.ObjectId
   income      Income[]
-  receipt     Receipt[]
+  expenses    Expenses[]
   @@unique(userId)
 }
 
-model Receipt {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  date              DateTime
-  expense           Expense[]  
-  personalBudget    PersonalBudget? @relation(fields: [personalBudgetId], references: [id], onDelete: Cascade)
-  personalBudgetId  String          @db.ObjectId
+model Income {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  value                  Int
+  category               String
+  date                   DateTime
+  personalTransaction    PersonalTransaction? @relation(fields: [personalTransactionId], references: [id], onDelete: Cascade)
+  personalTransactionId  String               @db.ObjectId
 }
 
-model Income {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  value             Int
-  category          String
-  date              DateTime
-  personalBudget    PersonalBudget? @relation(fields: [personalBudgetId], references: [id], onDelete: Cascade)
-  personalBudgetId  String          @db.ObjectId
+model Expenses {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  date                   DateTime
+  expense                Expense[]
+  personalTransaction    PersonalTransaction? @relation(fields: [personalTransactionId], references: [id], onDelete: Cascade)
+  personalTransactionId  String               @db.ObjectId
 }
 
 model Expense {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  value       Int
-  category    String
-  receipt     Receipt?   @relation(fields: [receiptId], references: [id], onDelete: Cascade)
-  receiptId   String     @db.ObjectId
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  value             Int
+  category          String
+  expenses          Expenses?       @relation(fields: [expensesId], references: [id], onDelete: Cascade)
+  expensesId        String          @db.ObjectId
 }
