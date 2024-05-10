@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
-import Navbar from '@/components/navbar';
-import Header from '@/components/header';
+import Navbar from '@/components/shared/navbar';
+import Header from '@/components/shared/header';
 
 export default async function DashboardLayout({
   children,

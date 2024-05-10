@@ -8,7 +8,7 @@ import Logo from '@/public/logo.svg';
 
 import { Button } from '@/components/ui/button';
 
-import NavLink from './shared/nav-link';
+import NavLink from './nav-link';
 
 import { AreaChart, Coins, PiggyBank, Power } from 'lucide-react';
 
