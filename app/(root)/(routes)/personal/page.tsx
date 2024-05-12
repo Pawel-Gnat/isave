@@ -73,11 +73,11 @@ async function getData(): Promise<PersonalIncomes[] | PersonalExpenses[]> {
 }
 
 const PersonalPage = async () => {
-  //   const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
-  //   if (!user) {
-  //     redirect('/auth');
-  //   }
+  if (!user) {
+    redirect('/auth');
+  }
 
   const data = await getData();
 

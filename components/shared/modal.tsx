@@ -21,6 +21,7 @@ interface ModalProps {
   secondaryActionButtonLabel: string | undefined;
   previousActionButtonLabel: string;
   previousActionButton: () => void;
+  disabled: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -34,6 +35,7 @@ export const Modal: React.FC<ModalProps> = ({
   secondaryActionButtonLabel,
   previousActionButtonLabel,
   previousActionButton,
+  disabled,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -42,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="flex-1">{content}</div>
+        <div className="relative flex flex-1 items-center justify-center">{content}</div>
         <DialogFooter className=" gap-2 sm:justify-between">
           <Button variant="outline" onClick={() => previousActionButton()}>
             {previousActionButtonLabel}
@@ -55,7 +57,7 @@ export const Modal: React.FC<ModalProps> = ({
               </Button>
             )}
 
-            <Button variant="outline" onClick={() => actionButton()}>
+            <Button variant="outline" onClick={() => actionButton()} disabled={disabled}>
               {actionButtonLabel}
             </Button>
           </div>

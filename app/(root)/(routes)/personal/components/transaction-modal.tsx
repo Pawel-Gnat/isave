@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 
 import { Modal } from '@/components/shared/modal';
 import { FileInput } from '@/components/shared/file-input';
+import Image from 'next/image';
 
 enum STEPS {
   FILE = 0,
@@ -29,9 +30,8 @@ enum STEPS {
 }
 
 export const TransactionModal = () => {
-  const { showTransationModal, setShowTransationModal } = useContext(
-    TransactionModalContext,
-  );
+  const { showTransationModal, setShowTransationModal, isLoading, setIsLoading } =
+    useContext(TransactionModalContext);
 
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
 
@@ -44,15 +44,22 @@ export const TransactionModal = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
+      file: null,
       expenses: [],
     },
   });
 
   const expenses = watch('expenses');
+  const file = watch('file');
+  let modalContent;
 
   const goBack = () => {
     if (step === STEPS.FILE) {
       setShowTransationModal(false);
+
+      setTimeout(() => {
+        reset();
+      }, 500);
       return;
     }
 
@@ -62,6 +69,7 @@ export const TransactionModal = () => {
   const goNext = () => {
     if (step === STEPS.SUMMARY) {
       setShowTransationModal(false);
+
       setTimeout(() => {
         setStep(STEPS.FILE);
       }, 500);
@@ -95,6 +103,8 @@ export const TransactionModal = () => {
     return 'Podsumowanie Twojego wydatku';
   };
 
+  const handleActionButtonState = () => step === STEPS.FILE && !file;
+
   const actionButtonLabel = () => {
     if (step === STEPS.FILE) {
       return 'Utwórz automatycznie';
@@ -127,7 +137,29 @@ export const TransactionModal = () => {
     return 'Powrót';
   };
 
-  let modalContent = <FileInput />;
+  if (step === STEPS.FILE) {
+    modalContent = (
+      <FileInput
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        onSelect={(file) =>
+          setValue('file', file, {
+            // shouldDirty: true,
+            // shouldTouch: true,
+            // shouldValidate: true,
+          })
+        }
+      />
+    );
+  }
+
+  // if (step === STEPS.FILE && isLoading) {
+  //   modalContent = <Image src={'/modal-loading.svg'} alt="" width={300} height={300} />;
+  // }
+
+  // if (step === STEPS.FILE && file && !isLoading) {
+  //   modalContent = <Image src={'/modal-sync.svg'} alt="" width={300} height={300} />;
+  // }
 
   if (step === STEPS.TABLE) {
     modalContent = (
@@ -161,6 +193,7 @@ export const TransactionModal = () => {
       previousActionButtonLabel={previousActionButtonLabel()}
       previousActionButton={goBack}
       content={modalContent}
+      disabled={handleActionButtonState()}
     />
   );
 };
