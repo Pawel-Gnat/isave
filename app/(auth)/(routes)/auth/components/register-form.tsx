@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { LoadingButton } from '@/components/shared/loading-button';
+import { FormLoadingButton } from '@/components/shared/form-loading-button';
 
 import { RegisterFormSchema } from '@/utils/validations';
 
@@ -101,7 +101,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ toggleAuthStatus }) => {
             </FormItem>
           )}
         />
-        <LoadingButton isLoading={loading} text="Utwórz konto" />
+        <FormLoadingButton isLoading={loading} text="Utwórz konto" />
       </form>
     </Form>
   );

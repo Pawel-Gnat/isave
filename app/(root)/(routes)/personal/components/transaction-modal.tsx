@@ -44,16 +44,18 @@ export const TransactionModal = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      file: null,
+      fileText: null,
       expenses: [],
     },
   });
 
   const expenses = watch('expenses');
-  const file = watch('file');
+  const fileText = watch('fileText');
   let modalContent;
 
   const goBack = () => {
+    if (isLoading) return;
+
     if (step === STEPS.FILE) {
       setShowTransationModal(false);
 
@@ -67,12 +69,19 @@ export const TransactionModal = () => {
   };
 
   const goNext = () => {
+    if (isLoading) return;
+
     if (step === STEPS.SUMMARY) {
       setShowTransationModal(false);
 
       setTimeout(() => {
         setStep(STEPS.FILE);
       }, 500);
+      return;
+    }
+
+    if (step === STEPS.FILE && fileText) {
+      console.log(fileText);
       return;
     }
 
@@ -103,7 +112,7 @@ export const TransactionModal = () => {
     return 'Podsumowanie Twojego wydatku';
   };
 
-  const handleActionButtonState = () => step === STEPS.FILE && !file;
+  const handleActionButtonState = () => step === STEPS.FILE && !fileText;
 
   const actionButtonLabel = () => {
     if (step === STEPS.FILE) {
@@ -142,8 +151,8 @@ export const TransactionModal = () => {
       <FileInput
         isLoading={isLoading}
         setIsLoading={setIsLoading}
-        onSelect={(file) =>
-          setValue('file', file, {
+        onSelect={(fileText) =>
+          setValue('fileText', fileText, {
             // shouldDirty: true,
             // shouldTouch: true,
             // shouldValidate: true,
@@ -152,14 +161,6 @@ export const TransactionModal = () => {
       />
     );
   }
-
-  // if (step === STEPS.FILE && isLoading) {
-  //   modalContent = <Image src={'/modal-loading.svg'} alt="" width={300} height={300} />;
-  // }
-
-  // if (step === STEPS.FILE && file && !isLoading) {
-  //   modalContent = <Image src={'/modal-sync.svg'} alt="" width={300} height={300} />;
-  // }
 
   if (step === STEPS.TABLE) {
     modalContent = (
@@ -189,11 +190,13 @@ export const TransactionModal = () => {
       description={handleDescription()}
       actionButton={goNext}
       actionButtonLabel={actionButtonLabel()}
+      secondaryActionButton={() => setStep((value) => value + 1)}
       secondaryActionButtonLabel={secondaryActionButtonLabel()}
       previousActionButtonLabel={previousActionButtonLabel()}
       previousActionButton={goBack}
       content={modalContent}
       disabled={handleActionButtonState()}
+      isLoading={isLoading}
     />
   );
 };

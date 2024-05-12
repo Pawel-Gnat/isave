@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { LoadingButton } from '@/components/shared/loading-button';
+import { FormLoadingButton } from '@/components/shared/form-loading-button';
 
 import { LoginFormSchema } from '@/utils/validations';
 
@@ -79,7 +79,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <LoadingButton isLoading={loading} text="Zaloguj się" />
+        <FormLoadingButton isLoading={loading} text="Zaloguj się" />
       </form>
     </Form>
   );

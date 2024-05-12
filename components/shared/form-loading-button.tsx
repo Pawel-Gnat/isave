@@ -1,5 +1,4 @@
 import { CSSProperties } from 'react';
-import { cn } from '@/lib/className';
 
 import PuffLoader from 'react-spinners/PuffLoader';
 
@@ -9,23 +8,17 @@ const override: CSSProperties = {
   borderColor: 'var(--background) var(--background) transparent',
 };
 
-interface LoadingButtonProps {
+interface FormLoadingButtonProps {
   text: string;
   isLoading: boolean;
-  onClick: () => void;
 }
 
-export const LoadingButton: React.FC<LoadingButtonProps> = ({
+export const FormLoadingButton: React.FC<FormLoadingButtonProps> = ({
   isLoading,
   text,
-  onClick,
 }) => {
   return (
-    <Button
-      type="button"
-      className={cn('w-full min-w-32', isLoading ? 'opacity-60' : '')}
-      onClick={onClick}
-    >
+    <Button type="submit" className={isLoading ? 'w-full opacity-60' : 'w-full'}>
       {isLoading ? <PuffLoader size={25} cssOverride={override} /> : text}
     </Button>
   );

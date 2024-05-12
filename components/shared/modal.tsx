@@ -8,7 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
+
+import { LoadingButton } from './loading-button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -18,10 +20,12 @@ interface ModalProps {
   description: string;
   content: React.ReactNode;
   actionButtonLabel: string;
+  secondaryActionButton: () => void;
   secondaryActionButtonLabel: string | undefined;
   previousActionButtonLabel: string;
   previousActionButton: () => void;
   disabled: boolean;
+  isLoading: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -32,10 +36,12 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   content,
   actionButtonLabel,
+  secondaryActionButton,
   secondaryActionButtonLabel,
   previousActionButtonLabel,
   previousActionButton,
   disabled,
+  isLoading,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -52,9 +58,12 @@ export const Modal: React.FC<ModalProps> = ({
 
           <div className="flex flex-row gap-2">
             {secondaryActionButtonLabel && (
-              <Button variant="outline" onClick={() => actionButton()}>
-                {secondaryActionButtonLabel}
-              </Button>
+              <LoadingButton
+                // variant="outline"
+                isLoading={isLoading}
+                onClick={() => secondaryActionButton()}
+                text={secondaryActionButtonLabel}
+              />
             )}
 
             <Button variant="outline" onClick={() => actionButton()} disabled={disabled}>

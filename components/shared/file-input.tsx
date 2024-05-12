@@ -40,12 +40,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
       return '/modal-loading.svg';
     }
 
-    if (
-      !isLoading &&
-      inputRef.current &&
-      inputRef.current.files &&
-      inputRef.current.files.length > 0
-    ) {
+    if (inputRef.current && inputRef.current.files && inputRef.current.files.length > 0) {
       return '/modal-sync.svg';
     }
 
@@ -91,7 +86,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
       />
       <Label
         htmlFor="file"
-        className="absolute inset-0 z-10 rounded-md border-2 border-dashed"
+        className="text-md absolute inset-0 z-10 rounded-md border-2 border-dashed"
       >
         <p className="relative top-[80%] text-center">{handleLabelText()}</p>
         <Input
