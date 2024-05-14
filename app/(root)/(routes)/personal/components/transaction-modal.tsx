@@ -7,26 +7,28 @@ import { z } from 'zod';
 
 import { TransactionModalContext } from '@/context/transaction-modal-context';
 
+import { getApiResponse } from '@/utils/getApiResponse';
+
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { Modal } from '@/components/shared/modal';
 import { FileInput } from '@/components/shared/file-input';
-import Image from 'next/image';
+
+import { TransactionTableModal } from './transaction-table-modal';
+
+import { Expense, OCR } from '@/types/types';
 
 enum STEPS {
   FILE = 0,
   TABLE = 1,
   SUMMARY = 2,
+}
+
+interface TransactionValues {
+  fileText: string | null;
+  ocr: OCR;
 }
 
 export const TransactionModal = () => {
@@ -42,14 +44,14 @@ export const TransactionModal = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<TransactionValues>({
     defaultValues: {
       fileText: null,
-      expenses: [],
+      ocr: { date: new Date(), expenses: [] },
     },
   });
 
-  const expenses = watch('expenses');
+  const ocr = watch('ocr');
   const fileText = watch('fileText');
   let modalContent;
 
@@ -68,8 +70,18 @@ export const TransactionModal = () => {
     setStep((value) => value - 1);
   };
 
-  const goNext = () => {
+  const goNext = async () => {
     if (isLoading) return;
+
+    if (step === STEPS.FILE && fileText) {
+      const apiResponse = await getApiResponse(fileText, setIsLoading);
+      setValue('ocr', apiResponse, {
+        // shouldDirty: true,
+        // shouldTouch: true,
+        // shouldValidate: true,
+      });
+      console.log(apiResponse, 'apiResponse');
+    }
 
     if (step === STEPS.SUMMARY) {
       setShowTransationModal(false);
@@ -77,11 +89,6 @@ export const TransactionModal = () => {
       setTimeout(() => {
         setStep(STEPS.FILE);
       }, 500);
-      return;
-    }
-
-    if (step === STEPS.FILE && fileText) {
-      console.log(fileText);
       return;
     }
 
@@ -163,11 +170,11 @@ export const TransactionModal = () => {
   }
 
   if (step === STEPS.TABLE) {
+    console.log(ocr);
     modalContent = (
-      <div>
-        {expenses.map((expense: any) => {
-          <p>{expense}</p>;
-        })}
+      <div className="w-full">
+        <p>{ocr.date.toString() || new Date()}</p>
+        <TransactionTableModal expenses={ocr.expenses} />
       </div>
     );
   }
@@ -175,9 +182,11 @@ export const TransactionModal = () => {
   if (step === STEPS.SUMMARY) {
     modalContent = (
       <div>
-        {expenses.map((expense: any) => {
-          <strong>{expense}</strong>;
-        })}
+        {/* {expenses.map((expense: any, index: number) => (
+          <strong key={index}>
+            {expense.name} - {expense.value}
+          </strong>
+        ))} */}
       </div>
     );
   }

@@ -35,45 +35,52 @@ model User {
   updatedAt              DateTime             @updatedAt
   accounts               Account[]
   personalExpenses       PersonalExpenses[]
-  personalIncomes        PersonalIncomes[]
+  personalIncomes        PersonalIncome[]
 }
 
-model PersonalIncomes {
+model PersonalIncome {
   id                     String               @id @default(auto()) @map("_id") @db.ObjectId
   name                   String
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @updatedAt
   date                   DateTime
-  income                 Income[]
+  category               String
+  value                  Int
   user                   User?                @relation(fields: [userId], references: [id])
   userId                 String               @db.ObjectId
-}
-
-model Income {
-  id                       String                  @id @default(auto()) @map("_id") @db.ObjectId
-  name                     String
-  value                    Int
-  category                 String
-  personalIncomes          PersonalIncomes?       @relation(fields: [personalIncomesId], references: [id], onDelete: Cascade)
-  personalIncomesId        String                  @db.ObjectId
 }
 
 model PersonalExpenses {
   id                     String               @id @default(auto()) @map("_id") @db.ObjectId
-  name                   String
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @updatedAt
   date                   DateTime
-  expense                Expense[]
+  expenseList            ExpenseProduct[]
   user                   User?                @relation(fields: [userId], references: [id])
   userId                 String               @db.ObjectId
 }
 
-model Expense {
+model ExpenseProduct {
   id                       String                  @id @default(auto()) @map("_id") @db.ObjectId
   name                     String
   value                    Int
   category                 String
   personalExpense          PersonalExpenses?       @relation(fields: [personalExpenseId], references: [id], onDelete: Cascade)
   personalExpenseId        String                  @db.ObjectId
+}
+
+model IncomeCategory {
+  id                       String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  name                     String
+  description              String
+}
+
+model ExpenseCategory {
+  id                       String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  name                     String
+  description              String
 }

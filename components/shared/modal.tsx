@@ -45,12 +45,14 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="flex h-1/2 max-h-none min-h-fit w-1/2 min-w-fit max-w-none flex-col">
+      <DialogContent className="flex max-h-[75%] min-h-[50%] min-w-[50%] max-w-[75%] flex-col">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="relative flex flex-1 items-center justify-center">{content}</div>
+        <div className="relative flex flex-1 justify-center overflow-auto">
+          {content}
+        </div>
         <DialogFooter className=" gap-2 sm:justify-between">
           <Button variant="outline" onClick={() => previousActionButton()}>
             {previousActionButtonLabel}
