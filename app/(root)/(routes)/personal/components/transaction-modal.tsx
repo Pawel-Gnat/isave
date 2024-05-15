@@ -19,6 +19,7 @@ import { FileInput } from '@/components/shared/file-input';
 import { TransactionTableModal } from './transaction-table-modal';
 
 import { Expense, OCR } from '@/types/types';
+import { TransactionDatePicker } from './transaction-date-picker';
 
 enum STEPS {
   FILE = 0,
@@ -28,7 +29,8 @@ enum STEPS {
 
 interface TransactionValues {
   fileText: string | null;
-  ocr: OCR;
+  date: Date;
+  expenses: Expense[];
 }
 
 export const TransactionModal = () => {
@@ -47,12 +49,14 @@ export const TransactionModal = () => {
   } = useForm<TransactionValues>({
     defaultValues: {
       fileText: null,
-      ocr: { date: new Date(), expenses: [] },
+      date: new Date(),
+      expenses: [],
     },
   });
 
-  const ocr = watch('ocr');
+  const date = watch('date');
   const fileText = watch('fileText');
+  const expenses = watch('expenses');
   let modalContent;
 
   const goBack = () => {
@@ -75,7 +79,12 @@ export const TransactionModal = () => {
 
     if (step === STEPS.FILE && fileText) {
       const apiResponse = await getApiResponse(fileText, setIsLoading);
-      setValue('ocr', apiResponse, {
+      setValue('date', new Date(apiResponse.date), {
+        // shouldDirty: true,
+        // shouldTouch: true,
+        // shouldValidate: true,
+      });
+      setValue('expenses', apiResponse.expenses, {
         // shouldDirty: true,
         // shouldTouch: true,
         // shouldValidate: true,
@@ -170,11 +179,10 @@ export const TransactionModal = () => {
   }
 
   if (step === STEPS.TABLE) {
-    console.log(ocr);
     modalContent = (
-      <div className="w-full">
-        <p>{ocr.date.toString() || new Date()}</p>
-        <TransactionTableModal expenses={ocr.expenses} />
+      <div className="flex w-full flex-col gap-4">
+        <TransactionDatePicker date={date} setDate={(date) => setValue('date', date)} />
+        <TransactionTableModal expenses={expenses} />
       </div>
     );
   }

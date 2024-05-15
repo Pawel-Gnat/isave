@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
@@ -12,8 +12,20 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { CalendarDays } from 'lucide-react';
 
-export const DatePicker = () => {
-  const [date, setDate] = useState<Date>();
+interface TransactionDatePickerProps {
+  date: Date;
+  setDate: (date: Date) => void;
+}
+
+export const TransactionDatePicker: FC<TransactionDatePickerProps> = ({
+  date,
+  setDate,
+}) => {
+  const handleDateSelect = (day: Date | undefined) => {
+    if (day) {
+      setDate(day);
+    }
+  };
 
   return (
     <Popover>
@@ -21,16 +33,22 @@ export const DatePicker = () => {
         <Button
           variant={'outline'}
           className={cn(
-            'w-[240px] justify-start text-left font-normal',
+            'ml-auto w-[240px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >
           <CalendarDays className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP', { locale: pl }) : <span>Wybierz miesiąc</span>}
+          {date ? format(date, 'PPP', { locale: pl }) : <span>Podaj datę</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+        <Calendar
+          locale={pl}
+          mode="single"
+          selected={date}
+          onSelect={handleDateSelect}
+          initialFocus
+        />
       </PopoverContent>
     </Popover>
   );

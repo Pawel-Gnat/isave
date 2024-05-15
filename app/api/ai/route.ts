@@ -32,10 +32,10 @@ export async function POST(request: Request) {
     categoryId: number;
   };
 
-  [
+  {
     data: Date,
     expenses: ExpenseProduct[],
-  ]
+  }
   
   categoryId match according to the id of the following categories ${JSON.stringify(simplifiedCategories)}. 
   Do not create any comments or any additional responses. You have to return only the JSON.
@@ -60,17 +60,17 @@ export async function POST(request: Request) {
   console.log(SYSTEM_PROMPT);
 
   const response = {
-    date: '2022-10-22',
+    date: '2024-05-10',
     expenses: [
-      { name: 'MAPUSTA KNASZONA 0, 9kg', value: 148.98, categoryId: 4 },
-      { name: 'OGORK KMASZONE 8706 FRUBEX', value: 147.99, categoryId: 4 },
-      { name: 'DGORKI KWASZONE 8706 FRUBEX', value: 147.99, categoryId: 4 },
-      { name: 'Masi 4009', value: 11.99, categoryId: 9 },
-      { name: 'Delicje Poraranczowe 1476', value: 123.28, categoryId: 7 },
-      { name: 'Jajka 7 wolnego wybiegu', value: 0, categoryId: 1 },
-      { name: 'Pottidor Mal./Zuykty/Bawole Serce', value: 2.1, categoryId: 2 },
-      { name: 'Sezanki 2 nioden unitop-opting', value: 0, categoryId: 7 },
-      { name: 'CILER 600g', value: 15.09, categoryId: 7 },
+      { name: 'MAPUSTA KNASZONA 0, 9kg', value: 148.98, categoryId: '4' },
+      { name: 'OGORK KMASZONE 8706 FRUBEX', value: 147.99, categoryId: '4' },
+      { name: 'DGORKI KWASZONE 8706 FRUBEX', value: 147.99, categoryId: '4' },
+      { name: 'Masi 4009', value: 11.99, categoryId: '9' },
+      { name: 'Delicje Poraranczowe 1476', value: 123.28, categoryId: '7' },
+      { name: 'Jajka 7 wolnego wybiegu', value: 0, categoryId: '1' },
+      { name: 'Pottidor Mal./Zuykty/Bawole Serce', value: 2.1, categoryId: '2' },
+      { name: 'Sezanki 2 nioden unitop-opting', value: 0, categoryId: '7' },
+      { name: 'CILER 600g', value: 15.09, categoryId: '7' },
     ],
   };
 

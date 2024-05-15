@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { createWorker } from 'tesseract.js';
 
@@ -12,19 +12,23 @@ interface FileInputProps {
 }
 
 export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoading }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState('');
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    onSelect(value);
+  }, [value]);
 
   const handleLabelText = () => {
     if (isError) {
       return 'Błąd wczytywania';
     }
 
-    if (isLoading) {
+    if (isLoading && !value) {
       return 'Wczytywanie zdjęcia';
     }
 
-    if (inputRef.current && inputRef.current.files && inputRef.current.files.length > 0) {
+    if (value) {
       return 'Wczytano zdjęcie';
     }
 
@@ -36,11 +40,11 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
       return '/modal-error.svg';
     }
 
-    if (isLoading) {
+    if (isLoading && !value) {
       return '/modal-loading.svg';
     }
 
-    if (inputRef.current && inputRef.current.files && inputRef.current.files.length > 0) {
+    if (value) {
       return '/modal-sync.svg';
     }
 
@@ -63,7 +67,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
         const result = await worker.recognize(base64String);
         await worker.terminate();
 
-        onSelect(result.data.text);
+        setValue(result.data.text);
         setIsLoading(false);
       };
 
@@ -93,7 +97,6 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
           id="file"
           type="file"
           onChange={processImageToBase64}
-          ref={inputRef}
           className="hidden"
           accept="image/*"
         />
