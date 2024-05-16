@@ -182,7 +182,7 @@ export const TransactionModal = () => {
     modalContent = (
       <div className="flex w-full flex-col gap-4">
         <TransactionDatePicker date={date} setDate={(date) => setValue('date', date)} />
-        <TransactionTableModal expenses={expenses} />
+        <TransactionTableModal expenses={expenses} setValue={setValue} />
       </div>
     );
   }
