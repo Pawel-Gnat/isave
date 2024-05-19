@@ -40,7 +40,7 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
+          {value.categoryId
             ? expenseCategories.find((category) => category.id === value.categoryId)?.name
             : 'Wybierz kategorię'}
           <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

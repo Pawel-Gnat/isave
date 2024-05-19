@@ -1,35 +1,57 @@
+import { UseFormSetValue } from 'react-hook-form';
+
 import { expenseCategories } from '@/lib/transactionCategories';
 
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 
 import { TransactionInput } from './transaction-input';
 import { ExpenseCategorySelect } from './expense-category-select';
 
-import { Expense, OCR } from '@/types/types';
-import { UseFormSetValue } from 'react-hook-form';
+import { Expense, ExpenseTransactionValues } from '@/types/types';
+import { SelectValue } from '@radix-ui/react-select';
 
 interface TransactionTableModalProps {
   expenses: Expense[];
-  setValue: UseFormSetValue<TransactionValues>;
-}
-
-interface TransactionValues {
-  fileText: string | null;
-  date: Date;
-  expenses: Expense[];
+  setValue: UseFormSetValue<ExpenseTransactionValues>;
 }
 
 export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
   expenses,
+  setValue,
 }) => {
   console.log(expenses);
+
+  const addNewRow = () => {
+    setValue('expenses', [
+      ...expenses,
+      { id: self.crypto.randomUUID(), title: '', value: 0, categoryId: '' },
+    ]);
+  };
+
+  const changeTitle = (value: string, id: string) => {
+    const updatedExpenses = expenses.map((expense) =>
+      expense.id === id ? { ...expense, title: value } : expense,
+    );
+
+    setValue('expenses', updatedExpenses);
+  };
+
+  const changeValue = (value: number, id: string) => {
+    // setValue(`expenses.${id}.value`, value);
+  };
+
+  const changeCategory = (value: SelectValue, id: string) => {
+    // setValue(`expenses.${id}.categoryId`, value.value);
+  };
 
   return (
     <Table>
@@ -43,9 +65,12 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
       </TableHeader>
       <TableBody>
         {expenses.map((expense) => (
-          <TableRow>
+          <TableRow key={expense.id}>
             <TableCell className="font-medium">
-              <TransactionInput value={expense.name} onChange={(value) => {}} />
+              <TransactionInput
+                value={expense.title}
+                onChange={(value) => changeTitle(value, expense.id)}
+              />
             </TableCell>
             <TableCell>
               <ExpenseCategorySelect value={expense} onChange={(value) => {}} />
@@ -55,6 +80,15 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
           </TableRow>
         ))}
       </TableBody>
+      <TableFooter className="border-none bg-transparent">
+        <TableRow>
+          <TableCell colSpan={4} className="text-right">
+            <Button variant="outline" onClick={addNewRow}>
+              Dodaj nowy wiersz
+            </Button>
+          </TableCell>
+        </TableRow>
+      </TableFooter>
     </Table>
   );
 };

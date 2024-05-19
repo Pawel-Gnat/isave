@@ -18,19 +18,13 @@ import { FileInput } from '@/components/shared/file-input';
 
 import { TransactionTableModal } from './transaction-table-modal';
 
-import { Expense, OCR } from '@/types/types';
+import { Expense, ExpenseTransactionValues, OCR } from '@/types/types';
 import { TransactionDatePicker } from './transaction-date-picker';
 
 enum STEPS {
   FILE = 0,
   TABLE = 1,
   SUMMARY = 2,
-}
-
-interface TransactionValues {
-  fileText: string | null;
-  date: Date;
-  expenses: Expense[];
 }
 
 export const TransactionModal = () => {
@@ -46,7 +40,7 @@ export const TransactionModal = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<TransactionValues>({
+  } = useForm<ExpenseTransactionValues>({
     defaultValues: {
       fileText: null,
       date: new Date(),
