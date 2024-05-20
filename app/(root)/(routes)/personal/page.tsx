@@ -5,12 +5,13 @@ import getCurrentUser from '@/actions/getCurrentUser';
 
 import { TransactionModalProvider } from '@/context/transaction-modal-context';
 
+import { TransactionModal } from '@/components/transaction-modal/transaction-modal';
+
 import { TransactionTable } from './components/transaction-table';
 import { columns } from './components/table-columns';
+import { ActionsPanel } from './components/actions-panel';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
-import { ActionsPanel } from './components/actions-panel';
-import { TransactionModal } from './components/transaction-modal';
 
 async function getData(): Promise<PersonalIncomes[] | PersonalExpenses[]> {
   return [

@@ -8,7 +8,7 @@ export const getApiResponse = async (
   setIsLoading(true);
 
   try {
-    const response = await axios.post(`/api/ai`, { data: data });
+    const response = await axios.post(`/api/ai`, { data });
     return response.data;
   } catch (error) {
     console.log(error);

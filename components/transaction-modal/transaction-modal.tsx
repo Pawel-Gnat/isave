@@ -17,9 +17,11 @@ import { Modal } from '@/components/shared/modal';
 import { FileInput } from '@/components/shared/file-input';
 
 import { TransactionTableModal } from './transaction-table-modal';
-
-import { Expense, ExpenseTransactionValues, OCR } from '@/types/types';
 import { TransactionDatePicker } from './transaction-date-picker';
+
+import { Expense, ExpenseTransactionValues } from '@/types/types';
+import { TransactionModalResult } from './transaction-modal-result';
+import { sendTransactionToDb } from '@/utils/sendTransationToDb';
 
 enum STEPS {
   FILE = 0,
@@ -87,12 +89,24 @@ export const TransactionModal = () => {
     }
 
     if (step === STEPS.SUMMARY) {
-      setShowTransationModal(false);
+      const result = await sendTransactionToDb(
+        date,
+        expenses,
+        'personal',
+        'expense',
+        setIsLoading,
+      );
 
-      setTimeout(() => {
-        setStep(STEPS.FILE);
-      }, 500);
-      return;
+      console.log(result, 'res');
+
+      if (result) {
+        setShowTransationModal(false);
+
+        setTimeout(() => {
+          setStep(STEPS.FILE);
+        }, 500);
+        return;
+      }
     }
 
     setStep((value) => value + 1);
@@ -182,15 +196,7 @@ export const TransactionModal = () => {
   }
 
   if (step === STEPS.SUMMARY) {
-    modalContent = (
-      <div>
-        {/* {expenses.map((expense: any, index: number) => (
-          <strong key={index}>
-            {expense.name} - {expense.value}
-          </strong>
-        ))} */}
-      </div>
-    );
+    modalContent = <TransactionModalResult date={date} expenses={expenses} />;
   }
 
   return (

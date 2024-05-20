@@ -40,9 +40,12 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value.categoryId
-            ? expenseCategories.find((category) => category.id === value.categoryId)?.name
-            : 'Wybierz kategorię'}
+          <p className="overflow-x-hidden">
+            {value.categoryId
+              ? expenseCategories.find((category) => category.id === value.categoryId)
+                  ?.name
+              : 'Wybierz kategorię'}
+          </p>
           <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -57,7 +60,7 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
                   key={category.id}
                   value={category.name}
                   onSelect={(currentValue) => {
-                    onChange(currentValue === value.categoryId ? '' : currentValue);
+                    onChange(currentValue === value.categoryId ? '' : category.id);
                     setOpen(false);
                   }}
                 >

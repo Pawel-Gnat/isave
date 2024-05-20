@@ -50,9 +50,7 @@ export const Modal: React.FC<ModalProps> = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="relative flex flex-1 justify-center overflow-auto">
-          {content}
-        </div>
+        <div className="relative flex flex-1 justify-center overflow-auto">{content}</div>
         <DialogFooter className=" gap-2 sm:justify-between">
           <Button variant="outline" onClick={() => previousActionButton()}>
             {previousActionButtonLabel}

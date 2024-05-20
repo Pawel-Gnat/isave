@@ -5,10 +5,10 @@ export type Expense = {
   categoryId: string;
 };
 
-export type OCR = {
-  date: Date;
-  expenses: Expense[];
-};
+// export type OCR = {
+//   date: Date;
+//   expenses: Expense[];
+// };
 
 export type ExpenseTransactionValues = {
   fileText: string | null;
