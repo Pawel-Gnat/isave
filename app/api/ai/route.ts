@@ -3,6 +3,8 @@ import OpenAI from 'openai';
 
 import { expenseCategories } from '@/lib/transactionCategories';
 
+import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
+
 const openai = new OpenAI({
   apiKey: process.env.API_KEY,
 });
@@ -114,5 +116,13 @@ export async function POST(request: Request) {
     ],
   };
 
-  return NextResponse.json(response);
+  const modifiedResponse = {
+    date: response.date,
+    expenses: response.expenses.map((expense) => ({
+      ...expense,
+      title: capitalizeFirstLetter(expense.title),
+    })),
+  };
+
+  return NextResponse.json(modifiedResponse);
 }

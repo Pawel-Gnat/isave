@@ -45,7 +45,7 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="flex max-h-[75%] min-h-[50%] min-w-[50%] max-w-[75%] flex-col">
+      <DialogContent className="flex max-h-[75%] min-h-[60%] min-w-[50%] max-w-[75%] flex-col">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

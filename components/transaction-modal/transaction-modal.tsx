@@ -20,13 +20,11 @@ import { TransactionTableModal } from './transaction-table-modal';
 import { TransactionDatePicker } from './transaction-date-picker';
 
 import { Expense, ExpenseTransactionValues } from '@/types/types';
-import { TransactionModalResult } from './transaction-modal-result';
 import { sendTransactionToDb } from '@/utils/sendTransationToDb';
 
 enum STEPS {
   FILE = 0,
   TABLE = 1,
-  SUMMARY = 2,
 }
 
 export const TransactionModal = () => {
@@ -88,7 +86,7 @@ export const TransactionModal = () => {
       console.log(apiResponse, 'apiResponse');
     }
 
-    if (step === STEPS.SUMMARY) {
+    if (step === STEPS.TABLE) {
       const result = await sendTransactionToDb(
         date,
         expenses,
@@ -117,10 +115,6 @@ export const TransactionModal = () => {
       return 'Utwórz nowy wydatek';
     }
 
-    if (step === STEPS.SUMMARY) {
-      return 'Podsumowanie wydatków';
-    }
-
     return 'Twoje wydatki';
   };
 
@@ -129,11 +123,7 @@ export const TransactionModal = () => {
       return 'Dodaj zdjęcie swojego rachunku lub przejdź dalej';
     }
 
-    if (step === STEPS.TABLE) {
-      return 'Zweryfikuj wydatki lub dodaj je samodzielnie';
-    }
-
-    return 'Podsumowanie Twojego wydatku';
+    return 'Zweryfikuj wydatki lub dodaj je samodzielnie';
   };
 
   const handleActionButtonState = () => step === STEPS.FILE && !fileText;
@@ -143,15 +133,7 @@ export const TransactionModal = () => {
       return 'Utwórz automatycznie';
     }
 
-    if (step === STEPS.TABLE) {
-      return 'Podsumowanie';
-    }
-
-    if (step === STEPS.SUMMARY) {
-      return 'Zatwierdź';
-    }
-
-    return 'Dalej';
+    return 'Zatwierdź';
   };
 
   const secondaryActionButtonLabel = () => {
@@ -193,10 +175,6 @@ export const TransactionModal = () => {
         <TransactionTableModal expenses={expenses} setValue={setValue} />
       </div>
     );
-  }
-
-  if (step === STEPS.SUMMARY) {
-    modalContent = <TransactionModalResult date={date} expenses={expenses} />;
   }
 
   return (

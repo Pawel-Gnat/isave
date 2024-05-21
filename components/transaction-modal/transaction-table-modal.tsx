@@ -81,7 +81,7 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
             <TableHead className="w-48 text-right"></TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="block max-h-[300px] overflow-y-auto">
+        <TableBody className="block max-h-[400px] overflow-y-auto">
           {expenses.map((expense) => (
             <TableRow key={expense.id} className="table w-full table-fixed">
               <TableCell className="font-medium">
@@ -113,6 +113,14 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
             </TableRow>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow className="table w-full table-fixed bg-transparent">
+            <TableCell colSpan={3}>Suma</TableCell>
+            <TableCell className="text-right">
+              {expenses.reduce((acc, expense) => acc + expense.value, 0).toFixed(2)} zł
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
 
       <div className="relative">
