@@ -1,78 +1,79 @@
+import Image from 'next/image';
 import { format } from 'date-fns';
 
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
-import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
-import Image from 'next/image';
+import { PersonalExpenses, PersonalIncome } from '@prisma/client';
 
-async function getData(): Promise<PersonalIncomes[] | PersonalExpenses[]> {
-  return [
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-    {
-      name: 'Zakupy',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      value: 200,
-    },
-  ];
-}
+// async function getData(): Promise<PersonalIncomes[] | PersonalExpenses[]> {
+//   return [
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//     {
+//       name: 'Zakupy',
+//       date: format(new Date(), 'yyyy-MM-dd'),
+//       value: 200,
+//     },
+//   ];
+// }
 
 export const Transactions = async () => {
-  const data = await getData();
+  // const data = await getData();
+  const data = [];
 
   return (
     <div>
       <Image
-        src="/empty.svg"
+        src="/empty.png"
         alt=""
         width={300}
         height={300}

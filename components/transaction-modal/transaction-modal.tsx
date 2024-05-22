@@ -12,10 +12,9 @@ import { getApiResponse } from '@/utils/getApiResponse';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
 import { Modal } from '@/components/shared/modal';
-import { FileInput } from '@/components/shared/file-input';
 
+import { FileInput } from './file-input';
 import { TransactionTableModal } from './transaction-table-modal';
 import { TransactionDatePicker } from './transaction-date-picker';
 

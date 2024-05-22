@@ -37,18 +37,18 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
 
   const handleImage = () => {
     if (isError) {
-      return '/modal-error.svg';
+      return '/error.png';
     }
 
     if (isLoading && !value) {
-      return '/modal-loading.svg';
+      return '/analizing2.png';
     }
 
     if (value) {
-      return '/modal-sync.svg';
+      return '/loaded.png';
     }
 
-    return '/modal-addfile.svg';
+    return '/upload.png';
   };
 
   const processImageToBase64 = async (event: ChangeEvent<HTMLInputElement>) => {

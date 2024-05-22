@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { expenseCategories } from '@/lib/transactionCategories';
+// import { expenseCategories } from '@/lib/transactionCategories';
 
 import {
   Table,
@@ -32,7 +33,7 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
   expenses,
   setValue,
 }) => {
-  console.log(expenses);
+  // console.log(expenses);
 
   const addNewRow = () => {
     setValue('expenses', [

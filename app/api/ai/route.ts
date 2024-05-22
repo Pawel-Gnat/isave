@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-import { expenseCategories } from '@/lib/transactionCategories';
+// import { expenseCategories } from '@/lib/transactionCategories';
 
 import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
 
@@ -15,10 +15,10 @@ type ExpenseProduct = {
   categoryId: string;
 };
 
-const simplifyCategories = (categories) => {
-  return categories.map(({ id, title }) => ({ id, title }));
-};
-const simplifiedCategories = simplifyCategories(expenseCategories);
+// const simplifyCategories = (categories) => {
+//   return categories.map(({ id, title }) => ({ id, title }));
+// };
+// const simplifiedCategories = simplifyCategories(expenseCategories);
 
 // import prisma from '@/lib/prisma';
 
@@ -27,24 +27,24 @@ export async function POST(request: Request) {
   const { data } = body;
 
   const MODEL_NAME = 'gpt-3.5-turbo';
-  const SYSTEM_PROMPT = `You are responsible for analyzing the text coming from OCR. Your task is to generate a JSON object of an array of elements compatible with the data type. 
-  type ExpenseProduct = {
-    title: string;
-    value: number;
-    categoryId: number;
-  };
+  // const SYSTEM_PROMPT = `You are responsible for analyzing the text coming from OCR. Your task is to generate a JSON object of an array of elements compatible with the data type.
+  // type ExpenseProduct = {
+  //   title: string;
+  //   value: number;
+  //   categoryId: number;
+  // };
 
-  {
-    data: Date,
-    expenses: ExpenseProduct[],
-  }
-  
-  categoryId match according to the id of the following categories ${JSON.stringify(simplifiedCategories)}. 
-  Do not create any comments or any additional responses. You have to return only the JSON.
+  // {
+  //   data: Date,
+  //   expenses: ExpenseProduct[],
+  // }
 
-  Text from OCR below.
-  ${data}
-  `;
+  // categoryId match according to the id of the following categories ${JSON.stringify(simplifiedCategories)}.
+  // Do not create any comments or any additional responses. You have to return only the JSON.
+
+  // Text from OCR below.
+  // ${data}
+  // `;
 
   // async function main() {
   //   const stream = await openai.chat.completions.create({
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
   // main();
 
-  console.log(SYSTEM_PROMPT);
+  // console.log(SYSTEM_PROMPT);
 
   const response = {
     date: '2024-05-10',

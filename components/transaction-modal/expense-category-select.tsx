@@ -1,9 +1,11 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
+
+import { TransactionModalContext } from '@/context/transaction-modal-context';
 
 import { cn } from '@/lib/className';
-import { expenseCategories } from '@/lib/transactionCategories';
+// import { expenseCategories } from '@/lib/transactionCategories';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ArrowUpDown, Check } from 'lucide-react';
 
 import { Expense } from '@/types/types';
+import { ExpenseCategory } from '@prisma/client';
 
 interface ExpenseCategorySelectProps {
   value: Expense;
@@ -29,7 +32,13 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
   value,
   onChange,
 }) => {
+  const { expenseCategories } = useContext(TransactionModalContext);
   const [open, setOpen] = useState(false);
+  // console.log(expenseCategories);
+
+  const getCategory = (categoryId: string) => {
+    return expenseCategories.find((category) => category.id === categoryId)?.name;
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -41,10 +50,11 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
           className="w-full justify-between"
         >
           <p className="overflow-x-hidden">
-            {value.categoryId
+            {/* {value.categoryId
               ? expenseCategories.find((category) => category.id === value.categoryId)
                   ?.name
-              : 'Wybierz kategorię'}
+              : 'Wybierz kategorię'} */}
+            {getCategory(value.categoryId) || 'Wybierz kategorię'}
           </p>
           <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
