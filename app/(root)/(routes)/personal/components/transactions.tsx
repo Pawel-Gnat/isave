@@ -1,86 +1,31 @@
 import Image from 'next/image';
-import { format } from 'date-fns';
 
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
 import { PersonalExpenses, PersonalIncome } from '@prisma/client';
-
-// async function getData(): Promise<PersonalIncomes[] | PersonalExpenses[]> {
-//   return [
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//     {
-//       name: 'Zakupy',
-//       date: format(new Date(), 'yyyy-MM-dd'),
-//       value: 200,
-//     },
-//   ];
-// }
+import getUserPersonalExpenses from '@/actions/getUserPersonalExpenses';
 
 export const Transactions = async () => {
-  // const data = await getData();
-  const data = [];
+  const personalExpenses = await getUserPersonalExpenses();
+  const data = [...(personalExpenses as PersonalExpenses[])];
 
   return (
-    <div>
-      <Image
-        src="/empty.png"
-        alt=""
-        width={300}
-        height={300}
-        className="m-auto aspect-square"
-        // className="absolute inset-0 m-auto aspect-square max-h-72"
-      />
-      <TransactionTable columns={columns} data={data} />
+    <div className="flex flex-1 flex-col">
+      {data.length > 0 ? (
+        <TransactionTable columns={columns} data={data} />
+      ) : (
+        <div className="m-auto text-center">
+          <Image
+            src="/empty.png"
+            alt=""
+            width={300}
+            height={300}
+            className="aspect-square"
+          />
+          <p className="font-medium">Brak transakcji dla wybranego miesiąca</p>
+        </div>
+      )}
     </div>
   );
 };

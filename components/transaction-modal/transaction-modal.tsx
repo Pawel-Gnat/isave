@@ -20,6 +20,7 @@ import { TransactionDatePicker } from './transaction-date-picker';
 
 import { Expense, ExpenseTransactionValues } from '@/types/types';
 import { sendTransactionToDb } from '@/utils/sendTransationToDb';
+import { useRouter } from 'next/navigation';
 
 enum STEPS {
   FILE = 0,
@@ -29,7 +30,7 @@ enum STEPS {
 export const TransactionModal = () => {
   const { showTransationModal, setShowTransationModal, isLoading, setIsLoading } =
     useContext(TransactionModalContext);
-
+  const router = useRouter();
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
 
   const {
@@ -98,6 +99,7 @@ export const TransactionModal = () => {
 
       if (result) {
         setShowTransationModal(false);
+        router.refresh();
 
         setTimeout(() => {
           setStep(STEPS.FILE);

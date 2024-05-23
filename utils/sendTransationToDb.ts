@@ -17,6 +17,7 @@ export const sendTransactionToDb = async (
       `api/transaction/${transactionCategory}/${transactionType}`,
       { date, expenses },
     );
+
     return response.data;
   } catch (error) {
     console.log(error);

@@ -17,6 +17,10 @@ export async function POST(request: Request) {
     data: {
       date: date,
       userId: currentUser.id,
+      value: -expenses.reduce(
+        (acc: number, curr: { value: number }) => acc + curr.value,
+        0,
+      ),
     },
   });
 
