@@ -8,14 +8,14 @@ import { DatePicker } from '@/components/shared/date-picker';
 import { Button } from '@/components/ui/button';
 
 export const ActionsPanel = () => {
-  const { setShowTransationModal } = useContext(TransactionModalContext);
+  const { setShowTransactionModal } = useContext(TransactionModalContext);
 
   return (
     <div className="mb-4 flex flex-row justify-between">
       <DatePicker />
       <div className="space-x-4">
         <Button variant="outline">Dodaj przychód</Button>
-        <Button variant="outline" onClick={() => setShowTransationModal(true)}>
+        <Button variant="outline" onClick={() => setShowTransactionModal(true)}>
           Dodaj wydatek
         </Button>
       </div>

@@ -1,17 +1,20 @@
-export type Expense = {
+export type Transaction = {
   id: string;
   title: string;
   value: number;
   categoryId: string;
 };
 
-// export type OCR = {
+// export type ExpenseTransactionValues = {
+//   fileText: string | null;
 //   date: Date;
-//   expenses: Expense[];
+//   transactions: Transaction[];
 // };
 
-export type ExpenseTransactionValues = {
+export type TransactionValues = {
   fileText: string | null;
   date: Date;
-  expenses: Expense[];
+  transactions: Transaction[];
 };
+
+export type TransactionType = 'income' | 'expense' | null;

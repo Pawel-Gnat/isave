@@ -1,11 +1,12 @@
-import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+
+import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { date, expenses } = body;
+  const { date, transactions } = body;
 
   const currentUser = await getCurrentUser();
 
@@ -17,14 +18,14 @@ export async function POST(request: Request) {
     data: {
       date: date,
       userId: currentUser.id,
-      value: -expenses.reduce(
+      value: -transactions.reduce(
         (acc: number, curr: { value: number }) => acc + curr.value,
         0,
       ),
     },
   });
 
-  for (const expense of expenses) {
+  for (const expense of transactions) {
     await prisma.personalExpenseProduct.create({
       data: {
         title: expense.title,
@@ -35,5 +36,5 @@ export async function POST(request: Request) {
     });
   }
 
-  return NextResponse.json({ date, expenses });
+  return NextResponse.json({ date, transactions });
 }

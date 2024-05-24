@@ -1,6 +1,7 @@
 'use client';
 
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -8,27 +9,23 @@ import { z } from 'zod';
 import { TransactionModalContext } from '@/context/transaction-modal-context';
 
 import { getApiResponse } from '@/utils/getApiResponse';
+import { sendTransactionToDb } from '@/utils/sendTransationToDb';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Modal } from '@/components/shared/modal';
 
 import { FileInput } from './file-input';
 import { TransactionTableModal } from './transaction-table-modal';
 import { TransactionDatePicker } from './transaction-date-picker';
 
-import { Expense, ExpenseTransactionValues } from '@/types/types';
-import { sendTransactionToDb } from '@/utils/sendTransationToDb';
-import { useRouter } from 'next/navigation';
+import { TransactionValues } from '@/types/types';
 
 enum STEPS {
   FILE = 0,
   TABLE = 1,
 }
 
-export const TransactionModal = () => {
-  const { showTransationModal, setShowTransationModal, isLoading, setIsLoading } =
+export const NewTransactionExpenseModal = () => {
+  const { showTransactionModal, setShowTransactionModal, isLoading, setIsLoading } =
     useContext(TransactionModalContext);
   const router = useRouter();
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
@@ -40,24 +37,24 @@ export const TransactionModal = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<ExpenseTransactionValues>({
+  } = useForm<TransactionValues>({
     defaultValues: {
       fileText: null,
       date: new Date(),
-      expenses: [],
+      transactions: [],
     },
   });
 
   const date = watch('date');
   const fileText = watch('fileText');
-  const expenses = watch('expenses');
+  const transactions = watch('transactions');
   let modalContent;
 
   const goBack = () => {
     if (isLoading) return;
 
     if (step === STEPS.FILE) {
-      setShowTransationModal(false);
+      setShowTransactionModal(false);
 
       setTimeout(() => {
         reset();
@@ -78,7 +75,7 @@ export const TransactionModal = () => {
         // shouldTouch: true,
         // shouldValidate: true,
       });
-      setValue('expenses', apiResponse.expenses, {
+      setValue('transactions', apiResponse.expenses, {
         // shouldDirty: true,
         // shouldTouch: true,
         // shouldValidate: true,
@@ -89,7 +86,7 @@ export const TransactionModal = () => {
     if (step === STEPS.TABLE) {
       const result = await sendTransactionToDb(
         date,
-        expenses,
+        transactions,
         'personal',
         'expense',
         setIsLoading,
@@ -98,7 +95,7 @@ export const TransactionModal = () => {
       console.log(result, 'res');
 
       if (result) {
-        setShowTransationModal(false);
+        setShowTransactionModal(false);
         router.refresh();
 
         setTimeout(() => {
@@ -173,15 +170,19 @@ export const TransactionModal = () => {
     modalContent = (
       <div className="flex w-full flex-col gap-4">
         <TransactionDatePicker date={date} setDate={(date) => setValue('date', date)} />
-        <TransactionTableModal expenses={expenses} setValue={setValue} />
+        <TransactionTableModal
+          transactions={transactions}
+          setValue={setValue}
+          transactionType="expense"
+        />
       </div>
     );
   }
 
   return (
     <Modal
-      isOpen={showTransationModal}
-      setIsOpen={setShowTransationModal}
+      isOpen={showTransactionModal}
+      setIsOpen={setShowTransactionModal}
       title={handleTitle()}
       description={handleDescription()}
       actionButton={goNext}

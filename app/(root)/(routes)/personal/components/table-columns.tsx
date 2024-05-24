@@ -1,17 +1,53 @@
 'use client';
 
+import { useContext } from 'react';
 import Image from 'next/image';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
+import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
+
 import { Button } from '@/components/ui/button';
 
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
-import { PersonalExpenses, PersonalIncome } from '@prisma/client';
+import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+import { TransactionType } from '@/types/types';
 
-export const columns: ColumnDef<PersonalIncome | PersonalExpenses>[] = [
+interface ButtonProps {
+  id: string;
+  transactionType: TransactionType;
+}
+
+const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+  const { setTransactionId, setTransactionType, setShowEditTransactionModal } =
+    useContext(EditTransactionModalContext);
+
+  return (
+    <Button
+      variant="outline"
+      className="mr-2"
+      onClick={() => {
+        setTransactionId(id);
+        setTransactionType(transactionType);
+        setShowEditTransactionModal(true);
+      }}
+    >
+      <Eye />
+    </Button>
+  );
+};
+
+const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+  return (
+    <Button variant="outline" onClick={() => console.log(id, transactionType)}>
+      <Trash2 />
+    </Button>
+  );
+};
+
+export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -94,9 +130,13 @@ export const columns: ColumnDef<PersonalIncome | PersonalExpenses>[] = [
     accessorKey: 'actions',
     header: () => <div className="text-right">Szczegóły</div>,
     cell: ({ row }) => {
+      const id = row.original.id;
+      const value = parseFloat(row.getValue('value'));
+
       return (
         <div className="text-right">
-          <Button variant="outline">Podgląd</Button>
+          <EditButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
+          <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
         </div>
       );
     },

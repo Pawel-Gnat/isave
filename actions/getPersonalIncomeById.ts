@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 
 import getCurrentUser from './getCurrentUser';
 
-const getUserPersonalExpenses = async () => {
+const getPersonalIncomeById = async (incomeId: string) => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -12,20 +12,21 @@ const getUserPersonalExpenses = async () => {
       return null;
     }
 
-    const userPersonalExpenses = await prisma.personalExpenses.findMany({
+    const personalIncome = await prisma.personalIncome.findUnique({
       where: {
+        id: incomeId,
         userId: currentUser.id,
       },
     });
 
-    if (!userPersonalExpenses) {
+    if (!personalIncome) {
       return null;
     }
 
-    return userPersonalExpenses;
+    return personalIncome;
   } catch (error) {
     return null;
   }
 };
 
-export default getUserPersonalExpenses;
+export default getPersonalIncomeById;

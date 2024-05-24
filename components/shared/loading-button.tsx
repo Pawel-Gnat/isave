@@ -23,7 +23,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   return (
     <Button
       type="button"
-      className={cn('w-full min-w-32', isLoading ? 'opacity-60' : '')}
+      className={cn('w-fit min-w-32', isLoading ? 'opacity-60' : '')}
       onClick={onClick}
     >
       {isLoading ? <PuffLoader size={25} cssOverride={override} /> : text}

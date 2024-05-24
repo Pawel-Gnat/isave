@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
-
-// import { expenseCategories } from '@/lib/transactionCategories';
 
 import {
   Table,
@@ -16,59 +13,59 @@ import { Button } from '@/components/ui/button';
 
 import { TransactionTitleInput } from './transaction-title-input';
 import { TransactionValueInput } from './transaction-value-input';
-import { ExpenseCategorySelect } from './expense-category-select';
+import { TransactionCategorySelect } from './transaction-category-select';
 
 import { Trash2 } from 'lucide-react';
 
-import { Expense, ExpenseTransactionValues } from '@/types/types';
-import { SelectValue } from '@radix-ui/react-select';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Transaction, TransactionType, TransactionValues } from '@/types/types';
 
 interface TransactionTableModalProps {
-  expenses: Expense[];
-  setValue: UseFormSetValue<ExpenseTransactionValues>;
+  transactions: Transaction[];
+  setValue: UseFormSetValue<TransactionValues>;
+  transactionType: TransactionType;
 }
 
 export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
-  expenses,
+  transactions,
   setValue,
+  transactionType,
 }) => {
-  // console.log(expenses);
-
   const addNewRow = () => {
-    setValue('expenses', [
-      ...expenses,
+    setValue('transactions', [
+      ...transactions,
       { id: self.crypto.randomUUID(), title: '', value: 0, categoryId: '' },
     ]);
   };
 
   const deleteRow = (id: string) => {
-    const updatedExpenses = expenses.filter((expense) => expense.id !== id);
-    setValue('expenses', updatedExpenses);
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction.id !== id,
+    );
+    setValue('transactions', updatedTransactions);
   };
 
   const changeTitle = (value: string, id: string) => {
-    const updatedExpenses = expenses.map((expense) =>
-      expense.id === id ? { ...expense, title: value } : expense,
+    const updatedTransactions = transactions.map((transaction) =>
+      transaction.id === id ? { ...transaction, title: value } : transaction,
     );
 
-    setValue('expenses', updatedExpenses);
+    setValue('transactions', updatedTransactions);
   };
 
   const changeValue = (value: number, id: string) => {
-    const updatedExpenses = expenses.map((expense) =>
-      expense.id === id ? { ...expense, value: +value.toFixed(2) } : expense,
+    const updatedTransactions = transactions.map((transaction) =>
+      transaction.id === id ? { ...transaction, value: +value.toFixed(2) } : transaction,
     );
 
-    setValue('expenses', updatedExpenses);
+    setValue('transactions', updatedTransactions);
   };
 
   const changeCategory = (value: string, id: string) => {
-    const updatedExpenses = expenses.map((expense) =>
-      expense.id === id ? { ...expense, categoryId: value } : expense,
+    const updatedTransactions = transactions.map((transaction) =>
+      transaction.id === id ? { ...transaction, categoryId: value } : transaction,
     );
 
-    setValue('expenses', updatedExpenses);
+    setValue('transactions', updatedTransactions);
   };
 
   return (
@@ -83,30 +80,31 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody className="block max-h-[400px] overflow-y-auto">
-          {expenses.map((expense) => (
-            <TableRow key={expense.id} className="table w-full table-fixed">
+          {transactions.map((transaction) => (
+            <TableRow key={transaction.id} className="table w-full table-fixed">
               <TableCell className="font-medium">
                 <TransactionTitleInput
-                  value={expense.title}
-                  onChange={(value) => changeTitle(value, expense.id)}
+                  value={transaction.title}
+                  onChange={(value) => changeTitle(value, transaction.id)}
                 />
               </TableCell>
               <TableCell>
-                <ExpenseCategorySelect
-                  value={expense}
+                <TransactionCategorySelect
+                  value={transaction}
                   onChange={(value) => {
-                    changeCategory(value, expense.id);
+                    changeCategory(value, transaction.id);
                   }}
+                  transactionType={transactionType}
                 />
               </TableCell>
               <TableCell className="w-36">
                 <TransactionValueInput
-                  value={expense.value}
-                  onChange={(value) => changeValue(value, expense.id)}
+                  value={transaction.value}
+                  onChange={(value) => changeValue(value, transaction.id)}
                 />
               </TableCell>
               <TableCell className="w-48 text-right">
-                <Button variant="outline" onClick={() => deleteRow(expense.id)}>
+                <Button variant="outline" onClick={() => deleteRow(transaction.id)}>
                   Usuń pozycję
                   <Trash2 className="ml-2 h-4 w-4 shrink-0" />
                 </Button>
@@ -118,7 +116,10 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
           <TableRow className="table w-full table-fixed bg-transparent">
             <TableCell colSpan={3}>Suma</TableCell>
             <TableCell className="text-right">
-              {expenses.reduce((acc, expense) => acc + expense.value, 0).toFixed(2)} zł
+              {transactions
+                .reduce((acc, transaction) => acc + transaction.value, 0)
+                .toFixed(2)}{' '}
+              zł
             </TableCell>
           </TableRow>
         </TableFooter>

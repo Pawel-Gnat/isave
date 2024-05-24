@@ -2,10 +2,9 @@
 
 import { FC, useState, useContext } from 'react';
 
-import { TransactionModalContext } from '@/context/transaction-modal-context';
+import { TransactionCategoryContext } from '@/context/transaction-category-context';
 
 import { cn } from '@/lib/className';
-// import { expenseCategories } from '@/lib/transactionCategories';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -20,24 +19,27 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { ArrowUpDown, Check } from 'lucide-react';
 
-import { Expense } from '@/types/types';
+import { Transaction, TransactionType } from '@/types/types';
 import { ExpenseCategory } from '@prisma/client';
 
-interface ExpenseCategorySelectProps {
-  value: Expense;
+interface TransactionCategorySelectProps {
+  value: Transaction;
+  transactionType: TransactionType;
   onChange: (value: string) => void;
 }
 
-export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
+export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = ({
   value,
+  transactionType,
   onChange,
 }) => {
-  const { expenseCategories } = useContext(TransactionModalContext);
+  const { expenseCategories } = useContext(TransactionCategoryContext);
   const [open, setOpen] = useState(false);
-  // console.log(expenseCategories);
+  const transactionCategories = transactionType === 'expense' ? expenseCategories : [];
+  //TODO with [] later
 
-  const getCategory = (categoryId: string) => {
-    return expenseCategories.find((category) => category.id === categoryId)?.name;
+  const getCategory = (categoryId: string, transaction: 'income' | 'expense' | null) => {
+    return transactionCategories.find((category) => category.id === categoryId)?.name;
   };
 
   return (
@@ -50,11 +52,7 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
           className="w-full justify-between"
         >
           <p className="overflow-x-hidden">
-            {/* {value.categoryId
-              ? expenseCategories.find((category) => category.id === value.categoryId)
-                  ?.name
-              : 'Wybierz kategorię'} */}
-            {getCategory(value.categoryId) || 'Wybierz kategorię'}
+            {getCategory(value.categoryId, transactionType) || 'Wybierz kategorię'}
           </p>
           <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -62,14 +60,14 @@ export const ExpenseCategorySelect: FC<ExpenseCategorySelectProps> = ({
       <PopoverContent className=" p-0">
         <Command>
           <CommandInput placeholder="Wybierz kategorię..." className="h-9" />
-          <CommandEmpty>Nie znaleziono kategorii.</CommandEmpty>
+          <CommandEmpty>Nie znaleziono kategorii</CommandEmpty>
           <CommandList>
             <CommandGroup>
-              {expenseCategories.map((category) => (
+              {transactionCategories.map((category) => (
                 <CommandItem
                   key={category.id}
                   value={category.name}
-                  onSelect={(currentValue) => {
+                  onSelect={(currentValue: string) => {
                     onChange(currentValue === value.categoryId ? '' : category.id);
                     setOpen(false);
                   }}

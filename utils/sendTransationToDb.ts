@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { toast } from 'sonner';
 
-import { Expense } from '@/types/types';
+import { Transaction } from '@/types/types';
 
 export const sendTransactionToDb = async (
   date: Date,
-  expenses: Expense[],
+  transactions: Transaction[],
   transactionType: 'group' | 'personal',
   transactionCategory: 'income' | 'expense',
   setIsLoading: (value: boolean) => void,
@@ -15,7 +15,7 @@ export const sendTransactionToDb = async (
   try {
     const response = await axios.post(
       `api/transaction/${transactionCategory}/${transactionType}`,
-      { date, expenses },
+      { date, transactions },
     );
 
     return response.data;

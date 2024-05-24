@@ -1,16 +1,15 @@
 import { redirect } from 'next/navigation';
-import { format } from 'date-fns';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
+import { TransactionCategoryProvider } from '@/context/transaction-category-context';
 import { TransactionModalProvider } from '@/context/transaction-modal-context';
+import { EditTransactionModalProvider } from '@/context/edit-transaction-modal-context';
 
-import { TransactionModal } from '@/components/transaction-modal/transaction-modal';
+import { NewTransactionExpenseModal } from '@/components/transaction-modal/new-transaction-expense-modal';
+import { EditTransactionModal } from '@/components/transaction-modal/modal/edit-transaction-modal';
 
-import { TransactionTable } from './components/transaction-table';
-import { columns } from './components/table-columns';
 import { ActionsPanel } from './components/actions-panel';
-
 import { Transactions } from './components/transactions';
 
 const PersonalPage = async () => {
@@ -21,12 +20,17 @@ const PersonalPage = async () => {
   }
 
   return (
-    <TransactionModalProvider>
-      {/* <h2 className="text-4xl font-bold">Personal</h2> */}
-      <ActionsPanel />
-      <Transactions />
-      <TransactionModal />
-    </TransactionModalProvider>
+    <TransactionCategoryProvider>
+      <EditTransactionModalProvider>
+        <TransactionModalProvider>
+          {/* <h2 className="text-4xl font-bold">Personal</h2> */}
+          <ActionsPanel />
+          <Transactions />
+          <NewTransactionExpenseModal />
+          <EditTransactionModal />
+        </TransactionModalProvider>
+      </EditTransactionModalProvider>
+    </TransactionCategoryProvider>
   );
 };
 

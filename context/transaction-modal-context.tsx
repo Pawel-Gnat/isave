@@ -1,47 +1,32 @@
 'use client';
 
-import { ReactNode, createContext, useEffect, useState } from 'react';
-
-import getExpenseCategories from '@/actions/getExpenseCategories';
-
-import { ExpenseCategory } from '@prisma/client';
+import { ReactNode, createContext, useState } from 'react';
 
 interface TransactionModalContextProps {
-  showTransationModal: boolean;
-  setShowTransationModal: (show: boolean) => void;
+  showTransactionModal: boolean;
+  setShowTransactionModal: (show: boolean) => void;
   isLoading: boolean;
   setIsLoading: (value: boolean) => void;
-  expenseCategories: ExpenseCategory[];
 }
 
 export const TransactionModalContext = createContext<TransactionModalContextProps>({
-  showTransationModal: false,
-  setShowTransationModal: (show: boolean) => {},
+  showTransactionModal: false,
+  setShowTransactionModal: (show: boolean) => {},
   isLoading: false,
   setIsLoading: (value: boolean) => {},
-  expenseCategories: [],
 });
 
 export const TransactionModalProvider = ({ children }: { children: ReactNode }) => {
-  const [showTransationModal, setShowTransationModal] = useState(false);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const expenseCategories = await getExpenseCategories();
-      setExpenseCategories(expenseCategories);
-    })();
-  }, []);
 
   return (
     <TransactionModalContext.Provider
       value={{
-        showTransationModal,
-        setShowTransationModal,
+        showTransactionModal,
+        setShowTransactionModal,
         isLoading,
         setIsLoading,
-        expenseCategories,
       }}
     >
       {children}

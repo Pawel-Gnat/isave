@@ -4,10 +4,10 @@ import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
 import { PersonalExpenses, PersonalIncome } from '@prisma/client';
-import getUserPersonalExpenses from '@/actions/getUserPersonalExpenses';
+import getPersonalExpenses from '@/actions/getPersonalExpenses';
 
 export const Transactions = async () => {
-  const personalExpenses = await getUserPersonalExpenses();
+  const personalExpenses = await getPersonalExpenses();
   const data = [...(personalExpenses as PersonalExpenses[])];
 
   return (
