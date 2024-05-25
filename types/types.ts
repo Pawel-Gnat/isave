@@ -1,3 +1,6 @@
+import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+import { transcode } from 'buffer';
+
 export type Transaction = {
   id: string;
   title: string;
@@ -18,3 +21,11 @@ export type TransactionValues = {
 };
 
 export type TransactionType = 'income' | 'expense' | null;
+
+export type ModifiedPersonalExpense = PersonalExpenses & {
+  transactions: Transaction[];
+};
+
+export type ModifiedPersonalIncome = PersonalIncomes & {
+  transactions: Transaction[];
+};

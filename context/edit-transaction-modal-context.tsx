@@ -6,7 +6,11 @@ import getPersonalExpenseById from '@/actions/getPersonalExpenseById';
 import getPersonalIncomeById from '@/actions/getPersonalIncomeById';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
-import { TransactionType } from '@/types/types';
+import {
+  ModifiedPersonalExpense,
+  ModifiedPersonalIncome,
+  TransactionType,
+} from '@/types/types';
 
 interface EditTransactionModalContextProps {
   showEditTransactionModal: boolean;
@@ -17,6 +21,7 @@ interface EditTransactionModalContextProps {
   setTransactionId: (value: string) => void;
   transactionType: TransactionType;
   setTransactionType: (value: TransactionType) => void;
+  transaction: ModifiedPersonalIncome | ModifiedPersonalExpense | null;
 }
 
 export const EditTransactionModalContext =
@@ -29,6 +34,7 @@ export const EditTransactionModalContext =
     setTransactionId: (value: string) => {},
     transactionType: null,
     setTransactionType: (value: TransactionType) => {},
+    transaction: null,
   });
 
 export const EditTransactionModalProvider = ({ children }: { children: ReactNode }) => {
@@ -36,26 +42,30 @@ export const EditTransactionModalProvider = ({ children }: { children: ReactNode
   const [isLoading, setIsLoading] = useState(false);
   const [transactionId, setTransactionId] = useState('');
   const [transactionType, setTransactionType] = useState<TransactionType>(null);
-  const [transactions, setTransactions] = useState<PersonalIncomes | PersonalExpenses>();
-  const [date, setDate] = useState(new Date());
+  const [transaction, setTransaction] = useState<
+    ModifiedPersonalIncome | ModifiedPersonalExpense | null
+  >(null);
 
   useEffect(() => {
     (async () => {
       if (!transactionId || !transactionType) return;
 
       if (transactionType === 'income') {
+        setIsLoading(true);
         const transaction = await getPersonalIncomeById(transactionId);
+        setIsLoading(false);
         if (!transaction) return;
 
-        setTransactions(transaction);
-        setDate(new Date(transaction.date));
+        setTransaction(transaction);
       }
 
       if (transactionType === 'expense') {
+        setIsLoading(true);
         const transaction = await getPersonalExpenseById(transactionId);
+        setIsLoading(false);
         if (!transaction) return;
 
-        setTransactions(transaction);
+        setTransaction(transaction);
       }
     })();
   }, [transactionId, transactionType]);
@@ -71,6 +81,7 @@ export const EditTransactionModalProvider = ({ children }: { children: ReactNode
         setTransactionId,
         transactionType,
         setTransactionType,
+        transaction,
       }}
     >
       {children}

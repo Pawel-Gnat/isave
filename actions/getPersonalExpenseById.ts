@@ -17,6 +17,9 @@ const getPersonalExpenseById = async (expenseId: string) => {
         id: expenseId,
         userId: currentUser.id,
       },
+      include: {
+        transactions: true,
+      },
     });
 
     if (!personalExpense) {

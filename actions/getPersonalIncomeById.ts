@@ -12,10 +12,13 @@ const getPersonalIncomeById = async (incomeId: string) => {
       return null;
     }
 
-    const personalIncome = await prisma.personalIncome.findUnique({
+    const personalIncome = await prisma.personalIncomes.findUnique({
       where: {
         id: incomeId,
         userId: currentUser.id,
+      },
+      include: {
+        transactions: true,
       },
     });
 
