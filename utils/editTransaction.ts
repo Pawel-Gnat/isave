@@ -3,7 +3,8 @@ import { toast } from 'sonner';
 
 import { Transaction } from '@/types/types';
 
-export const sendTransactionToDb = async (
+export const editTransaction = async (
+  transactionId: string,
   date: Date,
   transactions: Transaction[],
   transactionType: 'group' | 'personal',
@@ -13,8 +14,8 @@ export const sendTransactionToDb = async (
   setIsLoading(true);
 
   try {
-    const response = await axios.post(
-      `api/transaction/${transactionCategory}/${transactionType}`,
+    const response = await axios.patch(
+      `api/transaction/${transactionCategory}/${transactionType}/${transactionId}`,
       { date, transactions },
     );
 

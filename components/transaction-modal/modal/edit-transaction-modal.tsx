@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
 
-import { sendTransactionToDb } from '@/utils/sendTransationToDb';
+import { editTransaction } from '@/utils/editTransaction';
 
 import {
   Dialog,
@@ -45,8 +45,6 @@ export const EditTransactionModal = () => {
     }
   }, [transaction]);
 
-  // console.log(transaction);
-
   const {
     register,
     handleSubmit,
@@ -58,14 +56,11 @@ export const EditTransactionModal = () => {
     defaultValues: {
       date: transaction ? new Date(transaction.date) : new Date(),
       transactions: transaction ? transaction.transactions : [],
-      // date: new Date(),
-      // transactions: [],
     },
   });
 
   const date = watch('date');
   const transactions = watch('transactions');
-  // console.log(date, transactions);
 
   const hideModal = () => {
     if (isLoading) return;
@@ -77,15 +72,21 @@ export const EditTransactionModal = () => {
   };
 
   const saveData = async () => {
-    if (isLoading) return;
+    if (isLoading || !transaction) return;
 
-    // const result = await sendTransactionToDb(
-    //   date,
-    //   transactions,
-    //   'personal',
-    //   'expense',
-    //   setIsLoading,
-    // );
+    const result = await editTransaction(
+      transaction.id,
+      date,
+      transactions,
+      'personal',
+      'expense',
+      setIsLoading,
+    );
+
+    if (result) {
+      setShowEditTransactionModal(false);
+      router.refresh();
+    }
   };
 
   return (

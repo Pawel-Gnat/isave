@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { TransactionModalContext } from '@/context/transaction-modal-context';
 
 import { getApiResponse } from '@/utils/getApiResponse';
-import { sendTransactionToDb } from '@/utils/sendTransationToDb';
+import { createTransaction } from '@/utils/createTransaction';
 
 import { Modal } from '@/components/shared/modal';
 
@@ -84,7 +84,7 @@ export const NewTransactionExpenseModal = () => {
     }
 
     if (step === STEPS.TABLE) {
-      const result = await sendTransactionToDb(
+      const result = await createTransaction(
         date,
         transactions,
         'personal',

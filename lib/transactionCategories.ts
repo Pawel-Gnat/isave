@@ -138,51 +138,51 @@
 //   },
 // ];
 
-export const incomeCategories = [
-  {
-    id: '1',
-    name: 'Wynagrodzenie',
-    description: 'pensja, bonusy, prowizje od pracy etatowej',
-  },
-  {
-    id: '2',
-    name: 'Działalność gospodarcza',
-    description: 'przychody z własnej firmy lub działalności freelance',
-  },
-  {
-    id: '3',
-    name: 'Inwestycje',
-    description: 'dywidendy, zyski kapitałowe, przychody z najmu',
-  },
-  {
-    id: '4',
-    name: 'Renty i emerytury',
-    description: 'przychody z tytułu renty, emerytury',
-  },
-  {
-    id: '5',
-    name: 'Wsparcie',
-    description: 'regularne lub jednorazowe wsparcie finansowe',
-  },
-  { id: '6', name: 'Zwroty podatkowe', description: 'zwroty nadpłaconego podatku' },
-  {
-    id: '7',
-    name: 'Stypendia',
-    description: 'wsparcie finansowe na edukację, stypendia naukowe',
-  },
-  {
-    id: '8',
-    name: 'Nagrody i wygrane',
-    description: 'pieniądze wygrane w konkursach, loteriach',
-  },
-  {
-    id: '9',
-    name: 'Sprzedaż osobista',
-    description: 'przychody z sprzedaży używanych rzeczy, np. na aukcjach internetowych',
-  },
-  {
-    id: '10',
-    name: 'Inne przychody',
-    description: 'inne sporadyczne lub nieregularne przychody',
-  },
-];
+// export const incomeCategories = [
+//   {
+//     id: '1',
+//     name: 'Wynagrodzenie',
+//     description: 'pensja, bonusy, prowizje od pracy etatowej',
+//   },
+//   {
+//     id: '2',
+//     name: 'Działalność gospodarcza',
+//     description: 'przychody z własnej firmy lub działalności freelance',
+//   },
+//   {
+//     id: '3',
+//     name: 'Inwestycje',
+//     description: 'dywidendy, zyski kapitałowe, przychody z najmu',
+//   },
+//   {
+//     id: '4',
+//     name: 'Renty i emerytury',
+//     description: 'przychody z tytułu renty, emerytury',
+//   },
+//   {
+//     id: '5',
+//     name: 'Wsparcie',
+//     description: 'regularne lub jednorazowe wsparcie finansowe',
+//   },
+//   { id: '6', name: 'Zwroty podatkowe', description: 'zwroty nadpłaconego podatku' },
+//   {
+//     id: '7',
+//     name: 'Stypendia',
+//     description: 'wsparcie finansowe na edukację, stypendia naukowe',
+//   },
+//   {
+//     id: '8',
+//     name: 'Nagrody i wygrane',
+//     description: 'pieniądze wygrane w konkursach, loteriach',
+//   },
+//   {
+//     id: '9',
+//     name: 'Sprzedaż osobista',
+//     description: 'przychody z sprzedaży używanych rzeczy, np. na aukcjach internetowych',
+//   },
+//   {
+//     id: '10',
+//     name: 'Inne przychody',
+//     description: 'inne sporadyczne lub nieregularne przychody',
+//   },
+// ];

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       date: date,
       userId: currentUser.id,
       value: -transactions.reduce(
-        (acc: number, curr: { value: number }) => acc + curr.value,
+        (acc: number, curr: { value: number }) => acc + curr.value * 100,
         0,
       ),
     },
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     await prisma.personalExpenseProduct.create({
       data: {
         title: expense.title,
-        value: expense.value,
+        value: expense.value * 100,
         categoryId: expense.categoryId,
         personalExpenseId: personalExpense.id,
       },

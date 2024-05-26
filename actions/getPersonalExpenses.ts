@@ -22,7 +22,12 @@ const getPersonalExpenses = async () => {
       return null;
     }
 
-    return personalExpenses;
+    const convertedExpenses = personalExpenses.map((expense) => ({
+      ...expense,
+      value: expense.value / 100,
+    }));
+
+    return convertedExpenses;
   } catch (error) {
     return null;
   }

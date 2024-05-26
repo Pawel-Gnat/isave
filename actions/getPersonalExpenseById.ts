@@ -26,7 +26,16 @@ const getPersonalExpenseById = async (expenseId: string) => {
       return null;
     }
 
-    return personalExpense;
+    const convertedTransactions = personalExpense.transactions.map((expense) => ({
+      ...expense,
+      value: expense.value / 100,
+    }));
+
+    return {
+      ...personalExpense,
+      value: personalExpense.value / 100,
+      transactions: convertedTransactions,
+    };
   } catch (error) {
     return null;
   }
