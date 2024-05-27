@@ -28,6 +28,7 @@ const PersonalPage = async () => {
           <Transactions />
           <NewTransactionExpenseModal />
           <EditTransactionModal />
+          
         </TransactionModalProvider>
       </EditTransactionModalProvider>
     </TransactionCategoryProvider>

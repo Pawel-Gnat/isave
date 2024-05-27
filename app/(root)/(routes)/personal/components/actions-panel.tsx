@@ -14,7 +14,9 @@ export const ActionsPanel = () => {
     <div className="mb-4 flex flex-row justify-between">
       <DatePicker />
       <div className="space-x-4">
-        <Button variant="outline">Dodaj przychód</Button>
+        <Button variant="outline" onClick={() => {}}>
+          Dodaj przychód
+        </Button>
         <Button variant="outline" onClick={() => setShowTransactionModal(true)}>
           Dodaj wydatek
         </Button>

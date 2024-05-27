@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`flex flex-row ${font.className}`}>
         {children}
-        <Toaster />
+        <Toaster richColors />
       </body>
     </html>
   );

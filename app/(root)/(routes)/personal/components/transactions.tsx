@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
-import { PersonalExpenses, PersonalIncome } from '@prisma/client';
+import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
 import getPersonalExpenses from '@/actions/getPersonalExpenses';
 
 export const Transactions = async () => {

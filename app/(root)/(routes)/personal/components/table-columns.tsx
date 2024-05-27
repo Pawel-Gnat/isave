@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
 import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
+import { AlertContext } from '@/context/alert-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -40,8 +41,19 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
 };
 
 const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+  const { setIsAlertOpen, setTransactionId, setTransactionType, setTransactionCategory } =
+    useContext(AlertContext);
+
   return (
-    <Button variant="outline" onClick={() => console.log(id, transactionType)}>
+    <Button
+      variant="outline"
+      onClick={() => {
+        setTransactionId(id);
+        setTransactionType(transactionType);
+        setIsAlertOpen(true);
+        setTransactionCategory('personal');
+      }}
+    >
       <Trash2 />
     </Button>
   );

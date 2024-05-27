@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
   const personalExpense = await prisma.personalExpenses.create({

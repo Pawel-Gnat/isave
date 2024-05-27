@@ -16,7 +16,7 @@ export async function PATCH(request: Request, { params }: { params: ParamsProps 
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
   const currentTransaction = await prisma.personalExpenses.findUnique({
@@ -27,7 +27,7 @@ export async function PATCH(request: Request, { params }: { params: ParamsProps 
   });
 
   if (!currentTransaction) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
   await prisma.personalExpenses.update({
@@ -62,4 +62,23 @@ export async function PATCH(request: Request, { params }: { params: ParamsProps 
   }
 
   return NextResponse.json('Zaktualizowano transakcję');
+}
+
+export async function DELETE(request: Request, { params }: { params: ParamsProps }) {
+  const { transactionId } = params;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
+  }
+
+  await prisma.personalExpenses.delete({
+    where: {
+      id: transactionId,
+      userId: currentUser.id,
+    },
+  });
+
+  return NextResponse.json('Usunięto transakcję');
 }

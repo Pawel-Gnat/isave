@@ -99,6 +99,7 @@ export const NewTransactionExpenseModal = () => {
         router.refresh();
 
         setTimeout(() => {
+          reset();
           setStep(STEPS.FILE);
         }, 500);
         return;
