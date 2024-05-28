@@ -5,9 +5,11 @@ import getCurrentUser from '@/actions/getCurrentUser';
 import { TransactionCategoryProvider } from '@/context/transaction-category-context';
 import { TransactionModalProvider } from '@/context/transaction-modal-context';
 import { EditTransactionModalProvider } from '@/context/edit-transaction-modal-context';
+import { IncomeModalProvider } from '@/context/income-modal-context';
 
 import { NewTransactionExpenseModal } from '@/components/transaction-modal/new-transaction-expense-modal';
 import { EditTransactionModal } from '@/components/transaction-modal/modal/edit-transaction-modal';
+import { IncomeModal } from '@/components/transaction-modal/income-modal';
 
 import { ActionsPanel } from './components/actions-panel';
 import { Transactions } from './components/transactions';
@@ -23,12 +25,14 @@ const PersonalPage = async () => {
     <TransactionCategoryProvider>
       <EditTransactionModalProvider>
         <TransactionModalProvider>
-          {/* <h2 className="text-4xl font-bold">Personal</h2> */}
-          <ActionsPanel />
-          <Transactions />
-          <NewTransactionExpenseModal />
-          <EditTransactionModal />
-          
+          <IncomeModalProvider>
+            {/* <h2 className="text-4xl font-bold">Personal</h2> */}
+            <ActionsPanel />
+            <Transactions />
+            <NewTransactionExpenseModal />
+            <EditTransactionModal />
+            <IncomeModal />
+          </IncomeModalProvider>
         </TransactionModalProvider>
       </EditTransactionModalProvider>
     </TransactionCategoryProvider>

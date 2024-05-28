@@ -33,10 +33,10 @@ export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = ({
   transactionType,
   onChange,
 }) => {
-  const { expenseCategories } = useContext(TransactionCategoryContext);
+  const { expenseCategories, incomeCategories } = useContext(TransactionCategoryContext);
   const [open, setOpen] = useState(false);
-  const transactionCategories = transactionType === 'expense' ? expenseCategories : [];
-  //TODO with [] later
+  const transactionCategories =
+    transactionType === 'expense' ? expenseCategories : incomeCategories;
 
   const getCategory = (categoryId: string, transaction: 'income' | 'expense' | null) => {
     return transactionCategories.find((category) => category.id === categoryId)?.name;

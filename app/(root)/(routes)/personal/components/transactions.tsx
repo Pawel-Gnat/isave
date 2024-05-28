@@ -5,10 +5,15 @@ import { TransactionTable } from './transaction-table';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
 import getPersonalExpenses from '@/actions/getPersonalExpenses';
+import getPersonalIncomes from '@/actions/getPersonalIncomes';
 
 export const Transactions = async () => {
   const personalExpenses = await getPersonalExpenses();
-  const data = [...(personalExpenses as PersonalExpenses[])];
+  const personalIncomes = await getPersonalIncomes();
+  const data = [
+    ...(personalExpenses as PersonalExpenses[]),
+    ...(personalIncomes as PersonalIncomes[]),
+  ];
 
   return (
     <div className="flex flex-1 flex-col">

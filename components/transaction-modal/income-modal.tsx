@@ -1,14 +1,15 @@
 'use client';
 
+import axios from 'axios';
+import { toast } from 'sonner';
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { TransactionModalContext } from '@/context/transaction-modal-context';
+import { IncomeModalContext } from '@/context/income-modal-context';
 
-import { getApiResponse } from '@/utils/getApiResponse';
 import { createTransaction } from '@/utils/createTransaction';
 
 import {
@@ -23,17 +24,14 @@ import { Button } from '@/components/ui/button';
 
 import { LoadingButton } from '@/components/shared/loading-button';
 
-import { Modal } from '@/components/shared/modal';
-
-import { FileInput } from './file-input';
 import { TransactionTableModal } from './transaction-table-modal';
 import { TransactionDatePicker } from './transaction-date-picker';
 
 import { TransactionValues } from '@/types/types';
 
-export const NewTransactionIncomeModal = () => {
-  const { showTransactionModal, setShowTransactionModal, isLoading, setIsLoading } =
-    useContext(TransactionModalContext);
+export const IncomeModal = () => {
+  const { showIncomeModal, setShowIncomeModal, isLoading, setIsLoading } =
+    useContext(IncomeModalContext);
   const router = useRouter();
 
   const {
@@ -56,76 +54,36 @@ export const NewTransactionIncomeModal = () => {
   const hideModal = () => {
     if (isLoading) return;
 
-    setShowTransactionModal(false);
-    // setTimeout(() => {
-    //   reset();
-    // }, 500);
+    setShowIncomeModal(false);
+    setTimeout(() => {
+      reset();
+    }, 500);
   };
 
   const saveData = async () => {
     if (isLoading) return;
+    setIsLoading(true);
 
-    // const result = await editTransaction(
-    //   transaction.id,
-    //   date,
-    //   transactions,
-    //   'personal',
-    //   'expense',
-    //   setIsLoading,
-    // );
+    try {
+      const response = await axios.post(
+        // that expense needs to be changed to dynamic category
+        `api/transaction/income/personal`,
+        { date, transactions },
+      );
 
-    // if (result) {
-    setShowTransactionModal(false);
-    router.refresh();
-    // }
+      toast.success(`${response.data}`);
+      hideModal();
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast.warning('Błąd wysyłania');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // const goNext = async () => {
-  //   if (isLoading) return;
-
-  //   if (step === STEPS.FILE && fileText) {
-  //     const apiResponse = await getApiResponse(fileText, setIsLoading);
-  //     setValue('date', new Date(apiResponse.date), {
-  //       // shouldDirty: true,
-  //       // shouldTouch: true,
-  //       // shouldValidate: true,
-  //     });
-  //     setValue('transactions', apiResponse.expenses, {
-  //       // shouldDirty: true,
-  //       // shouldTouch: true,
-  //       // shouldValidate: true,
-  //     });
-  //     console.log(apiResponse, 'apiResponse');
-  //   }
-
-  //   if (step === STEPS.TABLE) {
-  //     const result = await createTransaction(
-  //       date,
-  //       transactions,
-  //       'personal',
-  //       'expense',
-  //       setIsLoading,
-  //     );
-
-  //     console.log(result, 'res');
-
-  //     if (result) {
-  //       setShowTransactionModal(false);
-  //       router.refresh();
-
-  //       setTimeout(() => {
-  //         reset();
-  //         setStep(STEPS.FILE);
-  //       }, 500);
-  //       return;
-  //     }
-  //   }
-
-  //   setStep((value) => value + 1);
-  // };
-
   return (
-    <Dialog open={showTransactionModal} onOpenChange={hideModal}>
+    <Dialog open={showIncomeModal} onOpenChange={hideModal}>
       <DialogContent className="flex max-h-[75%] min-h-[60%] min-w-[50%] max-w-[75%] flex-col">
         <DialogHeader>
           <DialogTitle>Utwórz nowy przychód</DialogTitle>

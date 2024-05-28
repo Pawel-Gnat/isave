@@ -1,14 +1,14 @@
 'use client';
 
+import axios from 'axios';
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 
 import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
-
-import { editTransaction } from '@/utils/editTransaction';
 
 import {
   Dialog,
@@ -73,19 +73,23 @@ export const EditTransactionModal = () => {
 
   const saveData = async () => {
     if (isLoading || !transaction) return;
+    setIsLoading(true);
 
-    const result = await editTransaction(
-      transaction.id,
-      date,
-      transactions,
-      'personal',
-      'expense',
-      setIsLoading,
-    );
+    try {
+      const response = await axios.patch(
+        // that expense needs to be changed to dynamic category
+        `api/transaction/${transactionType}/personal/${transaction.id}`,
+        { date, transactions },
+      );
 
-    if (result) {
-      setShowEditTransactionModal(false);
+      toast.success(`${response.data}`);
+      hideModal();
       router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast.warning('Błąd wysyłania');
+    } finally {
+      setIsLoading(false);
     }
   };
 
