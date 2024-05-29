@@ -41,7 +41,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
     }
 
     if (isLoading && !value) {
-      return '/analizing2.png';
+      return '/analizing.png';
     }
 
     if (value) {
@@ -90,7 +90,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
       />
       <Label
         htmlFor="file"
-        className="text-md absolute inset-0 z-10 rounded-md border-2 border-dashed"
+        className="absolute inset-0 z-10 rounded-md border-2 border-dashed text-lg"
       >
         <p className="relative top-[80%] text-center">{handleLabelText()}</p>
         <Input

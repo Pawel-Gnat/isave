@@ -16,3 +16,15 @@ export const RegisterFormSchema = z.object({
     message: 'Hasło musi mieć przynajmniej 4 znaki.',
   }),
 });
+
+export const TransactionSchema = z.object({
+  date: z.date(),
+  transactions: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string().trim().min(1),
+      value: z.number().min(0.01),
+      categoryId: z.string().trim().min(1),
+    }),
+  ),
+});

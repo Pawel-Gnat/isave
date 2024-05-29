@@ -1,11 +1,12 @@
 import Image from 'next/image';
 
+import getPersonalExpenses from '@/actions/getPersonalExpenses';
+import getPersonalIncomes from '@/actions/getPersonalIncomes';
+
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
-import getPersonalExpenses from '@/actions/getPersonalExpenses';
-import getPersonalIncomes from '@/actions/getPersonalIncomes';
 
 export const Transactions = async () => {
   const personalExpenses = await getPersonalExpenses();

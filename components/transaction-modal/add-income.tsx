@@ -6,9 +6,10 @@ import { useContext, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { IncomeModalContext } from '@/context/income-modal-context';
+
+import { TransactionSchema } from '@/utils/formValidations';
 
 import { Button } from '@/components/ui/button';
 
@@ -20,18 +21,6 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
-
-const transactionSchema = z.object({
-  date: z.date(),
-  transactions: z.array(
-    z.object({
-      id: z.string(),
-      title: z.string().trim().min(1),
-      value: z.number().min(0.01),
-      categoryId: z.string().trim().min(1),
-    }),
-  ),
-});
 
 export const AddIncome = () => {
   const { showIncomeModal, setShowIncomeModal, isLoading, setIsLoading } =
@@ -55,7 +44,7 @@ export const AddIncome = () => {
     reset,
     formState: { errors },
   } = useForm<TransactionValues>({
-    resolver: zodResolver(transactionSchema),
+    resolver: zodResolver(TransactionSchema),
     defaultValues: {
       date: new Date(),
       transactions: [],

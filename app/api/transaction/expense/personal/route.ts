@@ -3,12 +3,52 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
+import getExpenseCategories from '@/actions/getExpenseCategories';
 
 import normalizeString from '@/utils/normalizeString';
+
+import { Transaction } from '@/types/types';
 
 export async function POST(request: Request) {
   const body = await request.json();
   const { date, transactions } = body;
+
+  if (!date) {
+    return NextResponse.json({ error: 'Należy określić datę' }, { status: 404 });
+  }
+
+  if ((transactions as Transaction[]).length === 0) {
+    return NextResponse.json({ error: 'Nie dodano wydatku' }, { status: 404 });
+  }
+
+  if (
+    (transactions as Transaction[]).find((t) => normalizeString(t.title).length === 0)
+  ) {
+    return NextResponse.json(
+      { error: 'Należy podać nazwę każdego wydatku' },
+      { status: 404 },
+    );
+  }
+
+  if ((transactions as Transaction[]).find((t) => t.value <= 0)) {
+    return NextResponse.json(
+      { error: 'Wartosc każdej transakcji musi byc dodatnia' },
+      { status: 404 },
+    );
+  }
+
+  const expenseCategories = await getExpenseCategories();
+
+  if (
+    (transactions as Transaction[]).find(
+      (t) => !expenseCategories.some((category) => category.id === t.categoryId),
+    )
+  ) {
+    return NextResponse.json(
+      { error: 'Należy określic kategorie każdej transakcji' },
+      { status: 404 },
+    );
+  }
 
   const currentUser = await getCurrentUser();
 
@@ -38,5 +78,5 @@ export async function POST(request: Request) {
     });
   }
 
-  return NextResponse.json({ date, transactions });
+  return NextResponse.json('Utworzono nowy wydatek');
 }

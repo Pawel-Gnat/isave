@@ -1,21 +1,25 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldValues, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm } from 'react-hook-form';
 
 import { TransactionModalContext } from '@/context/transaction-modal-context';
 
-import { getApiResponse } from '@/utils/getApiResponse';
-import { createTransaction } from '@/utils/createTransaction';
+import { TransactionSchema } from '@/utils/formValidations';
 
-import { Modal } from '@/components/shared/modal';
+import { Button } from '@/components/ui/button';
+
+import { LoadingButton } from '../shared/loading-button';
 
 import { FileInput } from './ui/file-input';
 import { TransactionTableModal } from './ui/transaction-table-modal';
 import { TransactionDatePicker } from './ui/transaction-date-picker';
+
+import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
 
@@ -29,6 +33,15 @@ export const NewTransactionExpenseModal = () => {
     useContext(TransactionModalContext);
   const router = useRouter();
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
+  const controllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
+  }, []);
 
   const {
     register,
@@ -38,6 +51,7 @@ export const NewTransactionExpenseModal = () => {
     reset,
     formState: { errors },
   } = useForm<TransactionValues>({
+    resolver: zodResolver(TransactionSchema),
     defaultValues: {
       fileText: null,
       date: new Date(),
@@ -48,18 +62,24 @@ export const NewTransactionExpenseModal = () => {
   const date = watch('date');
   const fileText = watch('fileText');
   const transactions = watch('transactions');
-  let modalContent;
+
+  const hideModal = () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+
+    setShowTransactionModal(false);
+    setTimeout(() => {
+      reset();
+      setStep(STEPS.FILE);
+    }, 500);
+  };
 
   const goBack = () => {
     if (isLoading) return;
 
     if (step === STEPS.FILE) {
-      setShowTransactionModal(false);
-
-      setTimeout(() => {
-        reset();
-      }, 500);
-      return;
+      return hideModal();
     }
 
     setStep((value) => value - 1);
@@ -69,41 +89,74 @@ export const NewTransactionExpenseModal = () => {
     if (isLoading) return;
 
     if (step === STEPS.FILE && fileText) {
-      const apiResponse = await getApiResponse(fileText, setIsLoading);
-      setValue('date', new Date(apiResponse.date), {
-        // shouldDirty: true,
-        // shouldTouch: true,
-        // shouldValidate: true,
-      });
-      setValue('transactions', apiResponse.expenses, {
-        // shouldDirty: true,
-        // shouldTouch: true,
-        // shouldValidate: true,
-      });
-      console.log(apiResponse, 'apiResponse');
+      setIsLoading(true);
+
+      const newController = new AbortController();
+      controllerRef.current = newController;
+
+      try {
+        const response = await axios.post(
+          `/api/ai`,
+          { fileText },
+          { signal: newController.signal },
+        );
+        setValue('date', new Date(response.data.date));
+        setValue('transactions', response.data.expenses);
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          return toast.warning('Anulowano zapytanie');
+        }
+
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.data) {
+            toast.error('Błąd odpowiedzi', { description: error.response.data.error });
+          } else {
+            toast.error('Błąd odpowiedzi', { description: 'Nieznany błąd' });
+          }
+        } else {
+          toast.error('Nieznany błąd');
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     if (step === STEPS.TABLE) {
-      const result = await createTransaction(
-        date,
-        transactions,
-        'personal',
-        'expense',
-        setIsLoading,
-      );
+      setIsLoading(true);
 
-      console.log(result, 'res');
+      const newController = new AbortController();
+      controllerRef.current = newController;
 
-      if (result) {
-        setShowTransactionModal(false);
+      try {
+        const response = await axios.post(
+          // that income needs to be changed to dynamic category
+          `api/transaction/expense/personal`,
+          { date, transactions },
+          { signal: newController.signal },
+        );
+
+        toast.success(`${response.data}`);
+        hideModal();
         router.refresh();
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          return toast.warning('Anulowano zapytanie');
+        }
 
-        setTimeout(() => {
-          reset();
-          setStep(STEPS.FILE);
-        }, 500);
-        return;
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.data) {
+            toast.error('Błąd wysyłania', { description: error.response.data.error });
+          } else {
+            toast.error('Błąd wysyłania', { description: 'Nieznany błąd' });
+          }
+        } else {
+          toast.error('Nieznany błąd');
+        }
+      } finally {
+        setIsLoading(false);
       }
+
+      return;
     }
 
     setStep((value) => value + 1);
@@ -140,7 +193,7 @@ export const NewTransactionExpenseModal = () => {
       return 'Utwórz ręcznie';
     }
 
-    return undefined;
+    return '';
   };
 
   const previousActionButtonLabel = () => {
@@ -151,50 +204,67 @@ export const NewTransactionExpenseModal = () => {
     return 'Powrót';
   };
 
-  if (step === STEPS.FILE) {
-    modalContent = (
-      <FileInput
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-        onSelect={(fileText) =>
-          setValue('fileText', fileText, {
-            // shouldDirty: true,
-            // shouldTouch: true,
-            // shouldValidate: true,
-          })
-        }
-      />
-    );
-  }
+  const content = () => {
+    if (step === STEPS.FILE) {
+      return (
+        <FileInput
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          onSelect={(fileText) => setValue('fileText', fileText)}
+        />
+      );
+    }
 
-  if (step === STEPS.TABLE) {
-    modalContent = (
+    return (
       <div className="flex w-full flex-col gap-4">
         <TransactionDatePicker date={date} setDate={(date) => setValue('date', date)} />
         <TransactionTableModal
           transactions={transactions}
           setValue={setValue}
           transactionType="expense"
+          register={register}
+          errors={errors}
         />
       </div>
     );
-  }
+  };
+
+  const footer = () => {
+    return (
+      <>
+        <Button variant="outline" onClick={() => goBack()}>
+          {previousActionButtonLabel()}
+        </Button>
+
+        <div className="flex flex-row gap-2">
+          {handleActionButtonState() && (
+            <LoadingButton
+              isLoading={isLoading}
+              onClick={() => setStep((value) => value + 1)}
+              text={secondaryActionButtonLabel()}
+            />
+          )}
+
+          <Button
+            variant="outline"
+            onClick={() => goNext()}
+            disabled={handleActionButtonState()}
+          >
+            {actionButtonLabel()}
+          </Button>
+        </div>
+      </>
+    );
+  };
 
   return (
-    <Modal
-      isOpen={showTransactionModal}
-      setIsOpen={setShowTransactionModal}
+    <TransactionModal
+      open={showTransactionModal}
+      onOpenChange={hideModal}
       title={handleTitle()}
       description={handleDescription()}
-      actionButton={goNext}
-      actionButtonLabel={actionButtonLabel()}
-      secondaryActionButton={() => setStep((value) => value + 1)}
-      secondaryActionButtonLabel={secondaryActionButtonLabel()}
-      previousActionButtonLabel={previousActionButtonLabel()}
-      previousActionButton={goBack}
-      content={modalContent}
-      disabled={handleActionButtonState()}
-      isLoading={isLoading}
+      content={content()}
+      footer={footer()}
     />
   );
 };

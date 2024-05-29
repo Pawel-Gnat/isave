@@ -24,7 +24,7 @@ type ExpenseProduct = {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { data } = body;
+  const { fileText } = body;
 
   const MODEL_NAME = 'gpt-3.5-turbo';
   // const SYSTEM_PROMPT = `You are responsible for analyzing the text coming from OCR. Your task is to generate a JSON object of an array of elements compatible with the data type.
