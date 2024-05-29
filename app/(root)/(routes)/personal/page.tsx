@@ -8,8 +8,8 @@ import { EditTransactionModalProvider } from '@/context/edit-transaction-modal-c
 import { IncomeModalProvider } from '@/context/income-modal-context';
 
 import { NewTransactionExpenseModal } from '@/components/transaction-modal/new-transaction-expense-modal';
-import { EditTransactionModal } from '@/components/transaction-modal/modal/edit-transaction-modal';
-import { IncomeModal } from '@/components/transaction-modal/income-modal';
+import { EditTransaction } from '@/components/transaction-modal/edit-transaction';
+import { AddIncome } from '@/components/transaction-modal/add-income';
 
 import { ActionsPanel } from './components/actions-panel';
 import { Transactions } from './components/transactions';
@@ -30,8 +30,8 @@ const PersonalPage = async () => {
             <ActionsPanel />
             <Transactions />
             <NewTransactionExpenseModal />
-            <EditTransactionModal />
-            <IncomeModal />
+            <EditTransaction />
+            <AddIncome />
           </IncomeModalProvider>
         </TransactionModalProvider>
       </EditTransactionModalProvider>

@@ -1,4 +1,4 @@
-import { UseFormSetValue } from 'react-hook-form';
+import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import {
   Table,
@@ -23,12 +23,16 @@ interface TransactionTableModalProps {
   transactions: Transaction[];
   setValue: UseFormSetValue<TransactionValues>;
   transactionType: TransactionType;
+  register: UseFormRegister<TransactionValues>;
+  errors: FieldErrors<TransactionValues>;
 }
 
 export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
   transactions,
   setValue,
   transactionType,
+  register,
+  errors,
 }) => {
   const addNewRow = () => {
     setValue('transactions', [
@@ -49,7 +53,11 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
       transaction.id === id ? { ...transaction, title: value } : transaction,
     );
 
-    setValue('transactions', updatedTransactions);
+    setValue('transactions', updatedTransactions, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
   };
 
   const changeValue = (value: number, id: string) => {
@@ -57,7 +65,11 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
       transaction.id === id ? { ...transaction, value: +value.toFixed(2) } : transaction,
     );
 
-    setValue('transactions', updatedTransactions);
+    setValue('transactions', updatedTransactions, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
   };
 
   const changeCategory = (value: string, id: string) => {
@@ -65,7 +77,11 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
       transaction.id === id ? { ...transaction, categoryId: value } : transaction,
     );
 
-    setValue('transactions', updatedTransactions);
+    setValue('transactions', updatedTransactions, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
   };
 
   return (
@@ -80,27 +96,41 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody className="block max-h-[400px] overflow-y-auto">
-          {transactions.map((transaction) => (
+          {transactions.map((transaction, index) => (
             <TableRow key={transaction.id} className="table w-full table-fixed">
               <TableCell className="font-medium">
                 <TransactionTitleInput
+                  {...(register(`transactions.${index}.title`),
+                  {
+                    onChange: (value) => changeTitle(value, transaction.id),
+                  })}
+                  className={errors.transactions?.[index]?.title ? 'border-red-500' : ''}
                   value={transaction.title}
-                  onChange={(value) => changeTitle(value, transaction.id)}
                 />
               </TableCell>
               <TableCell>
                 <TransactionCategorySelect
+                  {...(register(`transactions.${index}.categoryId`),
+                  {
+                    onChange: (value) => {
+                      changeCategory(value, transaction.id);
+                    },
+                  })}
+                  className={
+                    errors.transactions?.[index]?.categoryId ? 'border-red-500' : ''
+                  }
                   value={transaction}
-                  onChange={(value) => {
-                    changeCategory(value, transaction.id);
-                  }}
                   transactionType={transactionType}
                 />
               </TableCell>
               <TableCell className="w-36">
                 <TransactionValueInput
+                  {...(register(`transactions.${index}.value`),
+                  {
+                    onChange: (value) => changeValue(value, transaction.id),
+                  })}
+                  className={errors.transactions?.[index]?.value ? 'border-red-500' : ''}
                   value={transaction.value}
-                  onChange={(value) => changeValue(value, transaction.id)}
                 />
               </TableCell>
               <TableCell className="w-48 text-right">

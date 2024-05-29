@@ -13,9 +13,9 @@ import { createTransaction } from '@/utils/createTransaction';
 
 import { Modal } from '@/components/shared/modal';
 
-import { FileInput } from './file-input';
-import { TransactionTableModal } from './transaction-table-modal';
-import { TransactionDatePicker } from './transaction-date-picker';
+import { FileInput } from './ui/file-input';
+import { TransactionTableModal } from './ui/transaction-table-modal';
+import { TransactionDatePicker } from './ui/transaction-date-picker';
 
 import { TransactionValues } from '@/types/types';
 

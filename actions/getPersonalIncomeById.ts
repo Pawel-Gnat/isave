@@ -26,7 +26,16 @@ const getPersonalIncomeById = async (incomeId: string) => {
       return null;
     }
 
-    return personalIncome;
+    const convertedTransactions = personalIncome.transactions.map((income) => ({
+      ...income,
+      value: income.value / 100,
+    }));
+
+    return {
+      ...personalIncome,
+      value: personalIncome.value / 100,
+      transactions: convertedTransactions,
+    };
   } catch (error) {
     return null;
   }

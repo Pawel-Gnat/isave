@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, useContext } from 'react';
+import { FC, useState, useContext, forwardRef } from 'react';
 
 import { TransactionCategoryContext } from '@/context/transaction-category-context';
 
@@ -20,25 +20,24 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ArrowUpDown, Check } from 'lucide-react';
 
 import { Transaction, TransactionType } from '@/types/types';
-import { ExpenseCategory } from '@prisma/client';
 
 interface TransactionCategorySelectProps {
   value: Transaction;
   transactionType: TransactionType;
   onChange: (value: string) => void;
+  className: string;
 }
 
-export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = ({
-  value,
-  transactionType,
-  onChange,
-}) => {
+export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = forwardRef<
+  HTMLButtonElement,
+  TransactionCategorySelectProps
+>(({ value, transactionType, onChange, className }, ref) => {
   const { expenseCategories, incomeCategories } = useContext(TransactionCategoryContext);
   const [open, setOpen] = useState(false);
   const transactionCategories =
     transactionType === 'expense' ? expenseCategories : incomeCategories;
 
-  const getCategory = (categoryId: string, transaction: 'income' | 'expense' | null) => {
+  const getCategory = (categoryId: string) => {
     return transactionCategories.find((category) => category.id === categoryId)?.name;
   };
 
@@ -49,10 +48,11 @@ export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={cn(className, 'w-full justify-between')}
+          ref={ref}
         >
           <p className="overflow-x-hidden">
-            {getCategory(value.categoryId, transactionType) || 'Wybierz kategorię'}
+            {getCategory(value.categoryId) || 'Wybierz kategorię'}
           </p>
           <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -87,4 +87,4 @@ export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = ({
       </PopoverContent>
     </Popover>
   );
-};
+});

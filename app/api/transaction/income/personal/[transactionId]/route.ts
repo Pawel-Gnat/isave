@@ -9,7 +9,12 @@ import normalizeString from '@/utils/normalizeString';
 
 import { Transaction } from '@/types/types';
 
-export async function POST(request: Request) {
+interface ParamsProps {
+  transactionId: string;
+}
+
+export async function PATCH(request: Request, { params }: { params: ParamsProps }) {
+  const { transactionId } = params;
   const body = await request.json();
   const { date, transactions } = body;
 
@@ -56,14 +61,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  const personalIncome = await prisma.personalIncomes.create({
+  const currentTransaction = await prisma.personalIncomes.findUnique({
+    where: {
+      id: transactionId,
+      userId: currentUser.id,
+    },
+  });
+
+  if (!currentTransaction) {
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
+  }
+
+  await prisma.personalIncomes.update({
+    where: {
+      id: transactionId,
+      userId: currentUser.id,
+    },
     data: {
       date: date,
-      userId: currentUser.id,
       value: transactions.reduce(
         (acc: number, curr: { value: number }) => acc + curr.value * 100,
         0,
       ),
+    },
+  });
+
+  await prisma.personalIncomeProduct.deleteMany({
+    where: {
+      personalIncomeId: transactionId,
     },
   });
 
@@ -73,10 +98,29 @@ export async function POST(request: Request) {
         title: normalizeString(income.title),
         value: income.value * 100,
         categoryId: income.categoryId,
-        personalIncomeId: personalIncome.id,
+        personalIncomeId: currentTransaction.id,
       },
     });
   }
 
-  return NextResponse.json('Utworzono nowy przychód');
+  return NextResponse.json('Zaktualizowano transakcję');
+}
+
+export async function DELETE(request: Request, { params }: { params: ParamsProps }) {
+  const { transactionId } = params;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
+  }
+
+  await prisma.personalIncomes.delete({
+    where: {
+      id: transactionId,
+      userId: currentUser.id,
+    },
+  });
+
+  return NextResponse.json('Usunięto transakcję');
 }

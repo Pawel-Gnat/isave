@@ -10,24 +10,17 @@ import { toast } from 'sonner';
 
 import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
 import { LoadingButton } from '@/components/shared/loading-button';
 
-import { TransactionTableModal } from '../transaction-table-modal';
-import { TransactionDatePicker } from '../transaction-date-picker';
+import { TransactionTableModal } from './ui/transaction-table-modal';
+import { TransactionDatePicker } from './ui/transaction-date-picker';
+import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
 
-export const EditTransactionModal = () => {
+export const EditTransaction = () => {
   const {
     showEditTransactionModal,
     setShowEditTransactionModal,
@@ -64,11 +57,7 @@ export const EditTransactionModal = () => {
 
   const hideModal = () => {
     if (isLoading) return;
-
     setShowEditTransactionModal(false);
-    // setTimeout(() => {
-    //   reset();
-    // }, 500);
   };
 
   const saveData = async () => {
@@ -87,48 +76,58 @@ export const EditTransactionModal = () => {
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.warning('Błąd wysyłania');
+      toast.error('Błąd wysyłania');
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <Dialog open={showEditTransactionModal} onOpenChange={hideModal}>
-      <DialogContent className="flex max-h-[75%] min-h-[60%] min-w-[50%] max-w-[75%] flex-col">
-        <DialogHeader>
-          <DialogTitle>Edycja transakcji</DialogTitle>
-          <DialogDescription>Skoryguj wybrane pozycje i zapisz zmiany</DialogDescription>
-        </DialogHeader>
-        <div className="relative flex flex-1 justify-center overflow-auto">
-          {isLoading && <p>Ładowanie...</p>}
+  const content = () => {
+    return (
+      <>
+        {isLoading && <p>Ładowanie...</p>}
 
-          {!isLoading && (
-            <div className="flex w-full flex-col gap-4">
-              <TransactionDatePicker
-                date={date}
-                setDate={(date) => setValue('date', date)}
-              />
-              <TransactionTableModal
-                transactions={transactions}
-                setValue={setValue}
-                transactionType={transactionType}
-              />
-            </div>
-          )}
-        </div>
-        <DialogFooter className="flex gap-2 sm:justify-between">
-          <Button variant="outline" onClick={() => hideModal()}>
-            Anuluj
-          </Button>
-          <LoadingButton
-            // variant="outline"
-            isLoading={isLoading}
-            onClick={() => saveData()}
-            text="Zapisz zmiany"
-          />
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        {!isLoading && (
+          <div className="flex w-full flex-col gap-4">
+            <TransactionDatePicker
+              date={date}
+              setDate={(date) => setValue('date', date)}
+            />
+            <TransactionTableModal
+              transactions={transactions}
+              setValue={setValue}
+              transactionType={transactionType}
+            />
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const footer = () => {
+    return (
+      <>
+        <Button variant="outline" onClick={() => hideModal()}>
+          Anuluj
+        </Button>
+        <LoadingButton
+          // variant="outline"
+          isLoading={isLoading}
+          onClick={() => saveData()}
+          text="Zapisz zmiany"
+        />
+      </>
+    );
+  };
+
+  return (
+    <TransactionModal
+      open={showEditTransactionModal}
+      onOpenChange={hideModal}
+      title="Edycja transakcji"
+      description="Skoryguj wybrane pozycje i zapisz zmiany"
+      content={content()}
+      footer={footer()}
+    />
   );
 };

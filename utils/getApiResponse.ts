@@ -12,7 +12,7 @@ export const getApiResponse = async (
     return response.data;
   } catch (error) {
     console.log(error);
-    toast.warning('Błąd odpowiedzi');
+    toast.error('Błąd odpowiedzi');
   } finally {
     setIsLoading(false);
   }
