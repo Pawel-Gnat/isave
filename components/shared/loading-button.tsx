@@ -13,18 +13,21 @@ interface LoadingButtonProps {
   text: string;
   isLoading: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export const LoadingButton: React.FC<LoadingButtonProps> = ({
   isLoading,
   text,
   onClick,
+  disabled,
 }) => {
   return (
     <Button
       type="button"
       className={cn('w-fit min-w-32', isLoading ? 'opacity-60' : '')}
       onClick={onClick}
+      disabled={disabled}
     >
       {isLoading ? <PuffLoader size={25} cssOverride={override} /> : text}
     </Button>

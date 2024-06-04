@@ -245,13 +245,12 @@ export const NewTransactionExpenseModal = () => {
             />
           )}
 
-          <Button
-            variant="outline"
+          <LoadingButton
+            isLoading={isLoading}
             onClick={() => goNext()}
+            text={actionButtonLabel()}
             disabled={handleActionButtonState()}
-          >
-            {actionButtonLabel()}
-          </Button>
+          />
         </div>
       </>
     );
