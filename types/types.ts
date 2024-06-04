@@ -1,5 +1,4 @@
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
-import { transcode } from 'buffer';
 
 export type Transaction = {
   id: string;
