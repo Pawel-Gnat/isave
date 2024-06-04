@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
 
-import { RegisterFormSchema } from '@/utils/validations';
+import { RegisterFormSchema } from '@/utils/formValidations';
 
 interface RegisterFormProps {
   toggleAuthStatus: () => void;

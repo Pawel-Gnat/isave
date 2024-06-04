@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
 
-import { LoginFormSchema } from '@/utils/validations';
+import { LoginFormSchema } from '@/utils/formValidations';
 
 const LoginForm = () => {
   const [loading, setIsLoading] = useState(false);
