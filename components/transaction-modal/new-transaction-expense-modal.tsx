@@ -3,9 +3,10 @@
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+
+import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 
 import { TransactionModalContext } from '@/context/transaction-modal-context';
 
@@ -31,9 +32,10 @@ enum STEPS {
 export const NewTransactionExpenseModal = () => {
   const { showTransactionModal, setShowTransactionModal, isLoading, setIsLoading } =
     useContext(TransactionModalContext);
-  const router = useRouter();
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
   const controllerRef = useRef<AbortController | null>(null);
+
+  const { personalExpensesRefetch } = usePersonalExpenses();
 
   useEffect(() => {
     return () => {
@@ -45,7 +47,6 @@ export const NewTransactionExpenseModal = () => {
 
   const {
     register,
-    handleSubmit,
     setValue,
     watch,
     reset,
@@ -137,7 +138,7 @@ export const NewTransactionExpenseModal = () => {
 
         toast.success(`${response.data}`);
         hideModal();
-        router.refresh();
+        personalExpensesRefetch();
       } catch (error) {
         if (axios.isCancel(error)) {
           return toast.warning('Anulowano zapytanie');

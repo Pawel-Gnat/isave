@@ -4,7 +4,9 @@ import prisma from '@/lib/prisma';
 
 import getCurrentUser from './getCurrentUser';
 
-const getPersonalExpenses = async () => {
+import { DateRange } from 'react-day-picker';
+
+const getPersonalExpenses = async (date: DateRange) => {
   try {
     const currentUser = await getCurrentUser();
 
@@ -15,6 +17,10 @@ const getPersonalExpenses = async () => {
     const personalExpenses = await prisma.personalExpenses.findMany({
       where: {
         userId: currentUser.id,
+        date: {
+          gte: date.from,
+          lte: date.to,
+        },
       },
     });
 

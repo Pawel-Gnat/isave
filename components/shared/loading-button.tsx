@@ -1,4 +1,5 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, FC } from 'react';
+
 import { cn } from '@/lib/className';
 
 import PuffLoader from 'react-spinners/PuffLoader';
@@ -16,7 +17,7 @@ interface LoadingButtonProps {
   disabled?: boolean;
 }
 
-export const LoadingButton: React.FC<LoadingButtonProps> = ({
+export const LoadingButton: FC<LoadingButtonProps> = ({
   isLoading,
   text,
   onClick,

@@ -5,13 +5,10 @@ import { CSSProperties, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import PuffLoader from 'react-spinners/PuffLoader';
-
 import { AlertContext } from '@/context/alert-context';
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -22,12 +19,7 @@ import {
 
 import { LoadingButton } from './loading-button';
 
-const override: CSSProperties = {
-  borderColor: 'var(--background) var(--background) transparent',
-};
-
 export const Alert = () => {
-  const router = useRouter();
   const {
     isAlertOpen,
     setIsAlertOpen,
@@ -37,6 +29,7 @@ export const Alert = () => {
     transactionId,
     transactionCategory,
   } = useContext(AlertContext);
+  const router = useRouter();
 
   const handleDelete = () => {
     if (isLoading) return;
@@ -73,9 +66,6 @@ export const Alert = () => {
         <AlertDialogFooter>
           <AlertDialogCancel>Anuluj</AlertDialogCancel>
           <LoadingButton isLoading={isLoading} onClick={handleDelete} text="Usuń" />
-          {/* <AlertDialogAction onClick={() => handleDelete()}>
-            {isLoading ? <PuffLoader size={25} cssOverride={override} /> : 'Usuń'}
-          </AlertDialogAction> */}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

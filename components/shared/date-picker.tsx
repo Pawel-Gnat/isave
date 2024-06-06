@@ -1,7 +1,5 @@
-'use client';
-
-import { useState } from 'react';
-import { addDays, format } from 'date-fns';
+import { FC } from 'react';
+import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { DateRange } from 'react-day-picker';
 
@@ -13,13 +11,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { CalendarDays } from 'lucide-react';
 
-export const DatePicker = () => {
-  // const [date, setDate] = useState<DateRange | undefined>({
-  //   from: new Date(2022, 0, 20),
-  //   to: addDays(new Date(2022, 0, 20), 20),
-  // });
-  const [date, setDate] = useState<DateRange | undefined>();
+interface DatePickerProps {
+  date: DateRange | undefined;
+  setDate: (date: DateRange | undefined) => void;
+}
 
+export const DatePicker: FC<DatePickerProps> = ({ date, setDate }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>

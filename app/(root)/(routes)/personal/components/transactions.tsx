@@ -1,25 +1,40 @@
+'use client';
+
+import { FC } from 'react';
 import Image from 'next/image';
 
-import getPersonalExpenses from '@/actions/getPersonalExpenses';
-import getPersonalIncomes from '@/actions/getPersonalIncomes';
+import usePersonalExpenses from '@/hooks/usePersonalExpenses';
+import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
-import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+interface TransactionsProps {
+  dateFrom: Date;
+  dateTo: Date;
+}
 
-export const Transactions = async () => {
-  const personalExpenses = await getPersonalExpenses();
-  const personalIncomes = await getPersonalIncomes();
-  const data = [
-    ...(personalExpenses as PersonalExpenses[]),
-    ...(personalIncomes as PersonalIncomes[]),
-  ];
+export const Transactions: FC<TransactionsProps> = ({ dateFrom, dateTo }) => {
+  const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
+    dateFrom,
+    dateTo,
+  );
+  const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
+    dateFrom,
+    dateTo,
+  );
+
+  if (isPersonalExpensesLoading || isPersonalIncomesLoading) {
+    return <p>Ładowanie</p>;
+  }
 
   return (
     <div className="flex flex-1 flex-col">
-      {data.length > 0 ? (
-        <TransactionTable columns={columns} data={data} />
+      {personalExpenses && personalIncomes ? (
+        <TransactionTable
+          columns={columns}
+          data={[...personalExpenses, ...personalIncomes]}
+        />
       ) : (
         <div className="m-auto text-center">
           <Image
