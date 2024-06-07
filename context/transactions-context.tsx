@@ -28,14 +28,14 @@ interface TransactionsContextProps {
   // personalTransactions: PersonalExpenses[] | PersonalIncomes[];
   date: DateRange | undefined;
   setDate: (date: DateRange | undefined) => void;
-  isLoading: boolean;
+  // isLoading: boolean;
 }
 
 export const TransactionsContext = createContext<TransactionsContextProps>({
   // personalTransactions: [],
   date: { from: new Date(), to: new Date() },
   setDate: () => {},
-  isLoading: false,
+  // isLoading: false,
 });
 
 interface TransactionsProviderProps {
@@ -58,8 +58,11 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({
   //   from: dateFrom,
   //   to: dateTo,
   // });
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: endOfMonth(new Date()),
+  });
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // const fetchTransactions = async () => {
   //   if (date?.from && date?.to) {
@@ -86,7 +89,7 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({
         // personalTransactions,
         date,
         setDate,
-        isLoading,
+        // isLoading,
       }}
     >
       {children}

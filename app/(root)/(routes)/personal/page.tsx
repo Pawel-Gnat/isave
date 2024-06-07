@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation';
-import { endOfMonth, startOfMonth } from 'date-fns';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
@@ -15,16 +14,8 @@ import { AddIncome } from '@/components/transaction-modal/add-income';
 import { ActionsPanel } from './components/actions-panel';
 import { Transactions } from './components/transactions';
 
-interface PersonalPageProps {
-  from: string;
-  to: string;
-}
-
-const PersonalPage = async ({ searchParams }: { searchParams: PersonalPageProps }) => {
-  const { from, to } = searchParams;
+const PersonalPage = async () => {
   const user = await getCurrentUser();
-  const dateFrom = from ? new Date(from) : startOfMonth(new Date());
-  const dateTo = to ? new Date(to) : endOfMonth(new Date());
 
   if (!user) {
     redirect('/auth');
@@ -35,8 +26,8 @@ const PersonalPage = async ({ searchParams }: { searchParams: PersonalPageProps 
       <EditTransactionModalProvider>
         <TransactionModalProvider>
           <IncomeModalProvider>
-            <ActionsPanel dateFrom={dateFrom} dateTo={dateTo} />
-            <Transactions dateFrom={dateFrom} dateTo={dateTo} />
+            <ActionsPanel />
+            <Transactions />
             <NewTransactionExpenseModal />
             <EditTransaction />
             <AddIncome />

@@ -1,27 +1,28 @@
 'use client';
 
-import { FC } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
+import { TransactionsContext } from '@/context/transactions-context';
+
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
-interface TransactionsProps {
-  dateFrom: Date;
-  dateTo: Date;
-}
+import { endOfMonth, startOfMonth } from 'date-fns';
 
-export const Transactions: FC<TransactionsProps> = ({ dateFrom, dateTo }) => {
+export const Transactions = () => {
+  const { date } = useContext(TransactionsContext);
+
   const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
-    dateFrom,
-    dateTo,
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
   );
   const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
-    dateFrom,
-    dateTo,
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
   );
 
   if (isPersonalExpensesLoading || isPersonalIncomesLoading) {
@@ -30,7 +31,9 @@ export const Transactions: FC<TransactionsProps> = ({ dateFrom, dateTo }) => {
 
   return (
     <div className="flex flex-1 flex-col">
-      {personalExpenses && personalIncomes ? (
+      {personalExpenses &&
+      personalIncomes &&
+      (personalExpenses.length > 0 || personalIncomes.length > 0) ? (
         <TransactionTable
           columns={columns}
           data={[...personalExpenses, ...personalIncomes]}
@@ -39,7 +42,7 @@ export const Transactions: FC<TransactionsProps> = ({ dateFrom, dateTo }) => {
         <div className="m-auto text-center">
           <Image
             src="/empty.png"
-            alt=""
+            alt="Brak transakcji"
             width={300}
             height={300}
             className="aspect-square"

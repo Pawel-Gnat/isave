@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import { DateRange } from 'react-day-picker';
 
 import { cn } from '@/lib/className';
 
@@ -10,6 +9,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { CalendarDays } from 'lucide-react';
+
+import { DateRange } from 'react-day-picker';
 
 interface DatePickerProps {
   date: DateRange | undefined;
