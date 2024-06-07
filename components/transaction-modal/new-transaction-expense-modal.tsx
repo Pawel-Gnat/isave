@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 
-import { TransactionModalContext } from '@/context/transaction-modal-context';
+import { TransactionsContext } from '@/context/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 
@@ -31,7 +31,7 @@ enum STEPS {
 
 export const NewTransactionExpenseModal = () => {
   const { showTransactionModal, setShowTransactionModal, isLoading, setIsLoading } =
-    useContext(TransactionModalContext);
+    useContext(TransactionsContext);
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
   const controllerRef = useRef<AbortController | null>(null);
 

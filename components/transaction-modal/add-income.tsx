@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { IncomeModalContext } from '@/context/income-modal-context';
+import { TransactionsContext } from '@/context/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 
@@ -24,7 +24,7 @@ import { TransactionValues } from '@/types/types';
 
 export const AddIncome = () => {
   const { showIncomeModal, setShowIncomeModal, isLoading, setIsLoading } =
-    useContext(IncomeModalContext);
+    useContext(TransactionsContext);
   const router = useRouter();
   const controllerRef = useRef<AbortController | null>(null);
 

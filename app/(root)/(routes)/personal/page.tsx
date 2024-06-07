@@ -3,9 +3,7 @@ import { redirect } from 'next/navigation';
 import getCurrentUser from '@/actions/getCurrentUser';
 
 import { TransactionsProvider } from '@/context/transactions-context';
-import { TransactionModalProvider } from '@/context/transaction-modal-context';
 import { EditTransactionModalProvider } from '@/context/edit-transaction-modal-context';
-import { IncomeModalProvider } from '@/context/income-modal-context';
 
 import { NewTransactionExpenseModal } from '@/components/transaction-modal/new-transaction-expense-modal';
 import { EditTransaction } from '@/components/transaction-modal/edit-transaction';
@@ -24,15 +22,11 @@ const PersonalPage = async () => {
   return (
     <TransactionsProvider>
       <EditTransactionModalProvider>
-        <TransactionModalProvider>
-          <IncomeModalProvider>
-            <ActionsPanel />
-            <Transactions />
-            <NewTransactionExpenseModal />
-            <EditTransaction />
-            <AddIncome />
-          </IncomeModalProvider>
-        </TransactionModalProvider>
+        <ActionsPanel />
+        <Transactions />
+        <NewTransactionExpenseModal />
+        <EditTransaction />
+        <AddIncome />
       </EditTransactionModalProvider>
     </TransactionsProvider>
   );

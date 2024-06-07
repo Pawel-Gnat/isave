@@ -3,16 +3,13 @@
 import { useContext } from 'react';
 
 import { TransactionsContext } from '@/context/transactions-context';
-import { TransactionModalContext } from '@/context/transaction-modal-context';
-import { IncomeModalContext } from '@/context/income-modal-context';
 
 import { DatePicker } from '@/components/shared/date-picker';
 import { Button } from '@/components/ui/button';
 
 export const ActionsPanel = () => {
-  const { setShowTransactionModal } = useContext(TransactionModalContext);
-  const { setShowIncomeModal } = useContext(IncomeModalContext);
-  const { date, setDate } = useContext(TransactionsContext);
+  const { date, setDate, setShowIncomeModal, setShowTransactionModal } =
+    useContext(TransactionsContext);
 
   return (
     <div className="mb-4 flex flex-row justify-between">
