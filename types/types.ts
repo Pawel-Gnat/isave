@@ -7,17 +7,13 @@ export type Transaction = {
   categoryId: string;
 };
 
-// export type ExpenseTransactionValues = {
-//   fileText: string | null;
-//   date: Date;
-//   transactions: Transaction[];
-// };
-
 export type TransactionValues = {
   fileText: string | null;
   date: Date;
   transactions: Transaction[];
 };
+
+export type TransactionCategory = 'group' | 'personal' | null;
 
 export type TransactionType = 'income' | 'expense' | null;
 
@@ -27,4 +23,12 @@ export type ModifiedPersonalExpense = PersonalExpenses & {
 
 export type ModifiedPersonalIncome = PersonalIncomes & {
   transactions: Transaction[];
+};
+
+export type AlertState = {
+  isAlertOpen: boolean;
+  isLoading: boolean;
+  transactionId: string;
+  transactionCategory: TransactionCategory;
+  transactionType: TransactionType;
 };

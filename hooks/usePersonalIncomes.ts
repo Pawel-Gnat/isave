@@ -9,7 +9,7 @@ export default function usePersonalIncomes(dateFrom?: Date, dateTo?: Date) {
     error: personalIncomesError,
     refetch: personalIncomesRefetch,
   } = useQuery({
-    queryKey: ['personalIncomes', dateFrom, dateTo],
+    queryKey: ['personalIncomes', dateFrom?.toISOString, dateTo?.toISOString],
     queryFn: async () => await getPersonalIncomes({ from: dateFrom, to: dateTo }),
   });
 

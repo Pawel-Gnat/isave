@@ -2,13 +2,13 @@
 
 import { useContext } from 'react';
 
-import { TransactionsContext } from '@/context/transactions-context';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { DatePicker } from '@/components/shared/date-picker';
 import { Button } from '@/components/ui/button';
 
 export const ActionsPanel = () => {
-  const { date, setDate, setShowIncomeModal, setShowTransactionModal } =
+  const { date, setDate, setShowIncomeModal, setShowExpenseModal } =
     useContext(TransactionsContext);
 
   return (
@@ -26,7 +26,7 @@ export const ActionsPanel = () => {
         <Button
           variant="outline"
           onClick={() => {
-            setShowTransactionModal(true);
+            setShowExpenseModal(true);
           }}
         >
           Dodaj wydatek

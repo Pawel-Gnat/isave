@@ -2,13 +2,18 @@
 
 import axios from 'axios';
 import Image from 'next/image';
-import { useContext, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
+import usePersonalExpenses from '@/hooks/usePersonalExpenses';
+import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+
+import getPersonalIncomeById from '@/actions/getPersonalIncomeById';
+import getPersonalExpenseById from '@/actions/getPersonalExpenseById';
+
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 
@@ -21,7 +26,11 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 
 import { TransactionModal } from './transaction-modal';
 
-import { TransactionValues } from '@/types/types';
+import {
+  ModifiedPersonalExpense,
+  ModifiedPersonalIncome,
+  TransactionValues,
+} from '@/types/types';
 
 export const EditTransaction = () => {
   const {
@@ -29,18 +38,40 @@ export const EditTransaction = () => {
     setShowEditTransactionModal,
     isLoading,
     setIsLoading,
-    transaction,
+    transactionId,
     transactionType,
-  } = useContext(EditTransactionModalContext);
-  const router = useRouter();
+  } = useContext(TransactionsContext);
   const controllerRef = useRef<AbortController | null>(null);
+  const [transaction, setTransaction] = useState<
+    ModifiedPersonalIncome | ModifiedPersonalExpense | null
+  >(null);
+  const { personalExpensesRefetch } = usePersonalExpenses();
+  const { personalIncomesRefetch } = usePersonalIncomes();
 
   useEffect(() => {
-    if (transaction) {
-      setValue('date', new Date(transaction.date));
-      setValue('transactions', transaction.transactions);
-    }
-  }, [transaction]);
+    (async () => {
+      if (!transactionId || !transactionType) return;
+
+      setIsLoading(true);
+      let transaction = null;
+
+      if (transactionType === 'income') {
+        transaction = await getPersonalIncomeById(transactionId);
+      } else if (transactionType === 'expense') {
+        transaction = await getPersonalExpenseById(transactionId);
+      }
+
+      setIsLoading(false);
+
+      if (transaction) {
+        setTransaction(transaction);
+        reset({
+          date: new Date(transaction.date),
+          transactions: transaction.transactions,
+        });
+      }
+    })();
+  }, [transactionId, transactionType]);
 
   useEffect(() => {
     return () => {
@@ -55,6 +86,7 @@ export const EditTransaction = () => {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<TransactionValues>({
     resolver: zodResolver(TransactionSchema),
@@ -91,7 +123,12 @@ export const EditTransaction = () => {
 
       toast.success(`${response.data}`);
       hideModal();
-      router.refresh();
+
+      if (transactionType === 'income') {
+        personalIncomesRefetch();
+      } else if (transactionType === 'expense') {
+        personalExpensesRefetch();
+      }
     } catch (error) {
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');

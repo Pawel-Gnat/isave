@@ -1,11 +1,13 @@
 'use client';
 
 import axios from 'axios';
-import { CSSProperties, useContext } from 'react';
-import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
 import { toast } from 'sonner';
 
-import { AlertContext } from '@/context/alert-context';
+import usePersonalExpenses from '@/hooks/usePersonalExpenses';
+import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+
+import { AlertContext } from '@/contexts/alert-context';
 
 import {
   AlertDialog,
@@ -22,39 +24,47 @@ import { LoadingButton } from './loading-button';
 export const Alert = () => {
   const {
     isAlertOpen,
-    setIsAlertOpen,
-    isLoading,
-    setIsLoading,
     transactionType,
     transactionId,
     transactionCategory,
+    isLoading,
+    dispatch,
   } = useContext(AlertContext);
-  const router = useRouter();
+  const { personalExpensesRefetch } = usePersonalExpenses();
+  const { personalIncomesRefetch } = usePersonalIncomes();
 
   const handleDelete = () => {
     if (isLoading) return;
 
-    setIsLoading(true);
+    dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     axios
       .delete(
         `api/transaction/${transactionType}/${transactionCategory}/${transactionId}`,
       )
       .then((response) => {
-        setIsAlertOpen(false);
+        dispatch({ type: 'SET_HIDE_ALERT' });
         toast.success(`${response.data}`);
-        router.refresh();
+
+        if (transactionType === 'income') {
+          personalIncomesRefetch();
+        } else if (transactionType === 'expense') {
+          personalExpensesRefetch();
+        }
       })
       .catch((error) => {
         toast.error(`${error.message}`);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       });
   };
 
   return (
-    <AlertDialog open={isAlertOpen} onOpenChange={() => setIsAlertOpen(false)}>
+    <AlertDialog
+      open={isAlertOpen}
+      onOpenChange={() => dispatch({ type: 'SET_HIDE_ALERT' })}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Potwierdzenie operacji</AlertDialogTitle>

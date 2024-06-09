@@ -6,8 +6,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
-import { EditTransactionModalContext } from '@/context/edit-transaction-modal-context';
-import { AlertContext } from '@/context/alert-context';
+import { AlertContext } from '@/contexts/alert-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -15,6 +14,7 @@ import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
 import { TransactionType } from '@/types/types';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 interface ButtonProps {
   id: string;
@@ -23,7 +23,7 @@ interface ButtonProps {
 
 const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   const { setTransactionId, setTransactionType, setShowEditTransactionModal } =
-    useContext(EditTransactionModalContext);
+    useContext(TransactionsContext);
 
   return (
     <Button

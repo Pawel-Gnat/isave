@@ -3,11 +3,12 @@
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useContext, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { TransactionsContext } from '@/context/transactions-context';
+import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 
@@ -25,8 +26,8 @@ import { TransactionValues } from '@/types/types';
 export const AddIncome = () => {
   const { showIncomeModal, setShowIncomeModal, isLoading, setIsLoading } =
     useContext(TransactionsContext);
-  const router = useRouter();
   const controllerRef = useRef<AbortController | null>(null);
+  const { personalIncomesRefetch } = usePersonalIncomes();
 
   useEffect(() => {
     return () => {
@@ -82,7 +83,7 @@ export const AddIncome = () => {
 
       toast.success(`${response.data}`);
       hideModal();
-      router.refresh();
+      personalIncomesRefetch();
     } catch (error) {
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');

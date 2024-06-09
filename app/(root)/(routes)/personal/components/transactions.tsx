@@ -2,16 +2,15 @@
 
 import { useContext } from 'react';
 import Image from 'next/image';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
-import { TransactionsContext } from '@/context/transactions-context';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
-
-import { endOfMonth, startOfMonth } from 'date-fns';
 
 export const Transactions = () => {
   const { date } = useContext(TransactionsContext);
@@ -47,7 +46,7 @@ export const Transactions = () => {
             height={300}
             className="aspect-square"
           />
-          <p className="font-medium">Brak transakcji dla wybranego miesiąca</p>
+          <p className="font-medium">Brak transakcji dla wybranego okresu</p>
         </div>
       )}
     </div>

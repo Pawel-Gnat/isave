@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 
-import { TransactionsContext } from '@/context/transactions-context';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 
@@ -29,8 +29,8 @@ enum STEPS {
   TABLE = 1,
 }
 
-export const NewTransactionExpenseModal = () => {
-  const { showTransactionModal, setShowTransactionModal, isLoading, setIsLoading } =
+export const AddExpense = () => {
+  const { showExpenseModal, setShowExpenseModal, isLoading, setIsLoading } =
     useContext(TransactionsContext);
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
   const controllerRef = useRef<AbortController | null>(null);
@@ -69,7 +69,7 @@ export const NewTransactionExpenseModal = () => {
       controllerRef.current.abort();
     }
 
-    setShowTransactionModal(false);
+    setShowExpenseModal(false);
     setTimeout(() => {
       reset();
       setStep(STEPS.FILE);
@@ -259,7 +259,7 @@ export const NewTransactionExpenseModal = () => {
 
   return (
     <TransactionModal
-      open={showTransactionModal}
+      open={showExpenseModal}
       onOpenChange={hideModal}
       title={handleTitle()}
       description={handleDescription()}
