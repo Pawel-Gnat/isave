@@ -39,7 +39,7 @@ export default async function DashboardLayout({
             <AddIncome />
             <Alert />
           </div>
-        </AlertProvider>{' '}
+        </AlertProvider>
       </TransactionsProvider>
     </QueryProvider>
   );
