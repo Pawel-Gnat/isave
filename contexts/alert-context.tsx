@@ -2,7 +2,7 @@
 
 import { FC, ReactNode, createContext, useReducer } from 'react';
 
-import { Action, alertReducer } from '@/reducers/alertReducer';
+import { Action, alertReducer } from '@/reducers/alert-reducer';
 
 import { AlertState } from '@/types/types';
 

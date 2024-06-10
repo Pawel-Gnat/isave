@@ -4,7 +4,6 @@ export type Action =
   | {
       type: 'SET_SHOW_ALERT';
       payload: {
-        isAlertOpen: true;
         transactionId: string;
         transactionCategory: TransactionCategory;
         transactionType: TransactionType;
@@ -20,7 +19,7 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
     case 'SET_SHOW_ALERT':
       return {
         ...state,
-        isAlertOpen: action.payload.isAlertOpen,
+        isAlertOpen: true,
         transactionId: action.payload.transactionId,
         transactionCategory: action.payload.transactionCategory,
         transactionType: action.payload.transactionType,
@@ -39,6 +38,6 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
         isLoading: action.payload.isLoading,
       };
     default:
-      return state;
+      throw new Error('Unhandled action type in AlertReducer');
   }
 };

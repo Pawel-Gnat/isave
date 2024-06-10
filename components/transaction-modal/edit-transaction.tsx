@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
@@ -34,25 +35,31 @@ import {
 
 export const EditTransaction = () => {
   const {
-    showEditTransactionModal,
-    setShowEditTransactionModal,
+    date: dateContext,
+    isEditTransactionModalOpen,
     isLoading,
-    setIsLoading,
     transactionId,
     transactionType,
+    dispatch,
   } = useContext(TransactionsContext);
   const controllerRef = useRef<AbortController | null>(null);
   const [transaction, setTransaction] = useState<
     ModifiedPersonalIncome | ModifiedPersonalExpense | null
   >(null);
-  const { personalExpensesRefetch } = usePersonalExpenses();
-  const { personalIncomesRefetch } = usePersonalIncomes();
+  const { personalExpensesRefetch } = usePersonalExpenses(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+  );
+  const { personalIncomesRefetch } = usePersonalIncomes(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+  );
 
   useEffect(() => {
     (async () => {
       if (!transactionId || !transactionType) return;
 
-      setIsLoading(true);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
       let transaction = null;
 
       if (transactionType === 'income') {
@@ -61,7 +68,7 @@ export const EditTransaction = () => {
         transaction = await getPersonalExpenseById(transactionId);
       }
 
-      setIsLoading(false);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
 
       if (transaction) {
         setTransaction(transaction);
@@ -104,12 +111,12 @@ export const EditTransaction = () => {
       controllerRef.current.abort();
     }
 
-    setShowEditTransactionModal(false);
+    dispatch({ type: 'SET_HIDE_MODAL' });
   };
 
   const saveData = async (data: TransactionValues) => {
     if (isLoading || !transaction) return;
-    setIsLoading(true);
+    dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     const newController = new AbortController();
     controllerRef.current = newController;
@@ -144,7 +151,7 @@ export const EditTransaction = () => {
         toast.error('Nieznany błąd');
       }
     } finally {
-      setIsLoading(false);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
     }
   };
 
@@ -194,7 +201,7 @@ export const EditTransaction = () => {
 
   return (
     <TransactionModal
-      open={showEditTransactionModal}
+      open={isEditTransactionModalOpen}
       onOpenChange={hideModal}
       title="Edycja transakcji"
       description="Skoryguj wybrane pozycje i zapisz zmiany"

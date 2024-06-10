@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useContext, useEffect, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
@@ -24,10 +25,17 @@ import { TransactionModal } from './transaction-modal';
 import { TransactionValues } from '@/types/types';
 
 export const AddIncome = () => {
-  const { showIncomeModal, setShowIncomeModal, isLoading, setIsLoading } =
-    useContext(TransactionsContext);
+  const {
+    date: dateContext,
+    isIncomeModalOpen,
+    isLoading,
+    dispatch,
+  } = useContext(TransactionsContext);
   const controllerRef = useRef<AbortController | null>(null);
-  const { personalIncomesRefetch } = usePersonalIncomes();
+  const { personalIncomesRefetch } = usePersonalIncomes(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+  );
 
   useEffect(() => {
     return () => {
@@ -60,7 +68,7 @@ export const AddIncome = () => {
       controllerRef.current.abort();
     }
 
-    setShowIncomeModal(false);
+    dispatch({ type: 'SET_HIDE_MODAL' });
     setTimeout(() => {
       reset();
     }, 500);
@@ -68,7 +76,7 @@ export const AddIncome = () => {
 
   const saveData = async (data: TransactionValues) => {
     if (isLoading) return;
-    setIsLoading(true);
+    dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     const newController = new AbortController();
     controllerRef.current = newController;
@@ -99,7 +107,7 @@ export const AddIncome = () => {
         toast.error('Nieznany błąd');
       }
     } finally {
-      setIsLoading(false);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
     }
   };
 
@@ -137,7 +145,7 @@ export const AddIncome = () => {
 
   return (
     <TransactionModal
-      open={showIncomeModal}
+      open={isIncomeModalOpen}
       onOpenChange={hideModal}
       title="Utwórz nowy przychód"
       description="Dodaj pozycje i zapisz dane"

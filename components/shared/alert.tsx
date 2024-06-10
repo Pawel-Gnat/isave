@@ -3,11 +3,13 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { toast } from 'sonner';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
 import { AlertContext } from '@/contexts/alert-context';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import {
   AlertDialog,
@@ -30,8 +32,15 @@ export const Alert = () => {
     isLoading,
     dispatch,
   } = useContext(AlertContext);
-  const { personalExpensesRefetch } = usePersonalExpenses();
-  const { personalIncomesRefetch } = usePersonalIncomes();
+  const { date } = useContext(TransactionsContext);
+  const { personalExpensesRefetch } = usePersonalExpenses(
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
+  );
+  const { personalIncomesRefetch } = usePersonalIncomes(
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
+  );
 
   const handleDelete = () => {
     if (isLoading) return;

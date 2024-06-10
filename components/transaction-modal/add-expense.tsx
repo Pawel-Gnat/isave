@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 
@@ -30,12 +31,19 @@ enum STEPS {
 }
 
 export const AddExpense = () => {
-  const { showExpenseModal, setShowExpenseModal, isLoading, setIsLoading } =
-    useContext(TransactionsContext);
+  const {
+    date: dateContext,
+    isExpenseModalOpen,
+    isLoading,
+    dispatch,
+  } = useContext(TransactionsContext);
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
   const controllerRef = useRef<AbortController | null>(null);
 
-  const { personalExpensesRefetch } = usePersonalExpenses();
+  const { personalExpensesRefetch } = usePersonalExpenses(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+  );
 
   useEffect(() => {
     return () => {
@@ -69,7 +77,7 @@ export const AddExpense = () => {
       controllerRef.current.abort();
     }
 
-    setShowExpenseModal(false);
+    dispatch({ type: 'SET_HIDE_MODAL' });
     setTimeout(() => {
       reset();
       setStep(STEPS.FILE);
@@ -90,7 +98,7 @@ export const AddExpense = () => {
     if (isLoading) return;
 
     if (step === STEPS.FILE && fileText) {
-      setIsLoading(true);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
       const newController = new AbortController();
       controllerRef.current = newController;
@@ -118,12 +126,12 @@ export const AddExpense = () => {
           toast.error('Nieznany błąd');
         }
       } finally {
-        setIsLoading(false);
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       }
     }
 
     if (step === STEPS.TABLE) {
-      setIsLoading(true);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
       const newController = new AbortController();
       controllerRef.current = newController;
@@ -154,7 +162,7 @@ export const AddExpense = () => {
           toast.error('Nieznany błąd');
         }
       } finally {
-        setIsLoading(false);
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       }
 
       return;
@@ -207,13 +215,7 @@ export const AddExpense = () => {
 
   const content = () => {
     if (step === STEPS.FILE) {
-      return (
-        <FileInput
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          onSelect={(fileText) => setValue('fileText', fileText)}
-        />
-      );
+      return <FileInput onSelect={(fileText) => setValue('fileText', fileText)} />;
     }
 
     return (
@@ -259,7 +261,7 @@ export const AddExpense = () => {
 
   return (
     <TransactionModal
-      open={showExpenseModal}
+      open={isExpenseModalOpen}
       onOpenChange={hideModal}
       title={handleTitle()}
       description={handleDescription()}

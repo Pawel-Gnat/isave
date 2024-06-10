@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
 import { AlertContext } from '@/contexts/alert-context';
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -14,7 +15,6 @@ import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
 import { TransactionType } from '@/types/types';
-import { TransactionsContext } from '@/contexts/transactions-context';
 
 interface ButtonProps {
   id: string;
@@ -22,17 +22,20 @@ interface ButtonProps {
 }
 
 const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
-  const { setTransactionId, setTransactionType, setShowEditTransactionModal } =
-    useContext(TransactionsContext);
+  const { dispatch } = useContext(TransactionsContext);
 
   return (
     <Button
       variant="outline"
       className="mr-2"
       onClick={() => {
-        setTransactionId(id);
-        setTransactionType(transactionType);
-        setShowEditTransactionModal(true);
+        dispatch({
+          type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
+          payload: {
+            transactionId: id,
+            transactionType: transactionType,
+          },
+        });
       }}
     >
       <Eye />
@@ -41,17 +44,20 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
 };
 
 const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
-  const { setIsAlertOpen, setTransactionId, setTransactionType, setTransactionCategory } =
-    useContext(AlertContext);
+  const { dispatch } = useContext(AlertContext);
 
   return (
     <Button
       variant="outline"
       onClick={() => {
-        setTransactionId(id);
-        setTransactionType(transactionType);
-        setIsAlertOpen(true);
-        setTransactionCategory('personal');
+        dispatch({
+          type: 'SET_SHOW_ALERT',
+          payload: {
+            transactionCategory: 'personal',
+            transactionType: transactionType,
+            transactionId: id,
+          },
+        });
       }}
     >
       <Trash2 />

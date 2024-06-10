@@ -1,4 +1,5 @@
 import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+import { DateRange } from 'react-day-picker';
 
 export type Transaction = {
   id: string;
@@ -31,4 +32,14 @@ export type AlertState = {
   transactionId: string;
   transactionCategory: TransactionCategory;
   transactionType: TransactionType;
+};
+
+export type TransactionState = {
+  isIncomeModalOpen: boolean;
+  isExpenseModalOpen: boolean;
+  isEditTransactionModalOpen: boolean;
+  date: DateRange | undefined;
+  transactionType: TransactionType;
+  transactionId: string;
+  isLoading: boolean;
 };

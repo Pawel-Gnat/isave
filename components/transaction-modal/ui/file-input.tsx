@@ -1,19 +1,20 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { createWorker } from 'tesseract.js';
+
+import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface FileInputProps {
   onSelect: (value: string) => void;
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
 }
 
-export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoading }) => {
+export const FileInput: FC<FileInputProps> = ({ onSelect }) => {
   const [value, setValue] = useState('');
   const [isError, setIsError] = useState(false);
+  const { isLoading, dispatch } = useContext(TransactionsContext);
 
   useEffect(() => {
     onSelect(value);
@@ -55,7 +56,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
     const file = event.target.files ? event.target.files[0] : null;
 
     if (file) {
-      setIsLoading(true);
+      dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
       setIsError(false);
 
       const reader = new FileReader();
@@ -68,13 +69,13 @@ export const FileInput: FC<FileInputProps> = ({ onSelect, isLoading, setIsLoadin
         await worker.terminate();
 
         setValue(result.data.text);
-        setIsLoading(false);
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       };
 
       reader.onerror = (error) => {
         console.error('Error reading file:', error);
         setIsError(true);
-        setIsLoading(false);
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       };
     }
   };

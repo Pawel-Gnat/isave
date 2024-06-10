@@ -5,20 +5,25 @@ import { useContext } from 'react';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { DatePicker } from '@/components/shared/date-picker';
+
 import { Button } from '@/components/ui/button';
+import { DateRange } from 'react-day-picker';
 
 export const ActionsPanel = () => {
-  const { date, setDate, setShowIncomeModal, setShowExpenseModal } =
-    useContext(TransactionsContext);
+  const { date, dispatch } = useContext(TransactionsContext);
+
+  const handleSetDate = (date: DateRange | undefined) => {
+    dispatch({ type: 'SET_DATE', payload: { date } });
+  };
 
   return (
     <div className="mb-4 flex flex-row justify-between">
-      <DatePicker date={date} setDate={setDate} />
+      <DatePicker date={date} setDate={handleSetDate} />
       <div className="space-x-4">
         <Button
           variant="outline"
           onClick={() => {
-            setShowIncomeModal(true);
+            dispatch({ type: 'SET_SHOW_INCOME_MODAL' });
           }}
         >
           Dodaj przychód
@@ -26,7 +31,7 @@ export const ActionsPanel = () => {
         <Button
           variant="outline"
           onClick={() => {
-            setShowExpenseModal(true);
+            dispatch({ type: 'SET_SHOW_EXPENSE_MODAL' });
           }}
         >
           Dodaj wydatek
