@@ -1,10 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { signOut } from 'next-auth/react';
-
-import Logo from '@/public/logo.svg';
 
 import { Button } from '@/components/ui/button';
 
@@ -30,14 +27,6 @@ const Navbar = () => {
   return (
     <nav className="sticky flex h-screen flex-col items-center gap-4 p-6">
       <Link href="/" className="hidden p-2 lg:block">
-        {/* <Image
-          src={Logo}
-          alt=""
-          aria-hidden="true"
-          width={30}
-          height={30}
-          className="min-w-[30px]"
-        /> */}
         iSave
       </Link>
 

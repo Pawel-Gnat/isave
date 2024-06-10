@@ -3,11 +3,11 @@ import { redirect } from 'next/navigation';
 import getCurrentUser from '@/actions/getCurrentUser';
 
 const HomePage = async () => {
-  //   const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
-  //   if (!user) {
-  //     redirect('/auth');
-  //   }
+  if (!user) {
+    redirect('/auth');
+  }
 
   return (
     <>

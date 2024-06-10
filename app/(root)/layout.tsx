@@ -1,7 +1,3 @@
-import { redirect } from 'next/navigation';
-
-import getCurrentUser from '@/actions/getCurrentUser';
-
 import QueryProvider from '@/contexts/query-context';
 import { AlertProvider } from '@/contexts/alert-context';
 import { TransactionsProvider } from '@/contexts/transactions-context';
@@ -19,12 +15,6 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect('/auth');
-  }
-
   return (
     <QueryProvider>
       <TransactionsProvider>
@@ -32,7 +22,7 @@ export default async function DashboardLayout({
           <Navbar />
           {/* <div className="flex h-screen w-full flex-col overflow-y-auto bg-foreground"> */}
           <div className="flex h-screen w-full flex-col overflow-y-auto">
-            <Header user={user} />
+            <Header />
             <main className="flex flex-1 flex-col p-12">{children}</main>
             <EditTransaction />
             <AddExpense />

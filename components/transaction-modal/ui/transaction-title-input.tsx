@@ -22,3 +22,5 @@ export const TransactionTitleInput: FC<TransactionTitleInputProps> = forwardRef<
     />
   );
 });
+
+TransactionTitleInput.displayName = 'TransactionTitleInput';

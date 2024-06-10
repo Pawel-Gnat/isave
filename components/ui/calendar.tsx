@@ -55,7 +55,11 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // bug with day picker
+        // https://github.com/shadcn-ui/ui/issues/3072
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}

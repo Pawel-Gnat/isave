@@ -114,7 +114,7 @@ export const EditTransaction = () => {
     dispatch({ type: 'SET_HIDE_MODAL' });
   };
 
-  const saveData = async (data: TransactionValues) => {
+  const saveData = async () => {
     if (isLoading || !transaction) return;
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 

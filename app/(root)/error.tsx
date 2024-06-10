@@ -6,13 +6,7 @@ import NavLink from '@/components/shared/nav-link';
 
 import { Milestone } from 'lucide-react';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function Error({ reset }: { reset: () => void }) {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <h2>Błąd działania aplikacji!</h2>

@@ -93,3 +93,5 @@ export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = for
     );
   },
 );
+
+TransactionCategorySelect.displayName = 'TransactionCategorySelect';

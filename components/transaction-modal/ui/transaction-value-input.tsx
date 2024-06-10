@@ -24,3 +24,5 @@ export const TransactionValueInput: FC<TransactionValueInputProps> = forwardRef<
     />
   );
 });
+
+TransactionValueInput.displayName = 'TransactionValueInput';
