@@ -4,9 +4,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 
 import { ActionsPanel } from '@/components/shared/actions-panel';
 
-import { Transactions } from './components/transactions';
-
-const PersonalPage = async () => {
+const SharedBudgetPage = async () => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -16,9 +14,8 @@ const PersonalPage = async () => {
   return (
     <>
       <ActionsPanel />
-      <Transactions />
     </>
   );
 };
 
-export default PersonalPage;
+export default SharedBudgetPage;

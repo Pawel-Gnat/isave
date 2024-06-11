@@ -7,6 +7,7 @@ import { TransactionsContext } from '@/contexts/transactions-context';
 import { DatePicker } from '@/components/shared/date-picker';
 
 import { Button } from '@/components/ui/button';
+
 import { DateRange } from 'react-day-picker';
 
 export const ActionsPanel = () => {

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
+import { SharedBudgets } from './components/shared-budgets';
+
 const GroupPage = async () => {
   const user = await getCurrentUser();
 
@@ -11,7 +13,7 @@ const GroupPage = async () => {
 
   return (
     <>
-      <h2 className="text-4xl font-bold">Group</h2>
+      <SharedBudgets />
     </>
   );
 };
