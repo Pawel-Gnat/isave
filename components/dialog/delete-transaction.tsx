@@ -11,19 +11,9 @@ import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 import { AlertContext } from '@/contexts/alert-context';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { Dialog } from './dialog';
 
-import { LoadingButton } from './loading-button';
-
-export const Alert = () => {
+export const DeleteTransaction = () => {
   const {
     isAlertOpen,
     transactionType,
@@ -42,9 +32,12 @@ export const Alert = () => {
     date?.to || endOfMonth(new Date()),
   );
 
+  const handleClose = () => {
+    dispatch({ type: 'SET_HIDE_ALERT' });
+  };
+
   const handleDelete = () => {
     if (isLoading) return;
-
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     axios
@@ -62,7 +55,7 @@ export const Alert = () => {
         }
       })
       .catch((error) => {
-        toast.error(`${error.message}`);
+        toast.error(`${error.response.data.error}`);
       })
       .finally(() => {
         dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
@@ -70,23 +63,14 @@ export const Alert = () => {
   };
 
   return (
-    <AlertDialog
+    <Dialog
       open={isAlertOpen}
-      onOpenChange={() => dispatch({ type: 'SET_HIDE_ALERT' })}
-    >
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Potwierdzenie operacji</AlertDialogTitle>
-          <AlertDialogDescription>
-            Czy na pewno chcesz usunąć tę pozycję? Ta operacja jest nieodwracalna i
-            spowoduje trwałe usunięcie danych.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Anuluj</AlertDialogCancel>
-          <LoadingButton isLoading={isLoading} onClick={handleDelete} text="Usuń" />
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      onOpenChange={handleClose}
+      isLoading={isLoading}
+      title="Potwierdzenie operacji"
+      description="Czy na pewno chcesz usunąć tę pozycję? Ta operacja jest nieodwracalna i spowoduje trwałe usunięcie danych."
+      handleDialog={handleDelete}
+      actionText="Usuń"
+    />
   );
 };

@@ -139,7 +139,7 @@ export const AddExpense = () => {
       try {
         const response = await axios.post(
           // that income needs to be changed to dynamic category
-          `api/transaction/expense/personal`,
+          `api/transaction/personal/expense`,
           { date, transactions },
           { signal: newController.signal },
         );

@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 
+import { LoginFormSchema } from '@/utils/formValidations';
+
 import {
   Form,
   FormControl,
@@ -17,8 +19,6 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
-
-import { LoginFormSchema } from '@/utils/formValidations';
 
 const LoginForm = () => {
   const [loading, setIsLoading] = useState(false);

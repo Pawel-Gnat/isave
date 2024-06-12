@@ -2,7 +2,10 @@ import { redirect } from 'next/navigation';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
+import { NewBudget } from '@/components/dialog/new-budget';
+
 import { SharedBudgets } from './components/shared-budgets';
+import { BudgetsPanel } from './components/budgets-panel';
 
 const GroupPage = async () => {
   const user = await getCurrentUser();
@@ -13,7 +16,9 @@ const GroupPage = async () => {
 
   return (
     <>
+      <BudgetsPanel />
       <SharedBudgets />
+      <NewBudget />
     </>
   );
 };

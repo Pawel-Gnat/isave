@@ -37,6 +37,7 @@ model User {
   accounts               Account[]
   personalExpenses       PersonalExpenses[]
   personalIncomes        PersonalIncomes[]
+  ownedGroupBudgets      GroupBudget[]            
 }
 
 model PersonalIncomes {
@@ -81,6 +82,23 @@ model PersonalExpenseProduct {
   categoryId               String
   personalExpense          PersonalExpenses?       @relation(fields: [personalExpenseId], references: [id], onDelete: Cascade)
   personalExpenseId        String                  @db.ObjectId
+}
+
+model GroupBudget {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  name                   String
+  ownerId                String               @db.ObjectId
+  owner                  User                 @relation(fields: [ownerId], references: [id])
+  members                GroupBudgetMember[]  
+}
+
+model GroupBudgetMember {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String               @db.ObjectId
+  groupBudgetId          String               @db.ObjectId
+  groupBudget            GroupBudget          @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
 }
 
 model IncomeCategory {

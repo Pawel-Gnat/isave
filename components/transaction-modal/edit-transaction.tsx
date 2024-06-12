@@ -124,7 +124,7 @@ export const EditTransaction = () => {
     try {
       const response = await axios.patch(
         // that expense needs to be changed to dynamic category
-        `api/transaction/${transactionType}/personal/${transaction.id}`,
+        `api/transaction/personal/${transactionType}/${transaction.id}`,
         { date, transactions },
       );
 

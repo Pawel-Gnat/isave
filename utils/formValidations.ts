@@ -17,6 +17,12 @@ export const RegisterFormSchema = z.object({
   }),
 });
 
+export const CreateBudgetFormSchema = z.object({
+  name: z.string().trim().min(3, {
+    message: 'Nazwa musi mieć przynajmniej 3 znaki.',
+  }),
+});
+
 export const TransactionSchema = z.object({
   date: z.date(),
   transactions: z.array(

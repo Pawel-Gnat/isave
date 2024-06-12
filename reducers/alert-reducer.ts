@@ -10,6 +10,9 @@ export type Action =
       };
     }
   | {
+      type: 'SET_SHOW_CREATE_BUDGET';
+    }
+  | {
       type: 'SET_HIDE_ALERT';
     }
   | { type: 'SET_IS_LOADING'; payload: { isLoading: boolean } };
@@ -24,10 +27,16 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
         transactionCategory: action.payload.transactionCategory,
         transactionType: action.payload.transactionType,
       };
+    case 'SET_SHOW_CREATE_BUDGET':
+      return {
+        ...state,
+        isCreateBudgetAlertOpen: true,
+      };
     case 'SET_HIDE_ALERT':
       return {
         ...state,
         isAlertOpen: false,
+        isCreateBudgetAlertOpen: false,
         transactionId: '',
         transactionCategory: null,
         transactionType: null,

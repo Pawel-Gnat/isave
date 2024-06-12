@@ -4,11 +4,12 @@ import { TransactionsProvider } from '@/contexts/transactions-context';
 
 import Navbar from '@/components/shared/navbar';
 import Header from '@/components/shared/header';
-import { Alert } from '@/components/shared/alert';
+import { DeleteTransaction } from '@/components/dialog/delete-transaction';
 
 import { EditTransaction } from '@/components/transaction-modal/edit-transaction';
 import { AddExpense } from '@/components/transaction-modal/add-expense';
 import { AddIncome } from '@/components/transaction-modal/add-income';
+import { Dialog } from '@/components/dialog/dialog';
 
 export default async function DashboardLayout({
   children,
@@ -27,7 +28,8 @@ export default async function DashboardLayout({
             <EditTransaction />
             <AddExpense />
             <AddIncome />
-            <Alert />
+            <DeleteTransaction />
+            {/* <Dialog /> */}
           </div>
         </AlertProvider>
       </TransactionsProvider>

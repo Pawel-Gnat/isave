@@ -48,7 +48,7 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
 
   return (
     <Button
-      variant="outline"
+      variant="destructive"
       onClick={() => {
         dispatch({
           type: 'SET_SHOW_ALERT',

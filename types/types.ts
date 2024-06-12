@@ -28,6 +28,7 @@ export type ModifiedPersonalIncome = PersonalIncomes & {
 
 export type AlertState = {
   isAlertOpen: boolean;
+  isCreateBudgetAlertOpen: boolean;
   isLoading: boolean;
   transactionId: string;
   transactionCategory: TransactionCategory;

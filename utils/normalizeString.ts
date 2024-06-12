@@ -1,5 +1,7 @@
+import capitalizeFirstLetter from './capitalizeFirstLetter';
+
 function normalizeString(input: string): string {
-  return input.trim().replace(/\s+/g, ' ');
+  return capitalizeFirstLetter(input.trim().replace(/\s+/g, ' '));
 }
 
 export default normalizeString;

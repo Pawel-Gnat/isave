@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
+import { RegisterFormSchema } from '@/utils/formValidations';
 
 import {
   Form,
@@ -18,8 +19,6 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
-
-import { RegisterFormSchema } from '@/utils/formValidations';
 
 interface RegisterFormProps {
   toggleAuthStatus: () => void;
@@ -37,16 +36,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ toggleAuthStatus }) => {
   });
 
   function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
-    const formData = {
-      ...values,
-      name: capitalizeFirstLetter(values.name),
-    };
-
     if (loading) return;
     setIsLoading(true);
 
     axios
-      .post('/api/register', formData)
+      .post('/api/register', values)
       .then((response) => {
         toast(`${response.data}`);
         toggleAuthStatus();
