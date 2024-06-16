@@ -1,8 +1,10 @@
+import { FC } from 'react';
+
+import useBudgetMember from '@/hooks/useBudgetMember';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import useBudgetMember from '@/hooks/useBudgetMember';
-import { FC } from 'react';
 
 interface BudgetBadgeProps {
   owner: boolean;

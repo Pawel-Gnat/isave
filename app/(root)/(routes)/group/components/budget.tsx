@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { FC, useContext } from 'react';
 
 import { AlertContext } from '@/contexts/alert-context';
@@ -26,6 +27,7 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
 
   const handleSaveInvideIdToClipboard = (id: string) => {
     navigator.clipboard.writeText(id);
+    toast.success('Skopiowano ID do schowka');
   };
 
   return (

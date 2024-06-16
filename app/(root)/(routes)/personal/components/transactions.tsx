@@ -9,6 +9,8 @@ import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import { columns } from './table-columns';
 import { TransactionTable } from './transaction-table';
 
@@ -25,7 +27,7 @@ export const Transactions = () => {
   );
 
   if (isPersonalExpensesLoading || isPersonalIncomesLoading) {
-    return <p>Ładowanie</p>;
+    return <Skeleton className="h-80 w-full" />;
   }
 
   return (

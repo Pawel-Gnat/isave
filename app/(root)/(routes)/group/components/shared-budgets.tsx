@@ -4,13 +4,20 @@ import Image from 'next/image';
 
 import useGroupBudgets from '@/hooks/useGroupBudgets';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import { Budget } from './budget';
 
 export const SharedBudgets = () => {
   const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
 
   if (isGroupBudgetsLoading) {
-    return <p>Ładowanie</p>;
+    return (
+      <div className="flex flex-1 flex-col gap-4">
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
+    );
   }
 
   return (
