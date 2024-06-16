@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 import getCurrentUser from '@/actions/getCurrentUser';
 import getExpenseCategories from '@/actions/getExpenseCategories';
 
-import normalizeString from '@/utils/normalizeString';
+import { normalizeString } from '@/utils/textUtils';
 
 import { Transaction } from '@/types/types';
 

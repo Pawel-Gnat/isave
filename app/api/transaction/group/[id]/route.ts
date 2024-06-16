@@ -4,11 +4,12 @@ import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
-import { capitalizeFirstLetter } from '@/utils/textUtils';
+interface ParamsProps {
+  id: string;
+}
 
-export async function POST(request: Request) {
-  const body = await request.json();
-  const { name } = body;
+export async function DELETE(request: Request, { params }: { params: ParamsProps }) {
+  const { id } = params;
 
   const currentUser = await getCurrentUser();
 
@@ -16,12 +17,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  await prisma.groupBudget.create({
-    data: {
-      name: capitalizeFirstLetter(name),
+  await prisma.groupBudget.delete({
+    where: {
+      id: id,
       ownerId: currentUser.id,
     },
   });
 
-  return NextResponse.json('Utworzono nowy budżet');
+  return NextResponse.json('Usunięto grupowy budżet');
 }

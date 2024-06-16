@@ -3,15 +3,19 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { toast } from 'sonner';
-import { endOfMonth, startOfMonth } from 'date-fns';
+
+import { handleApiDeleteRoute } from '@/utils/dialogUtils';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
+import useGroupBudgets from '@/hooks/useGroupBudgets';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
-import { AlertContext } from '@/contexts/alert-context';
 import { TransactionsContext } from '@/contexts/transactions-context';
+import { AlertContext } from '@/contexts/alert-context';
 
 import { Dialog } from './dialog';
+
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 export const DeleteTransaction = () => {
   const {
@@ -31,9 +35,30 @@ export const DeleteTransaction = () => {
     date?.from || startOfMonth(new Date()),
     date?.to || endOfMonth(new Date()),
   );
+  const { groupBudgetsRefetch } = useGroupBudgets();
 
   const handleClose = () => {
     dispatch({ type: 'SET_HIDE_ALERT' });
+  };
+
+  const handleRefetch = () => {
+    if (transactionCategory === 'group') {
+      if (!transactionType) {
+        return groupBudgetsRefetch();
+      } else if (transactionType === 'income') {
+        // personalIncomesRefetch();
+      } else if (transactionType === 'expense') {
+        // personalExpensesRefetch();
+      }
+    }
+
+    if (transactionCategory === 'personal') {
+      if (transactionType === 'income') {
+        return personalIncomesRefetch();
+      } else if (transactionType === 'expense') {
+        return personalExpensesRefetch();
+      }
+    }
   };
 
   const handleDelete = () => {
@@ -41,18 +66,11 @@ export const DeleteTransaction = () => {
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     axios
-      .delete(
-        `api/transaction/${transactionType}/${transactionCategory}/${transactionId}`,
-      )
+      .delete(handleApiDeleteRoute(transactionCategory, transactionType, transactionId))
       .then((response) => {
-        dispatch({ type: 'SET_HIDE_ALERT' });
         toast.success(`${response.data}`);
-
-        if (transactionType === 'income') {
-          personalIncomesRefetch();
-        } else if (transactionType === 'expense') {
-          personalExpensesRefetch();
-        }
+        handleRefetch();
+        dispatch({ type: 'SET_HIDE_ALERT' });
       })
       .catch((error) => {
         toast.error(`${error.response.data.error}`);

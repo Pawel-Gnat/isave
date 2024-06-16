@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import useGroupBudgets from '@/hooks/useGroupBudgets';
 
 import { Budget } from './budget';
@@ -7,35 +9,34 @@ import { Budget } from './budget';
 export const SharedBudgets = () => {
   const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
 
-  return (
-    <ul className="space-y-4">
-      <li>
-        <Budget
-          title="Budżet domowy"
-          href="/group/1"
-          users={[{ name: 'Pawel' }, { name: 'Agnieszka' }]}
-        />
-      </li>
-      <li>
-        <Budget title="Wyjazd rodzinny" href="/group/2" users={[{ name: 'Pawel' }]} />
-      </li>
-      <li>
-        <Budget
-          title="Fundusz oszczędnościowy"
-          href="/group/3"
-          users={[{ name: 'Pawel' }, { name: 'Agnieszka' }]}
-        />
-      </li>
+  if (isGroupBudgetsLoading) {
+    return <p>Ładowanie</p>;
+  }
 
-      {groupBudgets?.map((budget) => (
-        <li key={budget.id}>
+  return (
+    <div className="flex flex-1 flex-col gap-4">
+      {groupBudgets && groupBudgets.length > 0 ? (
+        groupBudgets.map((budget) => (
           <Budget
+            key={budget.id}
             title={budget.name}
+            id={budget.id}
             href={`/group/${budget.id}`}
             users={[{ name: 'test' }]}
           />
-        </li>
-      ))}
-    </ul>
+        ))
+      ) : (
+        <div className="m-auto text-center">
+          <Image
+            src="/empty.png"
+            alt="Brak transakcji"
+            width={300}
+            height={300}
+            className="aspect-square"
+          />
+          <p className="font-medium">Brak transakcji dla wybranego okresu</p>
+        </div>
+      )}
+    </div>
   );
 };

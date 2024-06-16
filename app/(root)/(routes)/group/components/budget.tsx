@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+
+import { AlertContext } from '@/contexts/alert-context';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,11 +12,14 @@ import { Trash2, UserMinus, UserPlus, Users } from 'lucide-react';
 
 interface BudgetProps {
   title: string;
+  id: string;
   href: string;
   users: { name: string }[];
 }
 
-export const Budget: FC<BudgetProps> = ({ title, href, users }) => {
+export const Budget: FC<BudgetProps> = ({ title, id, href, users }) => {
+  const { dispatch } = useContext(AlertContext);
+
   return (
     <Link
       href={href}
@@ -27,6 +32,14 @@ export const Budget: FC<BudgetProps> = ({ title, href, users }) => {
           className="mr-2"
           onClick={(e) => {
             e.preventDefault();
+            dispatch({
+              type: 'SET_SHOW_ALERT',
+              payload: {
+                transactionCategory: 'group',
+                transactionType: null,
+                transactionId: id,
+              },
+            });
           }}
         >
           <Trash2 />
@@ -36,6 +49,7 @@ export const Budget: FC<BudgetProps> = ({ title, href, users }) => {
         <div className="flex gap-2">
           {users.map((user, index) => (
             <Button
+              key={index}
               variant="ghost"
               className="h-fit self-end p-0"
               onClick={(e) => {
