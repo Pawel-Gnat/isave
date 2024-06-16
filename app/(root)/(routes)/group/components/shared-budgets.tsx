@@ -22,7 +22,8 @@ export const SharedBudgets = () => {
             title={budget.name}
             id={budget.id}
             href={`/group/${budget.id}`}
-            users={[{ name: 'test' }]}
+            ownerId={budget.ownerId}
+            members={budget.members}
           />
         ))
       ) : (
@@ -34,7 +35,7 @@ export const SharedBudgets = () => {
             height={300}
             className="aspect-square"
           />
-          <p className="font-medium">Brak transakcji dla wybranego okresu</p>
+          <p className="font-medium">Brak budżetów</p>
         </div>
       )}
     </div>

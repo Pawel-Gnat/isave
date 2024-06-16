@@ -5,20 +5,28 @@ import { FC, useContext } from 'react';
 
 import { AlertContext } from '@/contexts/alert-context';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-import { Trash2, UserMinus, UserPlus, Users } from 'lucide-react';
+import { BudgetBadge } from './budget-badge';
+
+import { Trash2, UserMinus, UserPlus } from 'lucide-react';
+
+import { GroupBudgetMember } from '@prisma/client';
 
 interface BudgetProps {
   title: string;
   id: string;
   href: string;
-  users: { name: string }[];
+  ownerId: string;
+  members: GroupBudgetMember[];
 }
 
-export const Budget: FC<BudgetProps> = ({ title, id, href, users }) => {
+export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
   const { dispatch } = useContext(AlertContext);
+
+  const handleSaveInvideIdToClipboard = (id: string) => {
+    navigator.clipboard.writeText(id);
+  };
 
   return (
     <Link
@@ -46,8 +54,14 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, users }) => {
         </Button>
       </div>
       <div className="flex flex-row justify-between gap-4">
-        <div className="flex gap-2">
-          {users.map((user, index) => (
+        <div className="flex items-end gap-2">
+          <BudgetBadge
+            id={ownerId}
+            owner={true}
+            onClick={handleSaveInvideIdToClipboard}
+          />
+
+          {/* {members.map((user, index) => (
             <Button
               key={index}
               variant="ghost"
@@ -57,10 +71,10 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, users }) => {
               }}
             >
               <Badge key={index} variant="default">
-                {user.name}
+                {user}
               </Badge>
             </Button>
-          ))}
+          ))} */}
         </div>
         <div>
           <Button

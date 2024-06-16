@@ -12,6 +12,9 @@ const getGroupBudgets = async () => {
       where: {
         ownerId: currentUser?.id,
       },
+      include: {
+        members: true,
+      },
     });
 
     return GroupBudgets;
