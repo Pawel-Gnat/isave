@@ -1,9 +1,13 @@
 import { DateRange } from 'react-day-picker';
-import { TransactionState, TransactionType } from '@/types/types';
+import { TransactionCategory, TransactionState, TransactionType } from '@/types/types';
 
 export type Action =
   | {
       type: 'SET_SHOW_INCOME_MODAL';
+      payload: {
+        groupBudgetId: string;
+        transactionCategory: TransactionCategory;
+      };
     }
   | {
       type: 'SET_SHOW_EXPENSE_MODAL';
@@ -35,6 +39,8 @@ export const transactionReducer = (
       return {
         ...state,
         isIncomeModalOpen: true,
+        groupBudgetId: action.payload.groupBudgetId,
+        transactionCategory: action.payload.transactionCategory,
       };
     case 'SET_SHOW_EXPENSE_MODAL':
       return {
@@ -56,6 +62,8 @@ export const transactionReducer = (
         isEditTransactionModalOpen: false,
         transactionId: '',
         transactionType: null,
+        transactionCategory: null,
+        groupBudgetId: '',
       };
     case 'SET_DATE':
       return {

@@ -41,6 +41,8 @@ export type TransactionState = {
   isEditTransactionModalOpen: boolean;
   date: DateRange | undefined;
   transactionType: TransactionType;
+  transactionCategory: TransactionCategory;
+  groupBudgetId: string;
   transactionId: string;
   isLoading: boolean;
 };

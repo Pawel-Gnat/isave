@@ -15,7 +15,7 @@ const PersonalPage = async () => {
 
   return (
     <>
-      <ActionsPanel />
+      <ActionsPanel category="personal" />
       <Transactions />
     </>
   );

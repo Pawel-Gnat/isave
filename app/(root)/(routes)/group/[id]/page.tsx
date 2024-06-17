@@ -4,7 +4,13 @@ import getCurrentUser from '@/actions/getCurrentUser';
 
 import { ActionsPanel } from '@/components/shared/actions-panel';
 
-const SharedBudgetPage = async () => {
+import { Transactions } from './components/transactions';
+
+interface SharedBudgetPageProps {
+  id: string;
+}
+
+const SharedBudgetPage = async ({ params }: { params: SharedBudgetPageProps }) => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -13,7 +19,8 @@ const SharedBudgetPage = async () => {
 
   return (
     <>
-      <ActionsPanel />
+      <ActionsPanel id={params.id} category="group" />
+      <Transactions id={params.id} />
     </>
   );
 };

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+import useGroupIncomes from '@/hooks/useGroupIncomes';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
@@ -23,18 +24,26 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
+import { handleApiPostRoute } from '@/utils/dialogUtils';
 
 export const AddIncome = () => {
   const {
     date: dateContext,
     isIncomeModalOpen,
     isLoading,
+    transactionCategory,
+    groupBudgetId,
     dispatch,
   } = useContext(TransactionsContext);
   const controllerRef = useRef<AbortController | null>(null);
   const { personalIncomesRefetch } = usePersonalIncomes(
     dateContext?.from || startOfMonth(new Date()),
     dateContext?.to || endOfMonth(new Date()),
+  );
+  const { groupIncomesRefetch } = useGroupIncomes(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+    groupBudgetId,
   );
 
   useEffect(() => {
@@ -74,6 +83,16 @@ export const AddIncome = () => {
     }, 500);
   };
 
+  const handleRefetch = () => {
+    if (transactionCategory === 'group') {
+      groupIncomesRefetch();
+    }
+
+    if (transactionCategory === 'personal') {
+      personalIncomesRefetch();
+    }
+  };
+
   const saveData = async (data: TransactionValues) => {
     if (isLoading) return;
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
@@ -83,15 +102,14 @@ export const AddIncome = () => {
 
     try {
       const response = await axios.post(
-        // that income needs to be changed to dynamic category
-        `api/transaction/personal/income`,
+        handleApiPostRoute(transactionCategory, groupBudgetId),
         data,
         { signal: newController.signal },
       );
 
       toast.success(`${response.data}`);
+      handleRefetch();
       hideModal();
-      personalIncomesRefetch();
     } catch (error) {
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');

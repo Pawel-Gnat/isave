@@ -1,12 +1,11 @@
 'use client';
 
-import { ReactNode, createContext, useReducer, useState } from 'react';
+import { ReactNode, createContext, useReducer } from 'react';
 import { startOfMonth, endOfMonth } from 'date-fns';
 
 import { Action, transactionReducer } from '@/reducers/transaction-modal-reducer';
 
-import { DateRange } from 'react-day-picker';
-import { TransactionState, TransactionType } from '@/types/types';
+import { TransactionState } from '@/types/types';
 
 interface TransactionsContextProps extends TransactionState {
   dispatch: React.Dispatch<Action>;
@@ -18,6 +17,8 @@ const initialState: TransactionState = {
   isEditTransactionModalOpen: false,
   date: { from: startOfMonth(new Date()), to: endOfMonth(new Date()) },
   transactionType: null,
+  transactionCategory: null,
+  groupBudgetId: '',
   transactionId: '',
   isLoading: false,
 };

@@ -5,11 +5,11 @@ import prisma from '@/lib/prisma';
 import getCurrentUser from '@/actions/getCurrentUser';
 
 interface ParamsProps {
-  id: string;
+  groupBudgetId: string;
 }
 
 export async function DELETE(request: Request, { params }: { params: ParamsProps }) {
-  const { id } = params;
+  const { groupBudgetId } = params;
 
   const currentUser = await getCurrentUser();
 
@@ -19,7 +19,7 @@ export async function DELETE(request: Request, { params }: { params: ParamsProps
 
   await prisma.groupBudget.delete({
     where: {
-      id: id,
+      id: groupBudgetId,
       ownerId: currentUser.id,
     },
   });

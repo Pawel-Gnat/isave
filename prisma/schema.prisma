@@ -47,7 +47,7 @@ model PersonalIncomes {
   date                   DateTime
   transactions           PersonalIncomeProduct[]
   value                  Int
-  user                   User?                @relation(fields: [userId], references: [id])
+  user                   User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                 String               @db.ObjectId
 }
 
@@ -69,7 +69,7 @@ model PersonalExpenses {
   date                   DateTime
   value                  Int
   transactions           PersonalExpenseProduct[]
-  user                   User?                @relation(fields: [userId], references: [id])
+  user                   User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                 String               @db.ObjectId
 }
 
@@ -90,8 +90,10 @@ model GroupBudget {
   updatedAt              DateTime             @updatedAt
   name                   String
   ownerId                String               @db.ObjectId
-  owner                  User                 @relation(fields: [ownerId], references: [id])
+  owner                  User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   members                GroupBudgetMember[]  
+  groupExpenses          GroupExpenses[]
+  groupIncomes           GroupIncomes[]
 }
 
 model GroupBudgetMember {
@@ -101,18 +103,62 @@ model GroupBudgetMember {
   groupBudget            GroupBudget          @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
 }
 
+model GroupExpenses {
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  date                   DateTime
+  value                  Int
+  transactions           GroupExpenseProduct[]
+  groupBudget            GroupBudget?             @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
+  groupBudgetId          String                   @db.ObjectId
+}
+
+model GroupExpenseProduct {
+  id                       String                  @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt
+  title                    String
+  value                    Int
+  categoryId               String
+  groupExpense             GroupExpenses?          @relation(fields: [groupExpenseId], references: [id], onDelete: Cascade)
+  groupExpenseId           String                  @db.ObjectId
+}
+
+model GroupIncomes {
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  date                   DateTime
+  transactions           GroupIncomeProduct[]
+  value                  Int
+  groupBudget            GroupBudget?             @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
+  groupBudgetId          String                   @db.ObjectId
+}
+
+model GroupIncomeProduct {
+  id                       String                 @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+  title                    String
+  value                    Int
+  categoryId               String
+  groupIncome              GroupIncomes?          @relation(fields: [groupIncomeId], references: [id], onDelete: Cascade)
+  groupIncomeId            String                 @db.ObjectId
+}
+
 model IncomeCategory {
   id                       String             @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @updatedAt
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
   name                     String
   description              String
 }
 
 model ExpenseCategory {
   id                       String             @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @updatedAt
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
   name                     String
   description              String
 }
