@@ -15,6 +15,7 @@ import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
 import { GroupExpenses, GroupIncomes } from '@prisma/client';
 import { TransactionType } from '@/types/types';
+import { Badge } from '@/components/ui/badge';
 
 interface ButtonProps {
   id: string;
@@ -112,22 +113,11 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
       );
     },
     cell: ({ row }) => {
-      const value = parseFloat(row.getValue('value'));
+      const userId = row.original.userId;
+      // const user = await getUserById(userId);
+      console.log(userId);
 
-      return (
-        <div className="flex flex-row items-center gap-4">
-          <div className="rounded-full border">
-            <Image
-              src={value > 0 ? '/income.png' : '/expense.png'}
-              alt=""
-              width={50}
-              height={50}
-              className="aspect-square"
-            />
-          </div>
-          <p className="font-medium">{value > 0 ? 'Przychód' : 'Wydatek'}</p>
-        </div>
-      );
+      return <Badge variant="outline">{row.getValue('user')}</Badge>;
     },
   },
   {

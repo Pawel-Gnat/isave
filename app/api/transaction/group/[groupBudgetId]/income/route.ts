@@ -90,6 +90,8 @@ export async function POST(request: Request, { params }: { params: ParamsProps }
         (acc: number, curr: { value: number }) => acc + curr.value * 100,
         0,
       ),
+      userId: currentUser.id,
+      userName: currentUser.name,
     },
   });
 
