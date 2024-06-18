@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
+import useGroupExpenses from '@/hooks/useGroupExpenses';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
@@ -24,6 +25,7 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
+import { handleExpenseApiPostRoute } from '@/utils/dialogUtils';
 
 enum STEPS {
   FILE = 0,
@@ -35,6 +37,8 @@ export const AddExpense = () => {
     date: dateContext,
     isExpenseModalOpen,
     isLoading,
+    transactionCategory,
+    groupBudgetId,
     dispatch,
   } = useContext(TransactionsContext);
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
@@ -43,6 +47,11 @@ export const AddExpense = () => {
   const { personalExpensesRefetch } = usePersonalExpenses(
     dateContext?.from || startOfMonth(new Date()),
     dateContext?.to || endOfMonth(new Date()),
+  );
+  const { groupExpensesRefetch } = useGroupExpenses(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+    groupBudgetId,
   );
 
   useEffect(() => {
@@ -71,6 +80,16 @@ export const AddExpense = () => {
   const date = watch('date');
   const fileText = watch('fileText');
   const transactions = watch('transactions');
+
+  const handleRefetch = () => {
+    if (transactionCategory === 'group') {
+      groupExpensesRefetch();
+    }
+
+    if (transactionCategory === 'personal') {
+      personalExpensesRefetch();
+    }
+  };
 
   const hideModal = () => {
     if (controllerRef.current) {
@@ -138,15 +157,14 @@ export const AddExpense = () => {
 
       try {
         const response = await axios.post(
-          // that income needs to be changed to dynamic category
-          `api/transaction/personal/expense`,
+          handleExpenseApiPostRoute(transactionCategory, groupBudgetId),
           { date, transactions },
           { signal: newController.signal },
         );
 
         toast.success(`${response.data}`);
+        handleRefetch();
         hideModal();
-        personalExpensesRefetch();
       } catch (error) {
         if (axios.isCancel(error)) {
           return toast.warning('Anulowano zapytanie');

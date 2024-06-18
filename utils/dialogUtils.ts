@@ -4,10 +4,11 @@ export const handleApiDeleteRoute = (
   transactionCategory: TransactionCategory,
   transactionType: TransactionType,
   transactionId: string,
+  groupBudgetId: string,
 ) => {
   if (transactionCategory === 'group') {
     if (transactionType) {
-      return `/api/transaction/${transactionCategory}/${transactionType}/${transactionId}`;
+      return `/api/transaction/${transactionCategory}/${groupBudgetId}/${transactionType}/${transactionId}`;
     }
 
     return `/api/transaction/${transactionCategory}/${transactionId}`;
@@ -20,7 +21,7 @@ export const handleApiDeleteRoute = (
   return '';
 };
 
-export const handleApiPostRoute = (
+export const handleIncomeApiPostRoute = (
   transactionCategory: TransactionCategory,
   groupBudgetId: string,
 ) => {
@@ -30,6 +31,21 @@ export const handleApiPostRoute = (
 
   if (transactionCategory === 'personal') {
     return `/api/transaction/${transactionCategory}/income`;
+  }
+
+  return '';
+};
+
+export const handleExpenseApiPostRoute = (
+  transactionCategory: TransactionCategory,
+  groupBudgetId: string,
+) => {
+  if (transactionCategory === 'group' && groupBudgetId) {
+    return `/api/transaction/${transactionCategory}/${groupBudgetId}/expense`;
+  }
+
+  if (transactionCategory === 'personal') {
+    return `/api/transaction/personal/expense`;
   }
 
   return '';

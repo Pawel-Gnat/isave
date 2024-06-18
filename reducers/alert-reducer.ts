@@ -5,6 +5,7 @@ export type Action =
       type: 'SET_SHOW_ALERT';
       payload: {
         transactionId: string;
+        groupBudgetId: string;
         transactionCategory: TransactionCategory;
         transactionType: TransactionType;
       };
@@ -24,6 +25,7 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
         ...state,
         isAlertOpen: true,
         transactionId: action.payload.transactionId,
+        groupBudgetId: action.payload.groupBudgetId,
         transactionCategory: action.payload.transactionCategory,
         transactionType: action.payload.transactionType,
       };
@@ -38,6 +40,7 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
         isAlertOpen: false,
         isCreateBudgetAlertOpen: false,
         transactionId: '',
+        groupBudgetId: '',
         transactionCategory: null,
         transactionType: null,
       };

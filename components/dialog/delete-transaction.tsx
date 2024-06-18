@@ -7,8 +7,10 @@ import { toast } from 'sonner';
 import { handleApiDeleteRoute } from '@/utils/dialogUtils';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
-import useGroupBudgets from '@/hooks/useGroupBudgets';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+import useGroupBudgets from '@/hooks/useGroupBudgets';
+import useGroupExpenses from '@/hooks/useGroupExpenses';
+import useGroupIncomes from '@/hooks/useGroupIncomes';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 import { AlertContext } from '@/contexts/alert-context';
@@ -24,6 +26,7 @@ export const DeleteTransaction = () => {
     transactionId,
     transactionCategory,
     isLoading,
+    groupBudgetId,
     dispatch,
   } = useContext(AlertContext);
   const { date } = useContext(TransactionsContext);
@@ -36,6 +39,16 @@ export const DeleteTransaction = () => {
     date?.to || endOfMonth(new Date()),
   );
   const { groupBudgetsRefetch } = useGroupBudgets();
+  const { groupExpensesRefetch } = useGroupExpenses(
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
+    groupBudgetId,
+  );
+  const { groupIncomesRefetch } = useGroupIncomes(
+    date?.from || startOfMonth(new Date()),
+    date?.to || endOfMonth(new Date()),
+    groupBudgetId,
+  );
 
   const handleClose = () => {
     dispatch({ type: 'SET_HIDE_ALERT' });
@@ -46,9 +59,9 @@ export const DeleteTransaction = () => {
       if (!transactionType) {
         return groupBudgetsRefetch();
       } else if (transactionType === 'income') {
-        // personalIncomesRefetch();
+        groupIncomesRefetch();
       } else if (transactionType === 'expense') {
-        // personalExpensesRefetch();
+        groupExpensesRefetch();
       }
     }
 
@@ -66,7 +79,14 @@ export const DeleteTransaction = () => {
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
     axios
-      .delete(handleApiDeleteRoute(transactionCategory, transactionType, transactionId))
+      .delete(
+        handleApiDeleteRoute(
+          transactionCategory,
+          transactionType,
+          transactionId,
+          groupBudgetId,
+        ),
+      )
       .then((response) => {
         toast.success(`${response.data}`);
         handleRefetch();

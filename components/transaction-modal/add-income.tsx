@@ -24,7 +24,7 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
-import { handleApiPostRoute } from '@/utils/dialogUtils';
+import { handleIncomeApiPostRoute } from '@/utils/dialogUtils';
 
 export const AddIncome = () => {
   const {
@@ -102,7 +102,7 @@ export const AddIncome = () => {
 
     try {
       const response = await axios.post(
-        handleApiPostRoute(transactionCategory, groupBudgetId),
+        handleIncomeApiPostRoute(transactionCategory, groupBudgetId),
         data,
         { signal: newController.signal },
       );

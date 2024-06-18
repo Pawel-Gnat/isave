@@ -41,7 +41,10 @@ export const ActionsPanel: FC<ActionsPanelProps> = ({ id, category }) => {
         <Button
           variant="outline"
           onClick={() => {
-            dispatch({ type: 'SET_SHOW_EXPENSE_MODAL' });
+            dispatch({
+              type: 'SET_SHOW_EXPENSE_MODAL',
+              payload: { groupBudgetId: id || '', transactionCategory: category },
+            });
           }}
         >
           Dodaj wydatek

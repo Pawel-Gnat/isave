@@ -31,6 +31,7 @@ export type AlertState = {
   isCreateBudgetAlertOpen: boolean;
   isLoading: boolean;
   transactionId: string;
+  groupBudgetId: string;
   transactionCategory: TransactionCategory;
   transactionType: TransactionType;
 };

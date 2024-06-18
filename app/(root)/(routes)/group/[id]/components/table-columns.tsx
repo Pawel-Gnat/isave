@@ -10,19 +10,20 @@ import { AlertContext } from '@/contexts/alert-context';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
 import { GroupExpenses, GroupIncomes } from '@prisma/client';
 import { TransactionType } from '@/types/types';
-import { Badge } from '@/components/ui/badge';
 
 interface ButtonProps {
   id: string;
+  groupBudgetId: string;
   transactionType: TransactionType;
 }
 
-const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+const EditButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType }) => {
   const { dispatch } = useContext(TransactionsContext);
 
   return (
@@ -44,7 +45,7 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   );
 };
 
-const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+const DeleteButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType }) => {
   const { dispatch } = useContext(AlertContext);
 
   return (
@@ -54,9 +55,10 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
         dispatch({
           type: 'SET_SHOW_ALERT',
           payload: {
-            transactionCategory: 'personal',
+            transactionCategory: 'group',
             transactionType: transactionType,
             transactionId: id,
+            groupBudgetId: groupBudgetId,
           },
         });
       }}
@@ -103,21 +105,23 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
     accessorKey: 'user',
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Użytkownik
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Użytkownik
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
-      const userId = row.original.userId;
-      // const user = await getUserById(userId);
-      console.log(userId);
-
-      return <Badge variant="outline">{row.getValue('user')}</Badge>;
+      return (
+        <div className="text-center">
+          <Badge variant="outline">{row.original.userName}</Badge>
+        </div>
+      );
     },
   },
   {
@@ -171,12 +175,21 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
     header: () => <div className="text-right">Szczegóły</div>,
     cell: ({ row }) => {
       const id = row.original.id;
+      const groupBudgetId = row.original.groupBudgetId;
       const value = parseFloat(row.getValue('value'));
 
       return (
         <div className="text-right">
-          <EditButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
-          <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
+          <EditButton
+            id={id}
+            groupBudgetId={groupBudgetId}
+            transactionType={value > 0 ? 'income' : 'expense'}
+          />
+          <DeleteButton
+            id={id}
+            groupBudgetId={groupBudgetId}
+            transactionType={value > 0 ? 'income' : 'expense'}
+          />
         </div>
       );
     },

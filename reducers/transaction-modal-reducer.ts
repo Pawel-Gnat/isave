@@ -11,6 +11,10 @@ export type Action =
     }
   | {
       type: 'SET_SHOW_EXPENSE_MODAL';
+      payload: {
+        groupBudgetId: string;
+        transactionCategory: TransactionCategory;
+      };
     }
   | {
       type: 'SET_SHOW_EDIT_TRANSACTION_MODAL';
@@ -46,6 +50,8 @@ export const transactionReducer = (
       return {
         ...state,
         isExpenseModalOpen: true,
+        groupBudgetId: action.payload.groupBudgetId,
+        transactionCategory: action.payload.transactionCategory,
       };
     case 'SET_SHOW_EDIT_TRANSACTION_MODAL':
       return {
