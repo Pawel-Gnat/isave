@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 
 import { ArrowUpDown, Eye, Trash2 } from 'lucide-react';
 
-import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+import { GroupExpenses, GroupIncomes } from '@prisma/client';
 import { TransactionType } from '@/types/types';
 
 interface ButtonProps {
@@ -65,7 +65,7 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   );
 };
 
-export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
+export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -75,6 +75,38 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Nazwa
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const value = parseFloat(row.getValue('value'));
+
+      return (
+        <div className="flex flex-row items-center gap-4">
+          <div className="rounded-full border">
+            <Image
+              src={value > 0 ? '/income.png' : '/expense.png'}
+              alt=""
+              width={50}
+              height={50}
+              className="aspect-square"
+            />
+          </div>
+          <p className="font-medium">{value > 0 ? 'Przychód' : 'Wydatek'}</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'user',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Użytkownik
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

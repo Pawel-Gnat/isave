@@ -41,8 +41,8 @@ export const Transactions: FC<TransactionsProps> = ({ id }) => {
       {groupExpenses &&
       groupIncomes &&
       (groupExpenses.length > 0 || groupIncomes.length > 0) ? (
-        // <TransactionTable columns={columns} data={[...groupExpenses, ...groupIncomes]} />
-        <div></div>
+        <TransactionTable columns={columns} data={[...groupExpenses, ...groupIncomes]} />
+
       ) : (
         <div className="m-auto text-center">
           <Image
