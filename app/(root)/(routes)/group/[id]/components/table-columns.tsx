@@ -20,7 +20,12 @@ import { TransactionType } from '@/types/types';
 interface ButtonProps {
   id: string;
   groupBudgetId: string;
+
   transactionType: TransactionType;
+}
+
+interface DeleteButtonProps extends ButtonProps {
+  transactionOwnerId: string;
 }
 
 const EditButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType }) => {
@@ -34,8 +39,10 @@ const EditButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType 
         dispatch({
           type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
           payload: {
-            transactionId: id,
+            transactionCategory: 'group',
             transactionType: transactionType,
+            transactionId: id,
+            groupBudgetId: groupBudgetId,
           },
         });
       }}
@@ -45,12 +52,19 @@ const EditButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType 
   );
 };
 
-const DeleteButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType }) => {
+const DeleteButton: React.FC<DeleteButtonProps> = ({
+  id,
+  groupBudgetId,
+  transactionOwnerId,
+  transactionType,
+}) => {
   const { dispatch } = useContext(AlertContext);
+  const { userId } = useContext(TransactionsContext);
 
   return (
     <Button
       variant="destructive"
+      disabled={userId !== transactionOwnerId}
       onClick={() => {
         dispatch({
           type: 'SET_SHOW_ALERT',
@@ -176,6 +190,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
     cell: ({ row }) => {
       const id = row.original.id;
       const groupBudgetId = row.original.groupBudgetId;
+      const transactionOwnerId = row.original.userId;
       const value = parseFloat(row.getValue('value'));
 
       return (
@@ -187,6 +202,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
           />
           <DeleteButton
             id={id}
+            transactionOwnerId={transactionOwnerId || ''}
             groupBudgetId={groupBudgetId}
             transactionType={value > 0 ? 'income' : 'expense'}
           />

@@ -1,4 +1,9 @@
-import { PersonalExpenses, PersonalIncomes } from '@prisma/client';
+import {
+  GroupExpenses,
+  GroupIncomes,
+  PersonalExpenses,
+  PersonalIncomes,
+} from '@prisma/client';
 import { DateRange } from 'react-day-picker';
 
 export type Transaction = {
@@ -23,6 +28,14 @@ export type ModifiedPersonalExpense = PersonalExpenses & {
 };
 
 export type ModifiedPersonalIncome = PersonalIncomes & {
+  transactions: Transaction[];
+};
+
+export type ModifiedGroupExpense = GroupExpenses & {
+  transactions: Transaction[];
+};
+
+export type ModifiedGroupIncome = GroupIncomes & {
   transactions: Transaction[];
 };
 

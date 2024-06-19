@@ -20,7 +20,7 @@ const SharedBudgetPage = async ({ params }: { params: SharedBudgetPageProps }) =
   return (
     <>
       <ActionsPanel id={params.id} category="group" />
-      <Transactions id={params.id} />
+      <Transactions id={params.id} userId={user.id} />
     </>
   );
 };

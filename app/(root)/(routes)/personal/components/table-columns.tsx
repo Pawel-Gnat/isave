@@ -32,8 +32,10 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
         dispatch({
           type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
           payload: {
+            transactionCategory: 'personal',
             transactionId: id,
             transactionType: transactionType,
+            groupBudgetId: '',
           },
         });
       }}
@@ -56,6 +58,7 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
             transactionCategory: 'personal',
             transactionType: transactionType,
             transactionId: id,
+            groupBudgetId: '',
           },
         });
       }}

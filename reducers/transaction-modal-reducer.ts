@@ -21,6 +21,8 @@ export type Action =
       payload: {
         transactionId: string;
         transactionType: TransactionType | null;
+        groupBudgetId: string;
+        transactionCategory: TransactionCategory;
       };
     }
   | {
@@ -59,6 +61,8 @@ export const transactionReducer = (
         isEditTransactionModalOpen: true,
         transactionId: action.payload.transactionId,
         transactionType: action.payload.transactionType,
+        groupBudgetId: action.payload.groupBudgetId,
+        transactionCategory: action.payload.transactionCategory,
       };
     case 'SET_HIDE_MODAL':
       return {

@@ -10,9 +10,13 @@ import { endOfMonth, startOfMonth } from 'date-fns';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+import useGroupIncomes from '@/hooks/useGroupIncomes';
+import useGroupExpenses from '@/hooks/useGroupExpenses';
 
 import getPersonalIncomeById from '@/actions/getPersonalIncomeById';
 import getPersonalExpenseById from '@/actions/getPersonalExpenseById';
+import getGroupIncomeById from '@/actions/getGroupIncomeById';
+import getGroupExpenseById from '@/actions/getGroupExpenseById';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
@@ -28,6 +32,8 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import {
+  ModifiedGroupExpense,
+  ModifiedGroupIncome,
   ModifiedPersonalExpense,
   ModifiedPersonalIncome,
   TransactionValues,
@@ -40,11 +46,17 @@ export const EditTransaction = () => {
     isLoading,
     transactionId,
     transactionType,
+    transactionCategory,
+    groupBudgetId,
     dispatch,
   } = useContext(TransactionsContext);
   const controllerRef = useRef<AbortController | null>(null);
   const [transaction, setTransaction] = useState<
-    ModifiedPersonalIncome | ModifiedPersonalExpense | null
+    | ModifiedPersonalIncome
+    | ModifiedPersonalExpense
+    | ModifiedGroupIncome
+    | ModifiedGroupExpense
+    | null
   >(null);
   const { personalExpensesRefetch } = usePersonalExpenses(
     dateContext?.from || startOfMonth(new Date()),
@@ -54,19 +66,46 @@ export const EditTransaction = () => {
     dateContext?.from || startOfMonth(new Date()),
     dateContext?.to || endOfMonth(new Date()),
   );
+  const { groupExpensesRefetch } = useGroupExpenses(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+    groupBudgetId,
+  );
+  const { groupIncomesRefetch } = useGroupIncomes(
+    dateContext?.from || startOfMonth(new Date()),
+    dateContext?.to || endOfMonth(new Date()),
+    groupBudgetId,
+  );
+
+  const getSpecificTransaction = async () => {
+    let transaction = null;
+
+    if (transactionCategory === 'group') {
+      if (transactionType === 'income') {
+        transaction = await getGroupIncomeById(transactionId);
+      } else if (transactionType === 'expense') {
+        transaction = await getGroupExpenseById(transactionId);
+      }
+    }
+
+    if (transactionCategory === 'personal') {
+      if (transactionType === 'income') {
+        transaction = await getPersonalIncomeById(transactionId);
+      } else if (transactionType === 'expense') {
+        transaction = await getPersonalExpenseById(transactionId);
+      }
+    }
+
+    return transaction;
+  };
 
   useEffect(() => {
     (async () => {
       if (!transactionId || !transactionType) return;
 
       dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
-      let transaction = null;
 
-      if (transactionType === 'income') {
-        transaction = await getPersonalIncomeById(transactionId);
-      } else if (transactionType === 'expense') {
-        transaction = await getPersonalExpenseById(transactionId);
-      }
+      const transaction = await getSpecificTransaction();
 
       dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
 
@@ -78,7 +117,7 @@ export const EditTransaction = () => {
         });
       }
     })();
-  }, [transactionId, transactionType]);
+  }, [transactionId, transactionType, transactionCategory]);
 
   useEffect(() => {
     return () => {

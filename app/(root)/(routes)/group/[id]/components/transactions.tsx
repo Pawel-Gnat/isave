@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect } from 'react';
 import Image from 'next/image';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
@@ -16,10 +16,15 @@ import { TransactionTable } from './transaction-table';
 
 interface TransactionsProps {
   id: string;
+  userId: string;
 }
 
-export const Transactions: FC<TransactionsProps> = ({ id }) => {
-  const { date } = useContext(TransactionsContext);
+export const Transactions: FC<TransactionsProps> = ({ id, userId }) => {
+  const { date, setUserId } = useContext(TransactionsContext);
+
+  useEffect(() => {
+    setUserId(userId);
+  }, [userId]);
 
   const { groupExpenses, isGroupExpensesLoading } = useGroupExpenses(
     date?.from || startOfMonth(new Date()),
@@ -42,7 +47,6 @@ export const Transactions: FC<TransactionsProps> = ({ id }) => {
       groupIncomes &&
       (groupExpenses.length > 0 || groupIncomes.length > 0) ? (
         <TransactionTable columns={columns} data={[...groupExpenses, ...groupIncomes]} />
-
       ) : (
         <div className="m-auto text-center">
           <Image
