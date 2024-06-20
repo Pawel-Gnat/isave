@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
 import { simplifyCategories } from '@/utils/simplifyCategories';
-import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 import getExpenseCategories from '@/actions/getExpenseCategories';
 
@@ -39,14 +39,14 @@ export async function POST(request: Request) {
   type ExpenseProduct = {
     title: string;
     value: number;
-    categoryId: number;
+    categoryId: string;
   };
 
   categoryId match according to the id of the following categories ${JSON.stringify(simplifiedCategories)}.
   Do not create any comments or any additional responses. You have to return only the JSON as 
   {
-    date: Date,
-    expenses: ExpenseProduct[],
+    date: Date;
+    expenses: ExpenseProduct[];
   }.
   `;
 

@@ -50,3 +50,20 @@ export const handleExpenseApiPostRoute = (
 
   return '';
 };
+
+export const handleApiEditTransactionRoute = (
+  transactionCategory: TransactionCategory,
+  transactionType: TransactionType,
+  transactionId: string,
+  groupBudgetId: string,
+) => {
+  if (transactionCategory === 'group') {
+    return `/api/transaction/${transactionCategory}/${groupBudgetId}/${transactionType}/${transactionId}`;
+  }
+
+  if (transactionCategory === 'personal') {
+    return `/api/transaction/${transactionCategory}/${transactionType}/${transactionId}`;
+  }
+
+  return '';
+};

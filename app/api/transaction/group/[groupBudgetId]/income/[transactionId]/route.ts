@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
-import getExpenseCategories from '@/actions/getExpenseCategories';
+import getIncomeCategories from '@/actions/getIncomeCategories';
 
 import { normalizeString } from '@/utils/textUtils';
 
@@ -42,11 +42,11 @@ export async function PATCH(request: Request, { params }: { params: ParamsProps 
     );
   }
 
-  const expenseCategories = await getExpenseCategories();
+  const incomeCategories = await getIncomeCategories();
 
   if (
     (transactions as Transaction[]).find(
-      (t) => !expenseCategories.some((category) => category.id === t.categoryId),
+      (t) => !incomeCategories.some((category) => category.id === t.categoryId),
     )
   ) {
     return NextResponse.json(
@@ -61,40 +61,40 @@ export async function PATCH(request: Request, { params }: { params: ParamsProps 
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  const currentExpense = await prisma.groupExpenses.findUnique({
+  const currentIncome = await prisma.groupIncomes.findUnique({
     where: { id: transactionId },
   });
 
-  if (!currentExpense || currentExpense.userId !== currentUser.id) {
+  if (!currentIncome || currentIncome.userId !== currentUser.id) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 403 });
   }
 
-  await prisma.groupExpenses.update({
+  await prisma.groupIncomes.update({
     where: {
       id: transactionId,
     },
     data: {
       date: date,
-      value: -transactions.reduce(
+      value: transactions.reduce(
         (acc: number, curr: { value: number }) => acc + curr.value * 100,
         0,
       ),
     },
   });
 
-  await prisma.groupExpenseProduct.deleteMany({
+  await prisma.groupIncomeProduct.deleteMany({
     where: {
-      groupExpenseId: transactionId,
+      groupIncomeId: transactionId,
     },
   });
 
-  for (const expense of transactions) {
-    await prisma.groupExpenseProduct.create({
+  for (const income of transactions) {
+    await prisma.groupIncomeProduct.create({
       data: {
-        title: normalizeString(expense.title),
-        value: expense.value * 100,
-        categoryId: expense.categoryId,
-        groupExpenseId: currentExpense.id,
+        title: normalizeString(income.title),
+        value: income.value * 100,
+        categoryId: income.categoryId,
+        groupIncomeId: currentIncome.id,
       },
     });
   }
@@ -111,15 +111,15 @@ export async function DELETE(request: Request, { params }: { params: ParamsProps
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  const currentExpense = await prisma.groupExpenses.findUnique({
+  const currentIncome = await prisma.groupIncomes.findUnique({
     where: { id: transactionId },
   });
 
-  if (!currentExpense || currentExpense.userId !== currentUser.id) {
+  if (!currentIncome || currentIncome.userId !== currentUser.id) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 403 });
   }
 
-  await prisma.groupExpenses.delete({
+  await prisma.groupIncomes.delete({
     where: {
       id: transactionId,
     },

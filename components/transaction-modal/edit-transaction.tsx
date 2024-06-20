@@ -21,6 +21,7 @@ import getGroupExpenseById from '@/actions/getGroupExpenseById';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
+import { handleApiEditTransactionRoute } from '@/utils/dialogUtils';
 
 import { Button } from '@/components/ui/button';
 
@@ -153,6 +154,24 @@ export const EditTransaction = () => {
     dispatch({ type: 'SET_HIDE_MODAL' });
   };
 
+  const handleRefetch = () => {
+    if (transactionCategory === 'group') {
+      if (transactionType === 'income') {
+        groupIncomesRefetch();
+      } else if (transactionType === 'expense') {
+        groupExpensesRefetch();
+      }
+    }
+
+    if (transactionCategory === 'personal') {
+      if (transactionType === 'income') {
+        personalIncomesRefetch();
+      } else if (transactionType === 'expense') {
+        personalExpensesRefetch();
+      }
+    }
+  };
+
   const saveData = async () => {
     if (isLoading || !transaction) return;
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
@@ -162,19 +181,18 @@ export const EditTransaction = () => {
 
     try {
       const response = await axios.patch(
-        // that expense needs to be changed to dynamic category
-        `api/transaction/personal/${transactionType}/${transaction.id}`,
+        handleApiEditTransactionRoute(
+          transactionCategory,
+          transactionType,
+          transaction.id,
+          groupBudgetId,
+        ),
         { date, transactions },
       );
 
       toast.success(`${response.data}`);
+      handleRefetch();
       hideModal();
-
-      if (transactionType === 'income') {
-        personalIncomesRefetch();
-      } else if (transactionType === 'expense') {
-        personalExpensesRefetch();
-      }
     } catch (error) {
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');
