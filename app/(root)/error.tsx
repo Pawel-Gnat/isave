@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import NavLink from '@/components/navbar/nav-link';
 
-import NavLink from '@/components/shared/nav-link';
+import { Button } from '@/components/ui/button';
 
 import { Milestone } from 'lucide-react';
 

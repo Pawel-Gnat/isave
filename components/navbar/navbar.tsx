@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 
 import NavLink from './nav-link';
 
-import { AreaChart, Coins, PiggyBank, Power } from 'lucide-react';
+import { AreaChart, Coins, PiggyBank, Power, Settings } from 'lucide-react';
 
 const PAGES = [
-  { src: '/', label: 'Podsumowanie', icon: <AreaChart className="mr-2" /> },
+  { src: '/', label: 'Statystyki', icon: <AreaChart className="mr-2" /> },
   {
     src: '/personal',
     label: 'Transakcje osobiste',
@@ -20,6 +20,11 @@ const PAGES = [
     src: '/group',
     label: 'Transakcje grupowe',
     icon: <Coins className="mr-2" />,
+  },
+  {
+    src: '/settings',
+    label: 'Ustawienia',
+    icon: <Settings className="mr-2" />,
   },
 ];
 
@@ -38,7 +43,7 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <Button className="mt-auto w-full" onClick={() => signOut()} size="lg">
+      <Button className="mt-auto w-full text-base" onClick={() => signOut()} size="lg">
         <Power size={20} className="mr-2" /> Wyloguj się
       </Button>
     </nav>

@@ -4,24 +4,25 @@ import prisma from '@/lib/prisma';
 
 import getCurrentUser from './getCurrentUser';
 
-const getGroupBudgets = async () => {
+const getGroupBudgetById = async (id: string) => {
   try {
     const currentUser = await getCurrentUser();
 
-    const groupBudgets = await prisma.groupBudget.findMany({
+    if (!currentUser) {
+      return null;
+    }
+
+    const groupBudget = await prisma.groupBudget.findUnique({
       where: {
-        ownerId: currentUser?.id,
-      },
-      include: {
-        members: true,
+        id: id,
       },
     });
 
-    return groupBudgets;
+    return groupBudget;
   } catch (error) {
     console.log(error);
     return [];
   }
 };
 
-export default getGroupBudgets;
+export default getGroupBudgetById;

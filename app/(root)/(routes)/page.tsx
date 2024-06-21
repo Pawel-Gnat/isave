@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
+import { Heading } from '@/components/shared/heading';
+
 const HomePage = async () => {
   const user = await getCurrentUser();
 
@@ -11,7 +13,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <h2 className="text-4xl font-bold">Overview</h2>
+      <Heading text="Statystyki" />
     </>
   );
 };

@@ -2,10 +2,10 @@ import QueryProvider from '@/contexts/query-context';
 import { AlertProvider } from '@/contexts/alert-context';
 import { TransactionsProvider } from '@/contexts/transactions-context';
 
-import Navbar from '@/components/shared/navbar';
+import Navbar from '@/components/navbar/navbar';
 import Header from '@/components/header/header';
-import { DeleteTransaction } from '@/components/dialog/delete-transaction';
 
+import { DeleteTransaction } from '@/components/dialog/delete-transaction';
 import { EditTransaction } from '@/components/transaction-modal/edit-transaction';
 import { AddExpense } from '@/components/transaction-modal/add-expense';
 import { AddIncome } from '@/components/transaction-modal/add-income';
@@ -20,10 +20,9 @@ export default async function DashboardLayout({
       <TransactionsProvider>
         <AlertProvider>
           <Navbar />
-          {/* <div className="flex h-screen w-full flex-col overflow-y-auto bg-foreground"> */}
-          <div className="flex h-screen w-full flex-col overflow-y-auto">
+          <div className="relative flex h-screen w-full flex-col overflow-y-auto">
             <Header />
-            <main className="flex flex-1 flex-col p-12">{children}</main>
+            <main className="flex flex-1 flex-col px-12 py-6">{children}</main>
             <EditTransaction />
             <AddExpense />
             <AddIncome />
