@@ -12,10 +12,14 @@ interface AlertContextProps extends AlertState {
 
 const initialState: AlertState = {
   isAlertOpen: false,
+  isCreateBudgetAlertOpen: false,
+  isMembershipAlertOpen: false,
   isLoading: false,
   transactionId: '',
+  groupBudgetId: '',
   transactionCategory: null,
   transactionType: null,
+  memberAction: null,
 };
 
 export const AlertContext = createContext<AlertContextProps>({

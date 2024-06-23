@@ -2,7 +2,9 @@ import { redirect } from 'next/navigation';
 
 import getCurrentUser from '@/actions/getCurrentUser';
 
+import { MemberDialog } from '@/components/dialog/members-dialog';
 import { NewBudget } from '@/components/dialog/new-budget';
+
 import { Heading } from '@/components/shared/heading';
 
 import { SharedBudgets } from './components/shared-budgets';
@@ -21,6 +23,7 @@ const GroupPage = async () => {
       <BudgetsPanel />
       <SharedBudgets />
       <NewBudget />
+      <MemberDialog />
     </>
   );
 };

@@ -1,4 +1,9 @@
-import { AlertState, TransactionCategory, TransactionType } from '@/types/types';
+import {
+  AlertState,
+  MemberAction,
+  TransactionCategory,
+  TransactionType,
+} from '@/types/types';
 
 export type Action =
   | {
@@ -12,6 +17,13 @@ export type Action =
     }
   | {
       type: 'SET_SHOW_CREATE_BUDGET';
+    }
+  | {
+      type: 'SET_SHOW_MEMBERSHIP_ALERT';
+      payload: {
+        groupBudgetId: string;
+        memberAction: MemberAction;
+      };
     }
   | {
       type: 'SET_HIDE_ALERT';
@@ -34,15 +46,24 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
         ...state,
         isCreateBudgetAlertOpen: true,
       };
+    case 'SET_SHOW_MEMBERSHIP_ALERT':
+      return {
+        ...state,
+        isMembershipAlertOpen: true,
+        memberAction: action.payload.memberAction,
+      };
     case 'SET_HIDE_ALERT':
       return {
         ...state,
         isAlertOpen: false,
         isCreateBudgetAlertOpen: false,
+        isMembershipAlertOpen: false,
+        isLoading: false,
         transactionId: '',
         groupBudgetId: '',
         transactionCategory: null,
         transactionType: null,
+        memberAction: null,
       };
     case 'SET_IS_LOADING':
       return {

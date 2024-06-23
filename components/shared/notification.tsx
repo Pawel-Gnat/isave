@@ -7,8 +7,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { Bell, BellRing } from 'lucide-react';
 
+import { InviteNotification } from '@prisma/client';
+
 interface NotificationProps {
-  notification: boolean;
+  notification: InviteNotification[] | null;
 }
 
 export const Notification: FC<NotificationProps> = ({ notification }) => {
@@ -16,7 +18,7 @@ export const Notification: FC<NotificationProps> = ({ notification }) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" size="icon" className="rounded-full">
-          {notification ? (
+          {notification && notification.length > 0 ? (
             <div className="relative">
               <BellRing className="text-red-500" />
               <span className="absolute flex h-3 w-3">
@@ -30,6 +32,16 @@ export const Notification: FC<NotificationProps> = ({ notification }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
+        <div className="flex h-10 flex-col items-center justify-center">
+          {notification && notification.length > 0 ? (
+            notification.map((notification) => <p>{notification.id}</p>)
+          ) : (
+            <p>Brak powiadomień</p>
+          )}
+        </div>
+
+        {/* [Osoba] zaprasza Cię do dołączenia do grupowego budżetu na platformie [Nazwa Aplikacji]. */}
+
         {/* <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Dimensions</h4>

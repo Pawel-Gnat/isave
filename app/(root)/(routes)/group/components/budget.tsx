@@ -46,8 +46,9 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
               type: 'SET_SHOW_ALERT',
               payload: {
                 transactionCategory: 'group',
+                groupBudgetId: id,
                 transactionType: null,
-                transactionId: id,
+                transactionId: '',
               },
             });
           }}
@@ -84,6 +85,13 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
             className="mr-2"
             onClick={(e) => {
               e.preventDefault();
+              dispatch({
+                type: 'SET_SHOW_MEMBERSHIP_ALERT',
+                payload: {
+                  groupBudgetId: id,
+                  memberAction: 'remove',
+                },
+              });
             }}
           >
             <UserMinus />
@@ -93,6 +101,13 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
             className="mr-2"
             onClick={(e) => {
               e.preventDefault();
+              dispatch({
+                type: 'SET_SHOW_MEMBERSHIP_ALERT',
+                payload: {
+                  groupBudgetId: id,
+                  memberAction: 'add',
+                },
+              });
             }}
           >
             <UserPlus />

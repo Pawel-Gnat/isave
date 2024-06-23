@@ -11,7 +11,7 @@ export const handleApiDeleteRoute = (
       return `/api/transaction/${transactionCategory}/${groupBudgetId}/${transactionType}/${transactionId}`;
     }
 
-    return `/api/transaction/${transactionCategory}/${transactionId}`;
+    return `/api/transaction/${transactionCategory}/${groupBudgetId}`;
   }
 
   if (transactionCategory === 'personal') {

@@ -23,6 +23,8 @@ export type TransactionCategory = 'group' | 'personal' | null;
 
 export type TransactionType = 'income' | 'expense' | null;
 
+export type MemberAction = 'add' | 'remove' | null;
+
 // export type NotificationStatus = 'pending' | 'fulfilled' | 'rejected';
 
 export type ModifiedPersonalExpense = PersonalExpenses & {
@@ -44,11 +46,13 @@ export type ModifiedGroupIncome = GroupIncomes & {
 export type AlertState = {
   isAlertOpen: boolean;
   isCreateBudgetAlertOpen: boolean;
+  isMembershipAlertOpen: boolean;
   isLoading: boolean;
   transactionId: string;
   groupBudgetId: string;
   transactionCategory: TransactionCategory;
   transactionType: TransactionType;
+  memberAction: MemberAction;
 };
 
 export type TransactionState = {

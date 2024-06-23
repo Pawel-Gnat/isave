@@ -3,13 +3,11 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
+import getUserById from '@/actions/getUserById';
 
-interface ParamsProps {
-  groupBudgetId: string;
-}
-
-export async function DELETE(request: Request, { params }: { params: ParamsProps }) {
-  const { groupBudgetId } = params;
+export async function POST(request: Request) {
+  const body = await request.json();
+  const { id, groupBudgetId } = body;
 
   const currentUser = await getCurrentUser();
 
@@ -27,12 +25,19 @@ export async function DELETE(request: Request, { params }: { params: ParamsProps
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  await prisma.groupBudget.delete({
-    where: {
-      id: groupBudgetId,
-      ownerId: currentUser.id,
+  const invitedUser = await getUserById(id);
+
+  if (!invitedUser) {
+    return NextResponse.json({ error: 'Zweryfikuj numer ID' }, { status: 404 });
+  }
+
+  await prisma.inviteNotification.create({
+    data: {
+      userId: id,
+      groupBudgetId: groupBudgetId,
+      status: 'pending',
     },
   });
 
-  return NextResponse.json('Usunięto grupowy budżet');
+  return NextResponse.json('Wysłano zaproszenie');
 }
