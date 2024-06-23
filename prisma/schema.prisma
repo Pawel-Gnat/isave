@@ -39,7 +39,8 @@ model User {
   personalIncomes        PersonalIncomes[]
   ownedGroupBudgets      GroupBudget[]  
   groupExpenses          GroupExpenses[]
-  groupIncomes           GroupIncomes[]            
+  groupIncomes           GroupIncomes[]    
+  InviteNotification     InviteNotification[]        
 }
 
 model PersonalIncomes {
@@ -60,8 +61,8 @@ model PersonalIncomeProduct {
   title                    String
   value                    Int
   categoryId               String
-  personalIncome          PersonalIncomes?        @relation(fields: [personalIncomeId], references: [id], onDelete: Cascade)
-  personalIncomeId        String                  @db.ObjectId
+  personalIncome           PersonalIncomes?       @relation(fields: [personalIncomeId], references: [id], onDelete: Cascade)
+  personalIncomeId         String                 @db.ObjectId
 }
 
 model PersonalExpenses {
@@ -93,6 +94,7 @@ model GroupBudget {
   name                   String
   ownerId                String               @db.ObjectId
   owner                  User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  InviteNotification     InviteNotification[]
   members                GroupBudgetMember[]  
   groupExpenses          GroupExpenses[]
   groupIncomes           GroupIncomes[]
@@ -170,3 +172,21 @@ model ExpenseCategory {
   name                     String
   description              String
 }
+
+enum NotificationStatus {
+  pending
+  fulfilled
+  rejected
+}
+
+model InviteNotification {
+  id                       String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  status                   NotificationStatus
+  groupBudget              GroupBudget        @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
+  groupBudgetId            String             @db.ObjectId
+  user                     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   String             @db.ObjectId  
+}
+

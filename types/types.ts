@@ -23,6 +23,8 @@ export type TransactionCategory = 'group' | 'personal' | null;
 
 export type TransactionType = 'income' | 'expense' | null;
 
+// export type NotificationStatus = 'pending' | 'fulfilled' | 'rejected';
+
 export type ModifiedPersonalExpense = PersonalExpenses & {
   transactions: Transaction[];
 };
