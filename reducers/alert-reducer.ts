@@ -50,6 +50,7 @@ export const alertReducer = (state: AlertState, action: Action): AlertState => {
       return {
         ...state,
         isMembershipAlertOpen: true,
+        groupBudgetId: action.payload.groupBudgetId,
         memberAction: action.payload.memberAction,
       };
     case 'SET_HIDE_ALERT':

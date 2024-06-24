@@ -24,7 +24,7 @@ export const CreateBudgetFormSchema = z.object({
 });
 
 export const HandleMemberFormSchema = z.object({
-  id: z.string().trim().min(1, {
+  inviteId: z.string().trim().min(1, {
     message: 'Uzupełnij pole numerem ID.',
   }),
 });

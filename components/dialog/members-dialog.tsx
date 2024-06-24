@@ -11,7 +11,8 @@ import { AlertContext } from '@/contexts/alert-context';
 
 import useGroupBudgets from '@/hooks/useGroupBudgets';
 
-import { CreateBudgetFormSchema, HandleMemberFormSchema } from '@/utils/formValidations';
+import { HandleMemberFormSchema } from '@/utils/formValidations';
+import { handleApiMembersRoute } from '@/utils/dialogUtils';
 
 import {
   Form,
@@ -34,7 +35,7 @@ export const MemberDialog = () => {
   const form = useForm<z.infer<typeof HandleMemberFormSchema>>({
     resolver: zodResolver(HandleMemberFormSchema),
     defaultValues: {
-      id: '',
+      inviteId: '',
     },
   });
 
@@ -47,19 +48,23 @@ export const MemberDialog = () => {
     if (isLoading) return;
     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: true } });
 
-    // axios
-    //   .post(`api/transaction/group/`, values)
-    //   .then((response) => {
-    //     dispatch({ type: 'SET_HIDE_ALERT' });
-    //     toast.success(`${response.data}`);
-    //     groupBudgetsRefetch();
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`${error.response.data.error}`);
-    //   })
-    //   .finally(() => {
-    //     dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
-    //   });
+    const axiosMethod =
+      memberAction === 'add'
+        ? axios.post(handleApiMembersRoute('add', groupBudgetId, values.inviteId), values)
+        : axios.delete(handleApiMembersRoute('remove', groupBudgetId, values.inviteId));
+
+    axiosMethod
+      .then((response) => {
+        dispatch({ type: 'SET_HIDE_ALERT' });
+        toast.success(`${response.data}`);
+        groupBudgetsRefetch();
+      })
+      .catch((error) => {
+        toast.error(`${error.response.data.error}`);
+      })
+      .finally(() => {
+        dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
+      });
   };
 
   const content = (
@@ -67,7 +72,7 @@ export const MemberDialog = () => {
       <form className="space-y-4 sm:space-y-8">
         <FormField
           control={form.control}
-          name="id"
+          name="inviteId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>ID zaproszenia użytkownika</FormLabel>
@@ -95,7 +100,7 @@ export const MemberDialog = () => {
       }
       content={content}
       handleDialog={form.handleSubmit(handleMember)}
-      actionText="Utwórz"
+      actionText={memberAction === 'add' ? 'Zaproś' : 'Usuń'}
     />
   );
 };

@@ -1,6 +1,8 @@
 import {
+  GroupBudget,
   GroupExpenses,
   GroupIncomes,
+  InviteNotification,
   PersonalExpenses,
   PersonalIncomes,
 } from '@prisma/client';
@@ -41,6 +43,10 @@ export type ModifiedGroupExpense = GroupExpenses & {
 
 export type ModifiedGroupIncome = GroupIncomes & {
   transactions: Transaction[];
+};
+
+export type ModifiedInviteNotification = InviteNotification & {
+  groupBudget: GroupBudget;
 };
 
 export type AlertState = {

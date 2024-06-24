@@ -3,11 +3,16 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 import getCurrentUser from '@/actions/getCurrentUser';
-import getUserById from '@/actions/getUserById';
+import getUserByInviteId from '@/actions/getUserByInviteId';
 
-export async function POST(request: Request) {
+interface ParamsProps {
+  groupBudgetId: string;
+}
+
+export async function POST(request: Request, { params }: { params: ParamsProps }) {
   const body = await request.json();
-  const { id, groupBudgetId } = body;
+  const { groupBudgetId } = params;
+  const { inviteId } = body;
 
   const currentUser = await getCurrentUser();
 
@@ -25,7 +30,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 
-  const invitedUser = await getUserById(id);
+  const invitedUser = await getUserByInviteId(inviteId);
 
   if (!invitedUser) {
     return NextResponse.json({ error: 'Zweryfikuj numer ID' }, { status: 404 });
@@ -33,7 +38,7 @@ export async function POST(request: Request) {
 
   await prisma.inviteNotification.create({
     data: {
-      userId: id,
+      userId: invitedUser.id,
       groupBudgetId: groupBudgetId,
       status: 'pending',
     },

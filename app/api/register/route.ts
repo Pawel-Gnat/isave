@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 import prisma from '@/lib/prisma';
 
-import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 export async function POST(request: Request) {
   const body = await request.json();

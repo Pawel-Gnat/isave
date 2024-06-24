@@ -1,4 +1,4 @@
-import { TransactionCategory, TransactionType } from '@/types/types';
+import { MemberAction, TransactionCategory, TransactionType } from '@/types/types';
 
 export const handleApiDeleteRoute = (
   transactionCategory: TransactionCategory,
@@ -63,6 +63,23 @@ export const handleApiEditTransactionRoute = (
 
   if (transactionCategory === 'personal') {
     return `/api/transaction/${transactionCategory}/${transactionType}/${transactionId}`;
+  }
+
+  return '';
+};
+
+export const handleApiMembersRoute = (
+  memberAction: MemberAction,
+  groupBudgetId: string,
+  inviteId: string,
+) => {
+  console.log('lol', groupBudgetId);
+  if (memberAction === 'add') {
+    return `/api/transaction/group/${groupBudgetId}/member`;
+  }
+
+  if (memberAction === 'remove') {
+    return `/api/transaction/group/${groupBudgetId}/member/${inviteId}`;
   }
 
   return '';
