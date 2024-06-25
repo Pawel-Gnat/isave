@@ -16,6 +16,15 @@ interface NotificationContainerProps {
 export const NotificationContainer: FC<NotificationContainerProps> = ({
   notifications,
 }) => {
+  // const owner = await getUserByOwnerId(notification.groupBudget.ownerId);
+  // const groupBudget = (await getGroupBudgetById(
+  //   notification.groupBudget.id,
+  // )) as GroupBudget;
+
+  // if (!owner || !groupBudget) {
+  //   return;
+  // }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -33,8 +42,8 @@ export const NotificationContainer: FC<NotificationContainerProps> = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="flex h-10 flex-col items-center justify-center">
+      <PopoverContent className="w-72">
+        <div className="flex flex-col items-center justify-center">
           {notifications && notifications.length > 0 ? (
             notifications.map((notification) => (
               <Notification key={notification.id} notification={notification} />
