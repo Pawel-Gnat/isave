@@ -36,11 +36,25 @@ export async function POST(request: Request, { params }: { params: ParamsProps }
     return NextResponse.json({ error: 'Zweryfikuj numer ID' }, { status: 404 });
   }
 
+  if (currentUser.id === invitedUser.id) {
+    return NextResponse.json({ error: 'Nie możesz zaprosić siebie' }, { status: 403 });
+  }
+
+  const existingInvitation = await prisma.inviteNotification.findFirst({
+    where: {
+      userId: invitedUser.id,
+      groupBudgetId: groupBudgetId,
+    },
+  });
+
+  if (existingInvitation) {
+    return NextResponse.json({ error: 'Już wysłano zaproszenie' }, { status: 400 });
+  }
+
   await prisma.inviteNotification.create({
     data: {
       userId: invitedUser.id,
       groupBudgetId: groupBudgetId,
-      status: 'pending',
     },
   });
 

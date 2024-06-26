@@ -20,9 +20,17 @@ interface BudgetProps {
   href: string;
   ownerId: string;
   members: GroupBudgetMember[];
+  userId: string;
 }
 
-export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
+export const Budget: FC<BudgetProps> = ({
+  title,
+  id,
+  href,
+  ownerId,
+  members,
+  userId,
+}) => {
   const { dispatch } = useContext(AlertContext);
 
   const handleSaveInvideIdToClipboard = (id: string) => {
@@ -38,6 +46,7 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
       <div className="flex flex-row justify-between gap-4">
         <p>{title}</p>
         <Button
+          disabled={userId !== ownerId}
           variant="destructive"
           className="mr-2"
           onClick={(e) => {
@@ -64,23 +73,18 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
             onClick={handleSaveInvideIdToClipboard}
           />
 
-          {/* {members.map((user, index) => (
-            <Button
-              key={index}
-              variant="ghost"
-              className="h-fit self-end p-0"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <Badge key={index} variant="default">
-                {user}
-              </Badge>
-            </Button>
-          ))} */}
+          {members.map((user) => (
+            <BudgetBadge
+              key={user.id}
+              id={user.userId}
+              owner={false}
+              onClick={handleSaveInvideIdToClipboard}
+            />
+          ))}
         </div>
         <div>
           <Button
+            disabled={userId !== ownerId}
             variant="outline"
             className="mr-2"
             onClick={(e) => {
@@ -97,6 +101,7 @@ export const Budget: FC<BudgetProps> = ({ title, id, href, ownerId }) => {
             <UserMinus />
           </Button>
           <Button
+            disabled={userId !== ownerId}
             variant="outline"
             className="mr-2"
             onClick={(e) => {

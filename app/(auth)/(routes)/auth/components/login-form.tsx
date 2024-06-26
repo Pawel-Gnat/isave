@@ -41,7 +41,7 @@ const LoginForm = () => {
 
       if (callback?.ok) {
         router.push('/');
-        toast('Pomyślnie zalogowano');
+        toast.success('Pomyślnie zalogowano');
       }
 
       if (callback?.error) {

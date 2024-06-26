@@ -8,7 +8,7 @@ const getGroupBudgets = async () => {
   try {
     const currentUser = await getCurrentUser();
 
-    const groupBudgets = await prisma.groupBudget.findMany({
+    const ownerBudgets = await prisma.groupBudget.findMany({
       where: {
         ownerId: currentUser?.id,
       },
@@ -17,7 +17,23 @@ const getGroupBudgets = async () => {
       },
     });
 
-    return groupBudgets;
+    const memberBudgets = await prisma.groupBudgetMember.findMany({
+      where: {
+        userId: currentUser?.id,
+      },
+      include: {
+        groupBudget: {
+          include: {
+            members: true,
+          },
+        },
+      },
+    });
+
+    const memberBudgetsOnly = memberBudgets.map((member) => member.groupBudget);
+    const allBudgets = [...ownerBudgets, ...memberBudgetsOnly];
+
+    return allBudgets;
   } catch (error) {
     console.log(error);
     return [];

@@ -3,6 +3,9 @@
 import prisma from '@/lib/prisma';
 
 import getCurrentUser from './getCurrentUser';
+import getUserByOwnerId from './getUserByOwnerId';
+
+import { ModifiedInviteNotificationWithOwner } from '@/types/types';
 
 const getInviteNotifications = async (id: string) => {
   try {
@@ -12,21 +15,30 @@ const getInviteNotifications = async (id: string) => {
       return null;
     }
 
-    const inviteNotification = await prisma.inviteNotification.findMany({
+    const inviteNotifications = await prisma.inviteNotification.findMany({
       where: {
         userId: id,
-        status: 'pending',
       },
       include: {
         groupBudget: true,
-      }
+      },
     });
 
-    if (!inviteNotification) {
+    if (!inviteNotifications) {
       return null;
     }
 
-    return inviteNotification;
+    const notificationsWithOwner = await Promise.all(
+      inviteNotifications.map(async (notification) => {
+        const owner = await getUserByOwnerId(notification.groupBudget.ownerId);
+        return {
+          ...notification,
+          owner,
+        } as ModifiedInviteNotificationWithOwner;
+      }),
+    );
+
+    return notificationsWithOwner;
   } catch (error) {
     return null;
   }

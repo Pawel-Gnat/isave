@@ -21,7 +21,7 @@ const GroupPage = async () => {
     <>
       <Heading text="Transakcje grupowe" />
       <BudgetsPanel />
-      <SharedBudgets />
+      <SharedBudgets userId={user.id} />
       <NewBudget />
       <MemberDialog />
     </>

@@ -73,7 +73,6 @@ export const handleApiMembersRoute = (
   groupBudgetId: string,
   inviteId: string,
 ) => {
-  console.log('lol', groupBudgetId);
   if (memberAction === 'add') {
     return `/api/transaction/group/${groupBudgetId}/member`;
   }

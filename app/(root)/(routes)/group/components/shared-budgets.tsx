@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { Budget } from './budget';
 
-export const SharedBudgets = () => {
+export const SharedBudgets = ({ userId }: { userId: string }) => {
   const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
 
   if (isGroupBudgetsLoading) {
@@ -31,6 +31,7 @@ export const SharedBudgets = () => {
             href={`/group/${budget.id}`}
             ownerId={budget.ownerId}
             members={budget.members}
+            userId={userId}
           />
         ))
       ) : (

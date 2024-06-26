@@ -74,11 +74,10 @@ export async function POST(request: Request, { params }: { params: ParamsProps }
     return NextResponse.json({ error: 'Nie znaleziono budżetu' }, { status: 404 });
   }
 
-  if (
-    groupBudget.ownerId !== currentUser.id ||
-    (groupBudget.members.length > 0 &&
-      !groupBudget.members.some((user) => user.userId === currentUser.id))
-  ) {
+  const isOwner = groupBudget.ownerId === currentUser.id;
+  const isMember = groupBudget.members.some((member) => member.userId === currentUser.id);
+
+  if (!isOwner && !isMember) {
     return NextResponse.json({ error: 'Dostęp nieupoważniony' }, { status: 401 });
   }
 

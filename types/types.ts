@@ -5,6 +5,7 @@ import {
   InviteNotification,
   PersonalExpenses,
   PersonalIncomes,
+  User,
 } from '@prisma/client';
 import { DateRange } from 'react-day-picker';
 
@@ -47,6 +48,10 @@ export type ModifiedGroupIncome = GroupIncomes & {
 
 export type ModifiedInviteNotification = InviteNotification & {
   groupBudget: GroupBudget;
+};
+
+export type ModifiedInviteNotificationWithOwner = ModifiedInviteNotification & {
+  owner: User;
 };
 
 export type AlertState = {
