@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 
 import { BudgetBadge } from './budget-badge';
 
-import { Trash2, UserMinus, UserPlus } from 'lucide-react';
+import { SquareArrowOutUpRight, Trash2, UserMinus, UserPlus } from 'lucide-react';
 
 import { GroupBudgetMember } from '@prisma/client';
 
@@ -39,18 +39,18 @@ export const Budget: FC<BudgetProps> = ({
   };
 
   return (
-    <Link
-      href={href}
-      className="flex flex-col gap-4 rounded-lg border p-4 transition-colors hover:bg-accent"
-    >
+    <div className="flex flex-col gap-4 rounded-lg border p-4 transition-colors">
       <div className="flex flex-row justify-between gap-4">
-        <p>{title}</p>
+        <Link href={href} className="group flex flex-row gap-2 border-b">
+          {title}
+          <SquareArrowOutUpRight className="transition-all group-hover:translate-x-2 group-hover:text-accent" />
+        </Link>
+
         <Button
           disabled={userId !== ownerId}
           variant="destructive"
           className="mr-2"
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             dispatch({
               type: 'SET_SHOW_ALERT',
               payload: {
@@ -87,8 +87,7 @@ export const Budget: FC<BudgetProps> = ({
             disabled={userId !== ownerId}
             variant="outline"
             className="mr-2"
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               dispatch({
                 type: 'SET_SHOW_MEMBERSHIP_ALERT',
                 payload: {
@@ -104,8 +103,7 @@ export const Budget: FC<BudgetProps> = ({
             disabled={userId !== ownerId}
             variant="outline"
             className="mr-2"
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               dispatch({
                 type: 'SET_SHOW_MEMBERSHIP_ALERT',
                 payload: {
@@ -119,6 +117,6 @@ export const Budget: FC<BudgetProps> = ({
           </Button>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

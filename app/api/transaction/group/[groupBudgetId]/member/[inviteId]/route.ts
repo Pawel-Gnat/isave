@@ -39,12 +39,49 @@ export async function DELETE(request: Request, { params }: { params: ParamsProps
     return NextResponse.json({ error: 'Nie możesz usunąć siebie' }, { status: 403 });
   }
 
-  // await prisma.inviteNotification.create({
-  //   data: {
-  //     userId: inviteId,
-  //     groupBudgetId: groupBudgetId,
-  //   },
-  // });
+  const groupBudgetMember = await prisma.groupBudgetMember.findFirst({
+    where: {
+      userId: invitedUser.id,
+      groupBudgetId: groupBudgetId,
+    },
+  });
+
+  if (!groupBudgetMember) {
+    return NextResponse.json(
+      { error: 'Nie znaleziono użytkownika w grupie' },
+      { status: 404 },
+    );
+  }
+
+  await prisma.groupBudgetMember.delete({
+    where: {
+      id: groupBudgetMember.id,
+      userId: invitedUser.id,
+      groupBudgetId: groupBudgetId,
+    },
+  });
+
+  await prisma.groupExpenses.updateMany({
+    where: {
+      userId: invitedUser.id,
+      groupBudgetId: groupBudgetId,
+    },
+    data: {
+      userId: null,
+      userName: 'Nieokreślony',
+    },
+  });
+
+  await prisma.groupIncomes.updateMany({
+    where: {
+      userId: invitedUser.id,
+      groupBudgetId: groupBudgetId,
+    },
+    data: {
+      userId: null,
+      userName: 'Nieokreślony',
+    },
+  });
 
   return NextResponse.json('Usunięto użytkownika');
 }

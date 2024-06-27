@@ -31,7 +31,7 @@ export const authOptions: AuthOptions = {
           },
         });
 
-        if (!user || !user.hashedPassword) {
+        if (!user) {
           throw new Error('Invalid credentials');
         }
 
@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isPasswordValid) {
-          throw new Error('Invalid credentials');
+          throw new Error('Please validate credentials');
         }
 
         return user;
