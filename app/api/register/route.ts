@@ -3,11 +3,19 @@ import bcrypt from 'bcrypt';
 
 import prisma from '@/lib/prisma';
 
+import { RegisterFormSchema } from '@/utils/formValidations';
 import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { name, email, password } = body;
+
+  const validationResult = RegisterFormSchema.safeParse(body);
+
+  if (!validationResult.success) {
+    return NextResponse.json({ error: 'Niepoprawne dane rejestracji' }, { status: 400 });
+  }
+
+  const { name, email, password } = validationResult.data;
 
   const existingUser = await prisma.user.findUnique({
     where: {
