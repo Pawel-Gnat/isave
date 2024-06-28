@@ -101,7 +101,7 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
               <TableRow>
                 <TableHead>Nazwa</TableHead>
                 <TableHead>Kategoria</TableHead>
-                <TableHead className="w-36">Cena [zł]</TableHead>
+                <TableHead className="w-36">Kwota [zł]</TableHead>
                 <TableHead className="w-48 text-right"></TableHead>
               </TableRow>
             </TableHeader>
