@@ -11,10 +11,6 @@ export const PersonalExpensesCard = () => {
     startOfMonth(new Date()),
     endOfMonth(new Date()),
   );
-  //   const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
-  //     date?.from || startOfMonth(new Date()),
-  //     date?.to || endOfMonth(new Date()),
-  //   );
 
   return (
     <StatsCard

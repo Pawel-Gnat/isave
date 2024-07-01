@@ -40,7 +40,8 @@ model User {
   ownedGroupBudgets      GroupBudget[]  
   groupExpenses          GroupExpenses[]
   groupIncomes           GroupIncomes[]    
-  InviteNotification     InviteNotification[]        
+  groupBudgetMember      GroupBudgetMember[]
+  inviteNotification     InviteNotification[]        
 }
 
 model PersonalIncomes {
@@ -103,6 +104,7 @@ model GroupBudget {
 model GroupBudgetMember {
   id                     String               @id @default(auto()) @map("_id") @db.ObjectId
   userId                 String               @db.ObjectId
+  user                   User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   groupBudgetId          String               @db.ObjectId
   groupBudget            GroupBudget          @relation(fields: [groupBudgetId], references: [id], onDelete: Cascade)
 }

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import getGroupBudgets from '@/actions/getGroupBudget';
+import getGroupBudgets from '@/actions/getGroupBudgets';
 
 export default function useGroupBudgets() {
   const {

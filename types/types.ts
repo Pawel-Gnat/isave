@@ -28,8 +28,6 @@ export type TransactionType = 'income' | 'expense' | null;
 
 export type MemberAction = 'add' | 'remove' | null;
 
-// export type NotificationStatus = 'pending' | 'fulfilled' | 'rejected';
-
 export type ModifiedPersonalExpense = PersonalExpenses & {
   transactions: Transaction[];
 };
@@ -52,6 +50,19 @@ export type ModifiedInviteNotification = InviteNotification & {
 
 export type ModifiedInviteNotificationWithOwner = ModifiedInviteNotification & {
   owner: User;
+};
+
+export type GroupBudgetStatistics = {
+  id: string;
+  name: string;
+  totalExpenses: number;
+  totalIncomes: number;
+  owner: {
+    name: string;
+    totalExpenses: number;
+    totalIncomes: number;
+  };
+  members: { name: string; totalExpenses: number; totalIncomes: number }[];
 };
 
 export type AlertState = {

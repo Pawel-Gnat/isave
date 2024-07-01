@@ -1,15 +1,18 @@
 'use client';
 
-import useGroupBudgets from '@/hooks/useGroupBudgets';
+import { endOfMonth, startOfMonth } from 'date-fns';
+
+import useGroupBudgetsStatistics from '@/hooks/useGroupBudgetsStatistics';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { GroupBudgetCard } from './group-budget-card';
 
 export const GroupBudgetsContainer = () => {
-  const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
+  const { groupBudgetsStatistics, isGroupBudgetsStatisticsLoading } =
+    useGroupBudgetsStatistics(startOfMonth(new Date()), endOfMonth(new Date()));
 
-  if (isGroupBudgetsLoading) {
+  if (isGroupBudgetsStatisticsLoading) {
     return (
       <div className="my-4 grid grid-cols-2 gap-4">
         <Skeleton className="h-52 w-full" />
@@ -20,8 +23,10 @@ export const GroupBudgetsContainer = () => {
 
   return (
     <div className="my-4 grid grid-cols-2 gap-4">
-      {groupBudgets &&
-        groupBudgets.map((budget) => <GroupBudgetCard key={budget.id} budget={budget} />)}
+      {groupBudgetsStatistics &&
+        groupBudgetsStatistics.map((budget) => (
+          <GroupBudgetCard key={budget.id} budget={budget} />
+        ))}
     </div>
   );
 };
