@@ -49,7 +49,7 @@ export const NewBudget = () => {
     axios
       .post(`api/transaction/group/`, values)
       .then((response) => {
-        dispatch({ type: 'SET_HIDE_ALERT' });
+        handleClose();
         toast.success(`${response.data}`);
         groupBudgetsRefetch();
       })

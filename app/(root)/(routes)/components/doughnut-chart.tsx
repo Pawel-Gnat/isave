@@ -1,13 +1,17 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import Chart from 'chart.js/auto';
+import { ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend);
 
-function DoughnutChart({ chartData }: { chartData: any }) {
+export const DoughnutChart = ({ chartData }: { chartData: any }) => {
+  const options = {
+    responsive: true,
+  };
+
   return (
     <div>
-      <Doughnut data={chartData} />
+      <Doughnut data={chartData} options={options} />
     </div>
   );
-}
-export default DoughnutChart;
+};
