@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { StatsCard } from './stats-card';
 import { BarChart } from './bar-chart';
 
-export const PersonalBudgetContainer = () => {
+export const PersonalContainer = () => {
   const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
     startOfMonth(new Date()),
     endOfMonth(new Date()),

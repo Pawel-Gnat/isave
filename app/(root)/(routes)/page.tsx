@@ -4,8 +4,8 @@ import getCurrentUser from '@/actions/getCurrentUser';
 
 import { Heading } from '@/components/shared/heading';
 
-import { GroupBudgetsContainer } from './components/group-budgets-container';
-import { PersonalBudgetContainer } from './components/personal-budget-container';
+import { GroupContainer } from './components/group-container';
+import { PersonalContainer } from './components/personal-container';
 
 const HomePage = async () => {
   const user = await getCurrentUser();
@@ -17,8 +17,8 @@ const HomePage = async () => {
   return (
     <>
       <Heading text="Statystyki" />
-      <PersonalBudgetContainer />
-      <GroupBudgetsContainer />
+      <PersonalContainer />
+      <GroupContainer />
     </>
   );
 };

@@ -5,11 +5,11 @@ import { DoughnutChart } from './doughnut-chart';
 
 import { GroupBudgetStatistics } from '@/types/types';
 
-interface GroupBudgetCardProps {
+interface GroupExpensesCardProps {
   budget: GroupBudgetStatistics;
 }
 
-export const GroupBudgetCard: FC<GroupBudgetCardProps> = ({ budget }) => {
+export const GroupExpensesCard: FC<GroupExpensesCardProps> = ({ budget }) => {
   return (
     <div className="flex flex-col justify-between gap-4 rounded-lg border p-4">
       <p>{budget.name} - wydatki</p>
