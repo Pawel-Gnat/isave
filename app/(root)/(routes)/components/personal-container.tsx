@@ -7,8 +7,8 @@ import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { StatsCard } from './stats-card';
 import { BarChart } from './bar-chart';
+import { DetailLink } from './detail-link';
 
 export const PersonalContainer = () => {
   const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
@@ -50,16 +50,35 @@ export const PersonalContainer = () => {
       )}
 
       <div className="flex flex-col justify-center gap-4">
-        <StatsCard
-          heading="Wydatki osobiste"
-          data={personalExpenses}
-          isLoading={isPersonalExpensesLoading}
-        />
-        <StatsCard
-          heading="Przychody osobiste"
-          data={personalIncomes}
-          isLoading={isPersonalIncomesLoading}
-        />
+        {(isPersonalExpensesLoading || isPersonalIncomesLoading) && (
+          <Skeleton className="h-64 w-52" />
+        )}
+
+        {personalExpenses && personalIncomes && (
+          <div className="flex h-64 w-52 flex-col items-end justify-between gap-4 rounded-lg border p-4">
+            <div>
+              <p>Wydatki osobiste</p>
+              <p className="mt-2 text-right text-xl font-bold">
+                {personalExpenses &&
+                  personalExpenses
+                    .reduce((acc, curr) => acc + curr.value, 0)
+                    .toFixed(2)}{' '}
+                zł
+              </p>
+            </div>
+            <div>
+              <p>Przychody osobiste</p>
+              <p className="mt-2 text-right text-xl font-bold">
+                {personalIncomes &&
+                  personalIncomes
+                    .reduce((acc, curr) => acc + curr.value, 0)
+                    .toFixed(2)}{' '}
+                zł
+              </p>
+            </div>
+            <DetailLink src="/" />
+          </div>
+        )}
       </div>
     </div>
   );

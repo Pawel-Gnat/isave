@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { BudgetLabel } from './budget-label';
 import { DoughnutChart } from './doughnut-chart';
+import { DetailLink } from './detail-link';
 
 import { GroupBudgetStatistics } from '@/types/types';
 
@@ -52,6 +53,7 @@ export const GroupIncomesCard: FC<GroupIncomesCardProps> = ({ budget }) => {
           <p className="mt-auto text-right text-xl font-bold">
             {budget.totalIncomes.toFixed(2)} zł
           </p>
+          <DetailLink src="/" />
         </div>
       </div>
     </div>
