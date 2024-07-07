@@ -76,7 +76,7 @@ export const PersonalContainer = () => {
                 zł
               </p>
             </div>
-            <DetailLink src="/" />
+            <DetailLink src="/statistics/personal" />
           </div>
         )}
       </div>

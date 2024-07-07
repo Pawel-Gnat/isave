@@ -57,7 +57,7 @@ export const GroupExpensesCard: FC<GroupExpensesCardProps> = ({ budget }) => {
           <p className="mt-auto text-right text-xl font-bold">
             {budget.totalExpenses.toFixed(2)} zł
           </p>
-          <DetailLink src="/" />
+          <DetailLink src="/statistics/group/id" />
         </div>
       </div>
     </div>

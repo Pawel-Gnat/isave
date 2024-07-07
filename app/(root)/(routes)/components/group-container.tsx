@@ -25,10 +25,15 @@ export const GroupContainer = () => {
   return (
     <div className="my-4 grid grid-cols-2 gap-4">
       {groupBudgetsStatistics &&
-        groupBudgetsStatistics.map((budget) => (
+        groupBudgetsStatistics.map((budget, index) => (
           <>
-            <GroupExpensesCard key={budget.id} budget={budget} />
-            <GroupIncomesCard key={budget.id} budget={budget} />
+            <GroupExpensesCard key={budget.id + index} budget={budget} />
+          </>
+        ))}
+      {groupBudgetsStatistics &&
+        groupBudgetsStatistics.map((budget, index) => (
+          <>
+            <GroupIncomesCard key={budget.id + index} budget={budget} />
           </>
         ))}
     </div>
