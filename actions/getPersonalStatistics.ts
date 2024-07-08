@@ -14,7 +14,7 @@ const getPersonalStatistics = async (date: DateRange) => {
       return null;
     }
 
-    const personalIncomes = await prisma.personalIncomes.findMany({
+    const personalExpenses = await prisma.personalExpenses.findMany({
       where: {
         userId: currentUser.id,
         date: {
@@ -27,16 +27,16 @@ const getPersonalStatistics = async (date: DateRange) => {
       },
     });
 
-    if (!personalIncomes) {
+    if (!personalExpenses) {
       return null;
     }
 
-    const convertedIncomes = personalIncomes.map((income) => ({
+    const convertedExpenses = personalExpenses.map((income) => ({
       ...income,
       value: income.value / 100,
     }));
 
-    return convertedIncomes;
+    return convertedExpenses;
   } catch (error) {
     console.error(error);
     return [];

@@ -16,6 +16,8 @@ export const PersonalContainer = () => {
     endOfMonth(new Date()),
   );
 
+  console.log(personalExpenses);
+
   const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
     startOfMonth(new Date()),
     endOfMonth(new Date()),
@@ -34,13 +36,13 @@ export const PersonalContainer = () => {
             datasets: [
               {
                 label: 'Wydatki',
-                data: [-personalExpenses[0].value],
+                data: [-personalExpenses.reduce((acc, curr) => acc + curr.value, 0)],
                 backgroundColor: 'rgba(27, 38, 59, 1)',
                 borderColor: 'rgba(27, 38, 59, 1)',
               },
               {
                 label: 'Przychody',
-                data: [personalIncomes[0].value],
+                data: [personalIncomes.reduce((acc, curr) => acc + curr.value, 0)],
                 backgroundColor: 'rgba(65, 90, 119, 1)',
                 borderColor: 'rgba(65, 90, 119, 1)',
               },
