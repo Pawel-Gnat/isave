@@ -5,6 +5,10 @@ import { endOfMonth, startOfMonth } from 'date-fns';
 import usePersonalStatistics from '@/hooks/usePersonalStatistics';
 import useExpenseCategories from '@/hooks/useExpenseCategories';
 
+import { BarChart } from '@/components/charts/bar-chart';
+
+import { ChartConfig } from '@/components/ui/chart';
+
 interface GroupedTransactions {
   [key: string]: number;
 }
@@ -37,24 +41,45 @@ export const TransactionsList = () => {
     return category ? category.name : 'Brak kategorii';
   };
 
-  if (isPersonalStatisticsLoading) {
+  const createChartData = (groupedTransactions: { [key: string]: number }) => {
+    return Object.entries(groupedTransactions).map(([categoryId, value]) => ({
+      categoryName: getExpenseCategoryName(categoryId),
+      value: +(value / 100).toFixed(2),
+    }));
+  };
+
+  const chartData = createChartData(groupedTransactions);
+
+  const chartConfig = {
+    desktop: {
+      label: 'Value',
+      color: 'hsl(var(--chart-1))',
+    },
+  } satisfies ChartConfig;
+
+  if (isPersonalStatisticsLoading || !chartData) {
     return <div>Ładowanie...</div>;
   }
 
   return (
-
-
-    
-    <ul>
-      {Object.keys(groupedTransactions).length > 0 ? (
-        Object.entries(groupedTransactions).map(([categoryId, value]) => (
-          <li key={categoryId}>
-            {getExpenseCategoryName(categoryId)}: {(value / 100).toFixed(2)} zł
-          </li>
-        ))
-      ) : (
-        <li>Brak transakcji w wybranym okresie</li>
-      )}
-    </ul>
+    <>
+      <BarChart
+        chartData={chartData}
+        chartConfig={chartConfig}
+        title="Zestawienie wydatków"
+        description="Wykres przedstawia kategorie wydatków z ich kosztem sumarycznym"
+      />
+      {/* <ul>
+        {chartData.length > 0 ? (
+          chartData.map(({ categoryName, value }, index) => (
+            <li key={index}>
+              {categoryName}: {value} zł
+            </li>
+          ))
+        ) : (
+          <li>Brak transakcji w wybranym okresie</li>
+        )}
+      </ul> */}
+    </>
   );
 };
