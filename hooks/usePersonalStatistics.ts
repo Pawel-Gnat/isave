@@ -5,8 +5,8 @@ import getPersonalStatistics from '@/actions/getPersonalStatistics';
 export default function usePersonalStatistics(dateFrom: Date, dateTo: Date) {
   const {
     data: personalStatistics,
-    isLoading: isGetPersonalStatisticsLoading,
-    error: getPersonalStatisticsError,
+    isLoading: isPersonalStatisticsLoading,
+    error: personalStatisticsError,
   } = useQuery({
     queryKey: ['personalStatistics', dateFrom, dateTo],
     queryFn: async () => await getPersonalStatistics({ from: dateFrom, to: dateTo }),
@@ -14,7 +14,7 @@ export default function usePersonalStatistics(dateFrom: Date, dateTo: Date) {
 
   return {
     personalStatistics,
-    isGetPersonalStatisticsLoading,
-    getPersonalStatisticsError,
+    isPersonalStatisticsLoading,
+    personalStatisticsError,
   };
 }
