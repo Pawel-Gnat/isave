@@ -4,7 +4,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 
 import { Heading } from '@/components/shared/heading';
 
-import { TransactionsList } from './components/transactions-list';
+import { ChartsContainer } from './components/charts-container';
 
 const HomePage = async () => {
   const user = await getCurrentUser();
@@ -16,7 +16,7 @@ const HomePage = async () => {
   return (
     <>
       <Heading text="Statystyki wydatków własnych" />
-      <TransactionsList />
+      <ChartsContainer />
     </>
   );
 };

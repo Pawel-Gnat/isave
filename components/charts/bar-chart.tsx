@@ -1,7 +1,14 @@
 'use client';
 
 import { FC } from 'react';
-import { Bar, BarChart as BarChartUI, CartesianGrid, LabelList, XAxis } from 'recharts';
+import {
+  Bar,
+  BarChart as BarChartUI,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 import {
   Card,
@@ -31,13 +38,16 @@ export const BarChart: FC<BarChartProps> = ({
   chartConfig,
 }) => {
   return (
-    <Card className="min-h-[200px] max-w-screen-lg">
+    <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="max-h-[500px] min-h-[200px] w-full"
+        >
           <BarChartUI
             accessibilityLayer
             data={chartData}
@@ -51,6 +61,10 @@ export const BarChart: FC<BarChartProps> = ({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
             />
             <Bar dataKey="value" fill="var(--color-desktop)" radius={8}>
               <LabelList

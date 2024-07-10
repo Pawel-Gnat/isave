@@ -22,6 +22,9 @@ const getPersonalExpenses = async (date: DateRange) => {
           lte: date.to,
         },
       },
+      include: {
+        transactions: true,
+      },
     });
 
     if (!personalExpenses) {

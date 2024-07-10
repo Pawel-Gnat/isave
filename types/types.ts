@@ -44,6 +44,10 @@ export type ModifiedGroupIncome = GroupIncomes & {
   transactions: Transaction[];
 };
 
+export type GroupedTransactions = {
+  [key: string]: number;
+};
+
 export type ModifiedInviteNotification = InviteNotification & {
   groupBudget: GroupBudget;
 };

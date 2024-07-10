@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
-import { simplifyCategories } from '@/utils/simplifyCategories';
+import { simplifyCategories } from '@/utils/categoryUtils';
 import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 import getExpenseCategories from '@/actions/getExpenseCategories';

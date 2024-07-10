@@ -16,8 +16,6 @@ export const PersonalContainer = () => {
     endOfMonth(new Date()),
   );
 
-  console.log(personalExpenses);
-
   const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
     startOfMonth(new Date()),
     endOfMonth(new Date()),
