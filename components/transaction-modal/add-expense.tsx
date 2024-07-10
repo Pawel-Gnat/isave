@@ -128,7 +128,7 @@ export const AddExpense = () => {
           { fileText },
           { signal: newController.signal },
         );
-        setValue('date', new Date(response.data.date));
+        // setValue('date', new Date(response.data.date));
         setValue('transactions', response.data.expenses);
       } catch (error) {
         if (axios.isCancel(error)) {

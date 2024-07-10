@@ -45,7 +45,6 @@ export async function POST(request: Request) {
   categoryId match according to the id of the following categories ${JSON.stringify(simplifiedCategories)}.
   Do not create any comments or any additional responses. You have to return only the JSON as 
   {
-    date: Date;
     expenses: ExpenseProduct[];
   }.
   `;
@@ -64,7 +63,6 @@ export async function POST(request: Request) {
       const response: CompletionResponse = JSON.parse(content);
 
       const modifiedResponse = {
-        date: response.date,
         expenses: response.expenses.map((expense) => ({
           ...expense,
           title: capitalizeFirstLetter(expense.title),
