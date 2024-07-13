@@ -39,8 +39,8 @@ export const Chart: FC<ExpenseChartProps> = ({
   const chartData = createChartData(categories, groupedTransactions);
 
   const chartConfig = {
-    desktop: {
-      label: 'Value',
+    value: {
+      label: 'Suma',
       color: 'hsl(var(--chart-1))',
     },
   } satisfies ChartConfig;

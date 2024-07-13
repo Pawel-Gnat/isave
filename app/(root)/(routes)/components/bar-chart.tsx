@@ -1,17 +1,78 @@
-import Chart from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
-import { CategoryScale } from 'chart.js';
+'use client';
 
-Chart.register(CategoryScale);
+import { FC } from 'react';
+import { Bar, BarChart as BarChartUI, CartesianGrid, LabelList, XAxis } from 'recharts';
 
-export const BarChart = ({ chartData }: { chartData: any }) => {
-  const options = {
-    responsive: true,
-  };
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 
+interface BarChartProps {
+  chartData: any;
+  chartConfig: any;
+  title: string;
+  description: string;
+}
+
+export const BarChart: FC<BarChartProps> = ({
+  title,
+  description,
+  chartData,
+  chartConfig,
+}) => {
   return (
-    <div className="rounded-lg border p-4">
-      <Bar data={chartData} options={options} className="h-full" />
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="max-h-[500px] min-h-[200px] w-full"
+        >
+          <BarChartUI
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              top: 20,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="categoryName"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <Bar dataKey="expenses" fill="var(--color-expenses)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+            <Bar dataKey="incomes" fill="var(--color-incomes)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+          </BarChartUI>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 };

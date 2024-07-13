@@ -5,7 +5,10 @@ import { endOfMonth, startOfMonth } from 'date-fns';
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 
+import { calculateTotal } from '@/utils/chartUtils';
+
 import { Skeleton } from '@/components/ui/skeleton';
+import { ChartConfig } from '@/components/ui/chart';
 
 import { BarChart } from './bar-chart';
 import { DetailLink } from './detail-link';
@@ -21,6 +24,25 @@ export const PersonalContainer = () => {
     endOfMonth(new Date()),
   );
 
+  const chartData = [
+    {
+      label: 'Transakcje',
+      expenses: calculateTotal(personalExpenses || []) * -1,
+      incomes: calculateTotal(personalIncomes || []),
+    },
+  ];
+
+  const chartConfig = {
+    expenses: {
+      label: 'Wydatki',
+      color: 'hsl(var(--chart-1))',
+    },
+    incomes: {
+      label: 'Przychód',
+      color: 'hsl(var(--chart-2))',
+    },
+  } satisfies ChartConfig;
+
   return (
     <div className="flex flex-row gap-4">
       {(isPersonalExpensesLoading || isPersonalIncomesLoading) && (
@@ -29,23 +51,10 @@ export const PersonalContainer = () => {
 
       {personalExpenses && personalIncomes && (
         <BarChart
-          chartData={{
-            labels: ['Budżet osobisty'],
-            datasets: [
-              {
-                label: 'Wydatki',
-                data: [-personalExpenses.reduce((acc, curr) => acc + curr.value, 0)],
-                backgroundColor: 'rgba(27, 38, 59, 1)',
-                borderColor: 'rgba(27, 38, 59, 1)',
-              },
-              {
-                label: 'Przychody',
-                data: [personalIncomes.reduce((acc, curr) => acc + curr.value, 0)],
-                backgroundColor: 'rgba(65, 90, 119, 1)',
-                borderColor: 'rgba(65, 90, 119, 1)',
-              },
-            ],
-          }}
+          title="Budżet osobisty"
+          description="Zestawienie z bieżącego miesiąca"
+          chartData={chartData}
+          chartConfig={chartConfig}
         />
       )}
 
@@ -55,26 +64,20 @@ export const PersonalContainer = () => {
         )}
 
         {personalExpenses && personalIncomes && (
-          <div className="flex h-64 w-52 flex-col items-end justify-between gap-4 rounded-lg border p-4">
-            <div>
-              <p>Wydatki osobiste</p>
-              <p className="mt-2 text-right text-xl font-bold">
-                {personalExpenses &&
-                  personalExpenses
-                    .reduce((acc, curr) => acc + curr.value, 0)
-                    .toFixed(2)}{' '}
-                zł
-              </p>
-            </div>
-            <div>
-              <p>Przychody osobiste</p>
-              <p className="mt-2 text-right text-xl font-bold">
-                {personalIncomes &&
-                  personalIncomes
-                    .reduce((acc, curr) => acc + curr.value, 0)
-                    .toFixed(2)}{' '}
-                zł
-              </p>
+          <div className="flex h-full w-52 flex-col items-end justify-between gap-4 rounded-lg border p-6">
+            <div className="space-y-4 text-right">
+              <div>
+                <p>Wydatki osobiste</p>
+                <p className="mt-2 text-xl font-bold">
+                  {personalExpenses && calculateTotal(personalExpenses)} zł
+                </p>
+              </div>
+              <div>
+                <p>Przychody osobiste</p>
+                <p className="mt-2 text-xl font-bold">
+                  {personalIncomes && calculateTotal(personalIncomes)} zł
+                </p>
+              </div>
             </div>
             <DetailLink src="/statistics/personal" />
           </div>

@@ -1,14 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import {
-  Bar,
-  BarChart as BarChartUI,
-  CartesianGrid,
-  LabelList,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Bar, BarChart as BarChartUI, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 import {
   Card,
@@ -17,12 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 
 interface BarChartProps {
   chartData: any;
@@ -66,7 +54,7 @@ export const BarChart: FC<BarChartProps> = ({
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <Bar dataKey="value" fill="var(--color-desktop)" radius={8}>
+            <Bar dataKey="value" fill="var(--color-value)" radius={8}>
               <LabelList
                 position="top"
                 offset={12}

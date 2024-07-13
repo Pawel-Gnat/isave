@@ -34,3 +34,9 @@ export const createChartData = (
     value: +(value / 100).toFixed(2),
   }));
 };
+
+export const calculateTotal = (
+  transactions: ModifiedPersonalExpense[] | ModifiedPersonalIncome[],
+) => {
+  return +transactions.reduce((acc, curr) => acc + curr.value, 0).toFixed(2);
+};
