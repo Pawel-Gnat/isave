@@ -15,7 +15,7 @@ export const GroupContainer = () => {
 
   if (isGroupBudgetsStatisticsLoading) {
     return (
-      <div className="my-4 grid grid-cols-2 gap-4">
+      <div className="my-4 grid max-w-screen-2xl grid-cols-2 gap-4">
         <Skeleton className="h-96 w-full" />
         <Skeleton className="h-96 w-full" />
       </div>
@@ -23,18 +23,13 @@ export const GroupContainer = () => {
   }
 
   return (
-    <div className="my-4 grid grid-cols-2 gap-4">
+    <div className="my-4 grid max-w-screen-2xl grid-cols-2 gap-4">
       {groupBudgetsStatistics &&
-        groupBudgetsStatistics.map((budget, index) => (
-          <>
-            <GroupExpensesCard key={budget.id + index} budget={budget} />
-          </>
-        ))}
-      {groupBudgetsStatistics &&
-        groupBudgetsStatistics.map((budget, index) => (
-          <>
-            <GroupIncomesCard key={budget.id + index} budget={budget} />
-          </>
+        groupBudgetsStatistics.map((budget) => (
+          <div key={budget.id} className="space-y-4">
+            <GroupExpensesCard budget={budget} />
+            <GroupIncomesCard budget={budget} />
+          </div>
         ))}
     </div>
   );

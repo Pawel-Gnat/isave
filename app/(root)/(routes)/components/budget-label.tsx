@@ -10,7 +10,7 @@ interface BudgetBadgeProps {
 export const BudgetLabel: FC<BudgetBadgeProps> = ({ name, totalExpenses }) => {
   return (
     <div>
-      <Badge variant="default" className="w-fit">
+      <Badge variant="default" className="w-fit min-w-max">
         {name}
       </Badge>
       <p className="mt-2 text-right font-bold">{totalExpenses.toFixed(2)} zł</p>

@@ -1,17 +1,46 @@
-import Chart from 'chart.js/auto';
-import { ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+'use client';
 
-Chart.register(ArcElement, Tooltip, Legend);
+import { Pie, PieChart } from 'recharts';
 
-export const DoughnutChart = ({ chartData }: { chartData: any }) => {
-  const options = {
-    responsive: true,
-  };
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 
+interface DougnnutChartProps {
+  chartData: any;
+  chartConfig: any;
+  title: string;
+  description: string;
+}
+
+export const DoughnutChart = ({
+  title,
+  description,
+  chartData,
+  chartConfig,
+}: DougnnutChartProps) => {
   return (
-    <div>
-      <Doughnut data={chartData} options={options} />
-    </div>
+    <Card className=" border-0 shadow-none">
+      <CardHeader className="p-0">
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="max-w-80 p-0">
+        <ChartContainer
+          config={chartConfig}
+          className="max-h-[500px] min-h-[200px] w-full"
+        >
+          <PieChart>
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Pie data={chartData} dataKey="value" nameKey="user" innerRadius={60} />
+          </PieChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 };
