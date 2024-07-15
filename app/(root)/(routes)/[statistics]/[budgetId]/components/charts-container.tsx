@@ -4,18 +4,16 @@ import { useState } from 'react';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import useExpenseCategories from '@/hooks/useExpenseCategories';
-import usePersonalExpenses from '@/hooks/usePersonalExpenses';
-import usePersonalIncomes from '@/hooks/usePersonalIncomes';
+import useGroupExpenses from '@/hooks/useGroupExpenses';
+import useGroupIncomes from '@/hooks/useGroupIncomes';
 import useIncomeCategories from '@/hooks/useIncomeCategories';
 
 import { DatePicker } from '@/components/shared/date-picker';
 import { BarChart } from '@/components/charts/bar-chart';
 
-// import { Chart } from './chart';
+import { Chart } from './chart';
 
 import { DateRange } from 'react-day-picker';
-import useGroupExpenses from '@/hooks/useGroupExpenses';
-import useGroupExpensesByUserId from '@/hooks/useGroupExpensesByUserId';
 
 interface ChartsContainerProps {
   budgetId: string;
@@ -26,19 +24,20 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
     from: startOfMonth(new Date()),
     to: endOfMonth(new Date()),
   });
-  // const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
-  //   date.from || startOfMonth(new Date()),
-  //   date.to || endOfMonth(new Date()),
-  // );
-  // const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
-  //   date.from || startOfMonth(new Date()),
-  //   date.to || endOfMonth(new Date()),
-  // );
-
-  // const{}=useGroupExpensesByUserId()
-
+  const { groupExpenses, isGroupExpensesLoading } = useGroupExpenses(
+    date.from || startOfMonth(new Date()),
+    date.to || endOfMonth(new Date()),
+    budgetId,
+  );
+  const { groupIncomes, isGroupIncomesLoading } = useGroupIncomes(
+    date.from || startOfMonth(new Date()),
+    date.to || endOfMonth(new Date()),
+    budgetId,
+  );
   const { expenseCategories, isExpenseCategoriesLoading } = useExpenseCategories();
   const { incomeCategories, isIncomeCategoriesLoading } = useIncomeCategories();
+
+  // console.log(groupExpenses);
 
   const handleDateChange = (newDate: DateRange | undefined) => {
     if (newDate) {
@@ -49,12 +48,12 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
   return (
     <div className="flex grow flex-col gap-4">
       <DatePicker date={date} setDate={handleDateChange} />
-      {/* <Chart
+      <Chart
         title="Zestawienie wydatków"
         description="Wykres przedstawia kategorie wydatków z ich kosztem sumarycznym"
-        isLoading={isPersonalExpensesLoading && isExpenseCategoriesLoading}
+        isLoading={isGroupExpensesLoading && isExpenseCategoriesLoading}
         categories={expenseCategories}
-        transactions={personalExpenses}
+        transactions={groupExpenses}
         chart={(chartData, chartConfig, title, description) => (
           <BarChart
             chartData={chartData}
@@ -67,9 +66,9 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
       <Chart
         title="Zestawienie przychodów"
         description="Wykres przedstawia kategorie przychodów z ich zyskiem sumarycznym"
-        isLoading={isPersonalIncomesLoading && isIncomeCategoriesLoading}
+        isLoading={isGroupIncomesLoading && isIncomeCategoriesLoading}
         categories={incomeCategories}
-        transactions={personalIncomes}
+        transactions={groupIncomes}
         chart={(chartData, chartConfig, title, description) => (
           <BarChart
             chartData={chartData}
@@ -78,7 +77,7 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
             description={description}
           />
         )}
-      /> */}
+      />
     </div>
   );
 };

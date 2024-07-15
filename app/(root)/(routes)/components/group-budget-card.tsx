@@ -83,8 +83,8 @@ export const GroupBudgetCard = ({ budget }: GroupBudgetCardProps) => {
       <div className="flex grow flex-row justify-between gap-4">
         {budget.totalExpenses < 0 ? (
           <DoughnutChart
-            title={budget.name}
-            description="Wydatki z bieżącego miesiąca"
+            title={`${budget.name} - wydatki`}
+            description="Zestawienie z bieżącego miesiąca"
             chartData={chartExpensesData}
             chartConfig={chartExpensesConfig}
           />
@@ -112,8 +112,8 @@ export const GroupBudgetCard = ({ budget }: GroupBudgetCardProps) => {
       <div className="flex grow flex-row justify-between gap-4">
         {budget.totalIncomes > 0 ? (
           <DoughnutChart
-            title={budget.name}
-            description="Przychody z bieżącego miesiąca"
+            title={`${budget.name} - przychody`}
+            description="Zestawienie z bieżącego miesiąca"
             chartData={chartIncomesData}
             chartConfig={chartIncomesConfig}
           />

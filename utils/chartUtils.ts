@@ -2,6 +2,8 @@ import { getCategoryName } from './categoryUtils';
 
 import {
   GroupedTransactions,
+  ModifiedGroupExpense,
+  ModifiedGroupIncome,
   ModifiedPersonalExpense,
   ModifiedPersonalIncome,
   Transaction,
@@ -9,7 +11,11 @@ import {
 import { ExpenseCategory, IncomeCategory } from '@prisma/client';
 
 export const flatTransactions = (
-  transactions: ModifiedPersonalIncome[] | ModifiedPersonalExpense[],
+  transactions:
+    | ModifiedPersonalIncome[]
+    | ModifiedPersonalExpense[]
+    | ModifiedGroupExpense[]
+    | ModifiedGroupIncome[],
 ) => {
   return transactions.flatMap((stat) => stat.transactions);
 };

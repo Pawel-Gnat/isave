@@ -22,6 +22,9 @@ const getGroupExpenses = async (date: DateRange, id: string) => {
           lte: date.to,
         },
       },
+      include: {
+        transactions: true,
+      },
     });
 
     if (!groupExpenses) {
