@@ -6,7 +6,11 @@ import { Heading } from '@/components/shared/heading';
 
 import { ChartsContainer } from './components/charts-container';
 
-const PersonalBudgetStatistics = async () => {
+interface GroupBudgetStatisticsProps {
+  params: { budgetId: string };
+}
+
+const GroupBudgetStatistics = async ({ params }: GroupBudgetStatisticsProps) => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -15,10 +19,10 @@ const PersonalBudgetStatistics = async () => {
 
   return (
     <>
-      <Heading text="Statystyki własnych transakcji" />
-      <ChartsContainer />
+      <Heading text="Statystyki transakcji grupowych" />
+      <ChartsContainer budgetId={params.budgetId} />
     </>
   );
 };
 
-export default PersonalBudgetStatistics;
+export default GroupBudgetStatistics;

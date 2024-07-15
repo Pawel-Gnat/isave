@@ -6,8 +6,7 @@ import useGroupBudgetsStatistics from '@/hooks/useGroupBudgetsStatistics';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { GroupExpensesCard } from './group-expenses-card';
-import { GroupIncomesCard } from './group-incomes-card';
+import { GroupBudgetCard } from './group-budget-card';
 
 export const GroupContainer = () => {
   const { groupBudgetsStatistics, isGroupBudgetsStatisticsLoading } =
@@ -27,8 +26,7 @@ export const GroupContainer = () => {
       {groupBudgetsStatistics &&
         groupBudgetsStatistics.map((budget) => (
           <div key={budget.id} className="space-y-4">
-            <GroupExpensesCard budget={budget} />
-            <GroupIncomesCard budget={budget} />
+            <GroupBudgetCard budget={budget} />
           </div>
         ))}
     </div>
