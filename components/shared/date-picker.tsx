@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
@@ -17,14 +16,14 @@ interface DatePickerProps {
   setDate: (date: DateRange | undefined) => void;
 }
 
-export const DatePicker: FC<DatePickerProps> = ({ date, setDate }) => {
+export const DatePicker = ({ date, setDate }: DatePickerProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
           className={cn(
-            'w-320px] justify-start text-left font-normal',
+            'w-[320px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >
