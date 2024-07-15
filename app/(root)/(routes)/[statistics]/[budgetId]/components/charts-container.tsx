@@ -37,8 +37,6 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
   const { expenseCategories, isExpenseCategoriesLoading } = useExpenseCategories();
   const { incomeCategories, isIncomeCategoriesLoading } = useIncomeCategories();
 
-  // console.log(groupExpenses);
-
   const handleDateChange = (newDate: DateRange | undefined) => {
     if (newDate) {
       setDate(newDate);
