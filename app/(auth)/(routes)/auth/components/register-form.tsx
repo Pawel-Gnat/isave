@@ -5,7 +5,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-import capitalizeFirstLetter from '@/utils/capitalizeFirstLetter';
 import { RegisterFormSchema } from '@/utils/formValidations';
 
 import {

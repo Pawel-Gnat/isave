@@ -13,6 +13,8 @@
     "no-console": 1,
     "prettier/prettier": 2,
     "camelcase": 1,
-    "react/jsx-pascal-case": 2
+    "react/jsx-pascal-case": 2,
+    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-explicit-any": 1
   }
 }
