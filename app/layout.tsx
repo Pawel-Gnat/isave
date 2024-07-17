@@ -6,6 +6,7 @@ import './globals.css';
 const font = Inter({ subsets: ['latin'] });
 
 import { Toaster } from '@/components/ui/sonner';
+import { Banner } from '@/components/banner/banner';
 
 export const metadata: Metadata = {
   title: 'iSave',
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={`flex flex-row ${font.className}`}>
         {children}
         <Toaster richColors />
+        <Banner />
       </body>
     </html>
   );
