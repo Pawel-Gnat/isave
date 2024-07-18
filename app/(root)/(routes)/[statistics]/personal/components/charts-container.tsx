@@ -55,21 +55,23 @@ export const ChartsContainer = () => {
           />
         )}
       />
-      <Chart
-        title="Zestawienie przychodów"
-        description="Wykres przedstawia kategorie przychodów z ich zyskiem sumarycznym"
-        isLoading={isPersonalIncomesLoading && isIncomeCategoriesLoading}
-        categories={incomeCategories}
-        transactions={personalIncomes}
-        chart={(chartData, chartConfig, title, description) => (
-          <BarChart
-            chartData={chartData}
-            chartConfig={chartConfig}
-            title={title}
-            description={description}
-          />
-        )}
-      />
+      <div className="max-w-[640px]">
+        <Chart
+          title="Zestawienie przychodów"
+          description="Wykres przedstawia kategorie przychodów z ich zyskiem sumarycznym"
+          isLoading={isPersonalIncomesLoading && isIncomeCategoriesLoading}
+          categories={incomeCategories}
+          transactions={personalIncomes}
+          chart={(chartData, chartConfig, title, description) => (
+            <BarChart
+              chartData={chartData}
+              chartConfig={chartConfig}
+              title={title}
+              description={description}
+            />
+          )}
+        />
+      </div>
     </div>
   );
 };

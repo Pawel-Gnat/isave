@@ -61,21 +61,23 @@ export const ChartsContainer = ({ budgetId }: ChartsContainerProps) => {
           />
         )}
       />
-      <Chart
-        title="Zestawienie przychodów"
-        description="Wykres przedstawia kategorie przychodów z ich zyskiem sumarycznym"
-        isLoading={isGroupIncomesLoading && isIncomeCategoriesLoading}
-        categories={incomeCategories}
-        transactions={groupIncomes}
-        chart={(chartData, chartConfig, title, description) => (
-          <BarChart
-            chartData={chartData}
-            chartConfig={chartConfig}
-            title={title}
-            description={description}
-          />
-        )}
-      />
+      <div className="max-w-[640px]">
+        <Chart
+          title="Zestawienie przychodów"
+          description="Wykres przedstawia kategorie przychodów z ich zyskiem sumarycznym"
+          isLoading={isGroupIncomesLoading && isIncomeCategoriesLoading}
+          categories={incomeCategories}
+          transactions={groupIncomes}
+          chart={(chartData, chartConfig, title, description) => (
+            <BarChart
+              chartData={chartData}
+              chartConfig={chartConfig}
+              title={title}
+              description={description}
+            />
+          )}
+        />
+      </div>
     </div>
   );
 };
