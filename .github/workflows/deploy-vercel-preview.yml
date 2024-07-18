@@ -30,3 +30,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          API_KEY: ${{ secrets.API_KEY }}

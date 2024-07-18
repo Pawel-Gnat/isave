@@ -35,3 +35,4 @@ jobs:
           VERCEL_FORCE_NO_BUILD_CACHE: 1
           DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          API_KEY: ${{ secrets.API_KEY }}
