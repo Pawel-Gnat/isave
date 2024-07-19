@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NEXT_ENV !== 'production') {
     return NextResponse.json(
       { error: 'AI niedostępne w trybie testowym' },
       { status: 405 },
