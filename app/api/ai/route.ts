@@ -15,10 +15,6 @@ interface CompletionResponse {
   }[];
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.API_KEY,
-});
-
 export async function POST(request: Request) {
   const body = await request.json();
   const { fileText } = body;
@@ -36,6 +32,10 @@ export async function POST(request: Request) {
       { status: 405 },
     );
   }
+
+  const openai = new OpenAI({
+    apiKey: process.env.API_KEY,
+  });
 
   const expenseCategories = await getExpenseCategories();
   const simplifiedCategories = simplifyCategories(expenseCategories);
