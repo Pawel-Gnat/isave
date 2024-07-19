@@ -12,6 +12,7 @@ import useGroupExpenses from '@/hooks/useGroupExpenses';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
+import { handleExpenseApiPostRoute } from '@/utils/dialogUtils';
 import { TransactionSchema } from '@/utils/formValidations';
 
 import { Button } from '@/components/ui/button';
@@ -25,7 +26,6 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
-import { handleExpenseApiPostRoute } from '@/utils/dialogUtils';
 
 enum STEPS {
   FILE = 0,
@@ -128,7 +128,6 @@ export const AddExpense = () => {
           { fileText },
           { signal: newController.signal },
         );
-        // setValue('date', new Date(response.data.date));
         setValue('transactions', response.data.expenses);
       } catch (error) {
         if (axios.isCancel(error)) {
