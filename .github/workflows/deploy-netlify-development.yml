@@ -28,7 +28,7 @@ jobs:
       - name: Deploy app to Netlify development env
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './dist'
+          publish-dir: './next'
           production-branch: development
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: 'Deploy from GitHub Actions'
