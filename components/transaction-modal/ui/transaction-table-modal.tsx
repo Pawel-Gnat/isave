@@ -146,7 +146,7 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
                       className={
                         errors.transactions?.[index]?.value ? 'border-red-500' : ''
                       }
-                      value={transaction.value}
+                      value={+transaction.value.toFixed(2)}
                     />
                   </TableCell>
                   <TableCell className="w-48 text-right">
