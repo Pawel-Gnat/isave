@@ -23,7 +23,7 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXT_PUBLIC_ENV: 'production'
+          NEXT_ENV: 'production'
 
       - name: Deploy app to Vercel production env
         uses: ./.github/actions/vercel-deployment
@@ -37,4 +37,4 @@ jobs:
           DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           API_KEY: ${{ secrets.API_KEY }}
-          NEXT_PUBLIC_ENV: 'production'
+          NEXT_ENV: 'production'

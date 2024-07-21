@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import prisma from '@/lib/prisma';
 
 import { RegisterFormSchema } from '@/utils/formValidations';
-import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -34,7 +33,7 @@ export async function POST(request: Request) {
   await prisma.user.create({
     data: {
       inviteId: crypto.randomUUID(),
-      name: capitalizeFirstLetter(name),
+      name,
       email,
       hashedPassword,
     },
