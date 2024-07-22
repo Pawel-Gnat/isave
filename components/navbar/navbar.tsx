@@ -11,32 +11,35 @@ import NavLink from './nav-link';
 import { AreaChart, Coins, PiggyBank, Power, Settings } from 'lucide-react';
 
 const PAGES = [
-  { src: '/', label: 'Statystyki', icon: <AreaChart className="mr-2" /> },
+  { src: '/', label: 'Statystyki', icon: <AreaChart className="lg:mr-2" /> },
   {
     src: '/personal',
     label: 'Transakcje osobiste',
-    icon: <PiggyBank className="mr-2" />,
+    icon: <PiggyBank className="lg:mr-2" />,
   },
   {
     src: '/group',
     label: 'Transakcje grupowe',
-    icon: <Coins className="mr-2" />,
+    icon: <Coins className="lg:mr-2" />,
   },
   {
     src: '/settings',
     label: 'Ustawienia',
-    icon: <Settings className="mr-2" />,
+    icon: <Settings className="lg:mr-2" />,
   },
 ];
 
 const Navbar = () => {
   return (
-    <nav className="sticky flex h-screen flex-col items-center gap-4 p-6">
-      <Link href="/" className="hidden pb-2 text-5xl font-bold text-primary lg:block">
+    <nav className=" flex flex-row items-center gap-2 p-4 sm:sticky sm:h-screen sm:flex-col sm:gap-4 sm:p-6">
+      <Link
+        href="/"
+        className="mr-auto font-bold text-primary sm:mr-0 sm:pb-2 sm:text-5xl"
+      >
         <Image src="/isave.svg" alt="iSave" width={60} height={60} />
       </Link>
 
-      <ul className="mt-16 flex flex-col gap-4 text-left">
+      <ul className="flex flex-row gap-2 text-left sm:mt-16 sm:flex-col sm:gap-4">
         {PAGES.map((page) => (
           <li key={page.label}>
             <NavLink href={page.src} label={page.label} icon={page.icon} />
@@ -44,8 +47,13 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <Button className="mt-auto w-full text-base" onClick={() => signOut()} size="lg">
-        <Power size={20} className="mr-2" /> Wyloguj się
+      <Button
+        className="p-2 text-base sm:mt-auto sm:w-full sm:p-4 lg:px-8"
+        onClick={() => signOut()}
+        size="lg"
+      >
+        <Power size={24} className="lg:mr-2" />
+        <span className="hidden w-fit text-nowrap lg:block"> Wyloguj się</span>
       </Button>
     </nav>
   );

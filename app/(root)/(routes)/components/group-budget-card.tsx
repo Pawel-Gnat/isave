@@ -79,8 +79,8 @@ export const GroupBudgetCard = ({ budget }: GroupBudgetCardProps) => {
   } satisfies ChartConfig;
 
   return (
-    <div className="flex w-full flex-col justify-between gap-4 rounded-lg border p-6">
-      <div className="flex grow flex-row justify-between gap-4">
+    <div className="flex w-full flex-col justify-between gap-4 rounded-lg border p-4 sm:p-6">
+      <div className="flex grow flex-col justify-between gap-4 sm:flex-row">
         {budget.totalExpenses < 0 ? (
           <DoughnutChart
             title={`${budget.name} - wydatki`}
@@ -109,7 +109,7 @@ export const GroupBudgetCard = ({ budget }: GroupBudgetCardProps) => {
 
       <Separator />
 
-      <div className="flex grow flex-row justify-between gap-4">
+      <div className="flex grow flex-col justify-between gap-4 sm:flex-row">
         {budget.totalIncomes > 0 ? (
           <DoughnutChart
             title={`${budget.name} - przychody`}
