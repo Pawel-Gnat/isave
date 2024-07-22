@@ -22,7 +22,9 @@ export default async function DashboardLayout({
           <Navbar />
           <div className="relative flex h-screen w-full flex-col overflow-y-auto">
             <Header />
-            <main className="flex flex-1 flex-col px-12 py-6">{children}</main>
+            <main className="mt-8 flex flex-1 flex-col p-4 sm:mt-0 sm:p-6 lg:px-12">
+              {children}
+            </main>
             <EditTransaction />
             <AddExpense />
             <AddIncome />

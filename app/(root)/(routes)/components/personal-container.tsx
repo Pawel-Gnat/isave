@@ -44,9 +44,9 @@ export const PersonalContainer = () => {
   } satisfies ChartConfig;
 
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-col gap-4 lg:flex-row">
       {(isPersonalExpensesLoading || isPersonalIncomesLoading) && (
-        <Skeleton className="h-full w-96" />
+        <Skeleton className="h-96 w-full lg:h-full lg:w-96" />
       )}
 
       {personalExpenses && personalIncomes && (
@@ -60,21 +60,21 @@ export const PersonalContainer = () => {
 
       <div className="flex flex-col justify-center gap-4">
         {(isPersonalExpensesLoading || isPersonalIncomesLoading) && (
-          <Skeleton className="h-64 w-52" />
+          <Skeleton className="h-64 w-full lg:w-52" />
         )}
 
         {personalExpenses && personalIncomes && (
-          <div className="flex h-full w-52 flex-col items-end justify-between gap-4 rounded-lg border p-6">
+          <div className="flex h-full flex-col items-end justify-between gap-4 rounded-lg border p-4 sm:p-6 lg:w-52">
             <div className="space-y-4 text-right">
               <div>
                 <p>Wydatki osobiste</p>
-                <p className="mt-2 text-xl font-bold">
+                <p className="mt-2 text-lg font-bold sm:text-xl">
                   {personalExpenses && calculateTotal(personalExpenses)} zł
                 </p>
               </div>
               <div>
                 <p>Przychody osobiste</p>
-                <p className="mt-2 text-xl font-bold">
+                <p className="mt-2 text-lg font-bold sm:text-xl">
                   {personalIncomes && calculateTotal(personalIncomes)} zł
                 </p>
               </div>
