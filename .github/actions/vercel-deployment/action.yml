@@ -24,10 +24,10 @@ runs:
         vercel deploy --prebuilt --prod --token=${{ inputs.vercel-token }}
       shell: bash
 
-    - name: PREVIEW Vercel Deployment
-      if: ${{ inputs.mode == 'preview' }}
+    - name: DEVELOPMENT Vercel Deployment
+      if: ${{ inputs.mode == 'development' }}
       run: |
-        vercel pull --yes --environment=preview --token=${{ inputs.vercel-token }}
+        vercel pull --yes --environment=development --token=${{ inputs.vercel-token }}
         vercel build --token=${{ inputs.vercel-token }}
         vercel deploy --prebuilt --token=${{ inputs.vercel-token }}
       shell: bash

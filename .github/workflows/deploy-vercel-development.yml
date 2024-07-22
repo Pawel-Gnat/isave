@@ -28,7 +28,7 @@ jobs:
       - name: Deploy app to Vercel development env
         uses: ./.github/actions/vercel-deployment
         with:
-          mode: 'preview'
+          mode: 'development'
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
