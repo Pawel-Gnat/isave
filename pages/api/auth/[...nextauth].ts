@@ -22,7 +22,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
-          throw new Error('Invalid credentials');
+          throw new Error('Błędne dane');
         }
 
         const user = await prisma.user.findUnique({
@@ -32,7 +32,7 @@ export const authOptions: AuthOptions = {
         });
 
         if (!user) {
-          throw new Error('Invalid credentials');
+          throw new Error('Błędne dane');
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -41,7 +41,11 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isPasswordValid) {
-          throw new Error('Please validate credentials');
+          throw new Error('Zweryfikuj dane');
+        }
+
+        if (!user.emailVerified) {
+          throw new Error('Konto nie jest aktywne');
         }
 
         return user;

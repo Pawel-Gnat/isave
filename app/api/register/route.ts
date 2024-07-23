@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
 import bcrypt from 'bcrypt';
 
 import prisma from '@/lib/prisma';
 
 import { RegisterFormSchema } from '@/utils/formValidations';
+
+import { EmailTemplate } from '@/components/email/email';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -30,7 +35,7 @@ export async function POST(request: Request) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       inviteId: crypto.randomUUID(),
       name,
@@ -39,5 +44,20 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json('Konto pomyślnie utworzone');
+  if (!user) {
+    return NextResponse.json({ error: 'Błąd tworzenia konta' }, { status: 500 });
+  }
+
+  const { error } = await resend.emails.send({
+    from: 'iSave <onboarding@resend.dev>',
+    to: [email],
+    subject: 'Link aktywacyjny',
+    react: EmailTemplate({ name, id: user.id }),
+  });
+
+  if (error) {
+    return NextResponse.json({ error: 'Błąd wysłania wiadomości' }, { status: 400 });
+  }
+
+  return NextResponse.json('Wysłano link aktywacyjny');
 }

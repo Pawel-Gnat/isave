@@ -31,7 +31,7 @@ model User {
   inviteId               String               @unique
   name                   String
   email                  String               @unique
-  emailVerified          DateTime?
+  emailVerified          Boolean              @default(false)
   hashedPassword         String
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @updatedAt

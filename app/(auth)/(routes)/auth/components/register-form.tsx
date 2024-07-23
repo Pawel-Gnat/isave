@@ -41,7 +41,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ toggleAuthStatus }) => {
     axios
       .post('/api/register', values)
       .then((response) => {
-        toast(`${response.data}`);
+        toast.success(`${response.data}`);
         toggleAuthStatus();
       })
       .catch((error) => {
