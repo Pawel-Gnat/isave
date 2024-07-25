@@ -1,10 +1,13 @@
 import OpenAI from 'openai';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+import { isBefore, startOfToday } from 'date-fns';
 
 import { simplifyCategories } from '@/utils/categoryUtils';
 import { capitalizeFirstLetter } from '@/utils/textUtils';
 
 import getExpenseCategories from '@/actions/getExpenseCategories';
+import getCurrentUser from '@/actions/getCurrentUser';
 
 interface CompletionResponse {
   date: Date;
@@ -16,8 +19,13 @@ interface CompletionResponse {
 }
 
 export async function POST(request: Request) {
+  const user = await getCurrentUser();
   const body = await request.json();
   const { fileText } = body;
+
+  if (!user) {
+    return NextResponse.json({ error: 'Brak dostępu' }, { status: 403 });
+  }
 
   if (!fileText) {
     return NextResponse.json(
@@ -30,6 +38,25 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: 'AI niedostępne w trybie testowym' },
       { status: 405 },
+    );
+  }
+
+  if (isBefore(user?.lastApiCall, startOfToday())) {
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        lastApiCall: new Date(),
+        apiCallLimit: 9,
+      },
+    });
+  }
+
+  if (user.apiCallLimit <= 0) {
+    return NextResponse.json(
+      { error: 'Dzienny limit AI został wykorzystany' },
+      { status: 403 },
     );
   }
 
@@ -91,6 +118,15 @@ export async function POST(request: Request) {
       }
     }
   }
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      apiCallLimit: user.apiCallLimit - 1,
+    },
+  });
 
   return main();
 }
