@@ -3,10 +3,7 @@ interface EmailTemplateProps {
   id: string;
 }
 
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://isave-ten.vercel.app';
+const baseUrl = 'https://isave-ten.vercel.app';
 
 export const EmailTemplate = ({ name, id }: EmailTemplateProps) => (
   <div>
