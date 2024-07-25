@@ -41,11 +41,16 @@ export async function POST(request: Request) {
       name,
       email,
       hashedPassword,
+      emailVerified: process.env.NEXT_ENV !== 'production',
     },
   });
 
   if (!user) {
     return NextResponse.json({ error: 'Błąd tworzenia konta' }, { status: 500 });
+  }
+
+  if (process.env.NEXT_ENV !== 'production') {
+    return NextResponse.json('Konto testowe utworzone');
   }
 
   const { error } = await resend.emails.send({
