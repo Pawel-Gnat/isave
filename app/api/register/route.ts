@@ -8,8 +8,6 @@ import { RegisterFormSchema } from '@/utils/formValidations';
 
 import { EmailTemplate } from '@/components/email/email';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
   const body = await request.json();
 
@@ -52,6 +50,8 @@ export async function POST(request: Request) {
   if (process.env.NEXT_ENV !== 'production') {
     return NextResponse.json('Konto testowe utworzone');
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const { error } = await resend.emails.send({
     from: 'iSave <onboarding@resend.dev>',
