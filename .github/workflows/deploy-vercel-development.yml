@@ -32,6 +32,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           auth-secret: ${{secrets.NEXTAUTH_SECRET }}
           database-url: ${{ secrets.DEV_DATABASE_URL }}
+          openai-key: ${{ secrets.API_KEY }}
+          resend-key: ${{ secrets.RESEND_API_KEY }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -39,4 +41,5 @@ jobs:
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           API_KEY: ${{ secrets.API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           NEXT_ENV: 'development'
