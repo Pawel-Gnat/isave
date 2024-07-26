@@ -30,6 +30,8 @@ jobs:
         with:
           mode: 'development'
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          auth-secret: ${{secrets.NEXTAUTH_SECRET }}
+          database-url: ${{ secrets.DEV_DATABASE_URL }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

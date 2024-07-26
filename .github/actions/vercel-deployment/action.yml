@@ -8,6 +8,12 @@ inputs:
   mode:
     description: 'Deployment mode'
     required: true
+  auth-secret:
+    description: 'Auth secret'
+    required: true
+  database-url:
+    description: 'Database URL'
+    required: true
 
 runs:
   using: 'composite'
@@ -29,5 +35,5 @@ runs:
       run: |
         vercel pull --yes --environment=development --token=${{ inputs.vercel-token }}
         vercel build --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --token=${{ inputs.vercel-token }}
+        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }}
       shell: bash
