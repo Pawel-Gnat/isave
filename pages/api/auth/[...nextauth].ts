@@ -32,7 +32,7 @@ export const authOptions: AuthOptions = {
         });
 
         if (!user) {
-          throw new Error('Błędne dane');
+          throw new Error('Konto nie istnieje');
         }
 
         const isPasswordValid = await bcrypt.compare(
