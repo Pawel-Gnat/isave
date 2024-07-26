@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 
 import prisma from '@/lib/prisma';
 
 import { RegisterFormSchema } from '@/utils/formValidations';
 
-import { EmailTemplate } from '@/components/email/email';
-
 export async function POST(request: Request) {
+  const baseUrl = 'https://isave-ten.vercel.app';
   const body = await request.json();
 
   const validationResult = RegisterFormSchema.safeParse(body);
@@ -51,19 +51,59 @@ export async function POST(request: Request) {
     return NextResponse.json('Konto testowe utworzone');
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
-  const { error } = await resend.emails.send({
-    from: 'iSave <onboarding@resend.dev>',
-    to: [email],
-    subject: 'Link aktywacyjny',
-    react: EmailTemplate({ name, id: user.id }),
+  const transport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_NAME,
+      pass: process.env.EMAIL_KEY,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
-  if (error) {
-    console.log(error);
-    return NextResponse.json({ error: 'Błąd wysłania wiadomości' }, { status: 400 });
-  }
+  const mailOptions: Mail.Options = {
+    from: `iSave App <${process.env.EMAIL_NAME}>`,
+    to: email,
+    subject: `iSave link aktywacyjny`,
+    html: `
+    <h1>Cześć, ${name}!</h1>
+    <br />
+    <p>Kliknij w link aktywacyjny, aby uzyskać dostęp do aplikacji.</p>
+    <br />
+    <p>
+      <strong>
+        <a href="${baseUrl}/activate/${user.id}">Aktywuj konto</a>
+      </strong>
+    </p>
+    <br />
+    <p>
+      Aplikacja nie jest produktem komercyjnym, 
+      <strong>nie zbieram informacji o Twoich danych osobowych</strong>. Aplikacja służy
+      wyłącznie dla rozwoju jako programista.
+    </p>
+    <br />
+    <p>Aktywując konto wyrażasz zgodę na testowy udział w rozwoju aplikacji.</p>
+    <br />
+    <p>Jeśli wiadomość trafiła do Ciebie przez pomyłkę, proszę zignoruj ją.</p>
+  `,
+  };
 
-  return NextResponse.json('Wysłano link aktywacyjny');
+  const sendMailPromise = () =>
+    new Promise<string>((resolve, reject) => {
+      transport.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve('Wysłano link aktywacyjny');
+        } else {
+          reject(err.message);
+        }
+      });
+    });
+
+  try {
+    const message = await sendMailPromise();
+    return NextResponse.json(message);
+  } catch (err) {
+    return NextResponse.json({ error: 'Błąd wysłania wiadomości' }, { status: 500 });
+  }
 }
