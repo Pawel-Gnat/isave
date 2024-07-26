@@ -1,6 +1,12 @@
 {
-    "git": {
-      "deploymentEnabled": false
+  "git": {
+    "deploymentEnabled": false
+  },
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
     }
-  }
-  
+  ]
+}
