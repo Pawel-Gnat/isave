@@ -44,5 +44,5 @@ runs:
       run: |
         vercel pull --yes --environment=development --token=${{ inputs.vercel-token }}
         vercel build --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env EMAIL_KEY=${{ inputs.email-key }} --env EMAIL_NAME=${{ inputs.email-name }}  --env NEXT_ENV='development'
+        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env EMAIL_KEY=${{ inputs.email-key }} --env EMAIL_NAME=${{ inputs.email-name }} --env NEXT_ENV='development'
       shell: bash
