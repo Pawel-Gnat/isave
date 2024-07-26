@@ -48,9 +48,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Błąd tworzenia konta' }, { status: 500 });
   }
 
-  if (process.env.NEXT_ENV !== 'production') {
-    return NextResponse.json('Konto testowe utworzone');
-  }
+  // if (process.env.NEXT_ENV !== 'production') {
+  //   return NextResponse.json('Konto testowe utworzone');
+  // }
 
   const transport = nodemailer.createTransport({
     service: 'gmail',
@@ -96,6 +96,7 @@ export async function POST(request: Request) {
         if (!err) {
           resolve('Wysłano link aktywacyjny');
         } else {
+          console.log(err);
           reject(err.message);
         }
       });
