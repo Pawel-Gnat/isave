@@ -61,9 +61,6 @@ export async function POST(request: Request) {
       user: baseEmail,
       pass: process.env.EMAIL_KEY,
     },
-    tls: {
-      rejectUnauthorized: false,
-    },
   });
 
   const mailOptions: Mail.Options = {
