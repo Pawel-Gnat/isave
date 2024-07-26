@@ -9,6 +9,7 @@ import { RegisterFormSchema } from '@/utils/formValidations';
 
 export async function POST(request: Request) {
   const baseUrl = 'https://isave-ten.vercel.app';
+  const baseEmail = 'p.gnat91@gmail.com';
   const body = await request.json();
 
   const validationResult = RegisterFormSchema.safeParse(body);
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
   const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_NAME,
+      user: baseEmail,
       pass: process.env.EMAIL_KEY,
     },
     tls: {
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
   });
 
   const mailOptions: Mail.Options = {
-    from: `iSave App <${process.env.EMAIL_NAME}>`,
+    from: `iSave App <${baseEmail}>`,
     to: email,
     subject: `iSave link aktywacyjny`,
     html: `
