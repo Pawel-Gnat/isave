@@ -34,7 +34,6 @@ jobs:
           database-url: ${{ secrets.DEV_DATABASE_URL }}
           openai-key: ${{ secrets.API_KEY }}
           email-key: ${{ secrets.EMAIL_KEY }}
-          email-name: ${{ secrets.EMAIL_NAME }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -43,5 +42,4 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           API_KEY: ${{ secrets.API_KEY }}
           EMAIL_KEY: ${{ secrets.EMAIL_KEY }}
-          EMAIL_NAME: ${{ secrets.EMAIL_NAME }}
           NEXT_ENV: 'development'
