@@ -17,8 +17,11 @@ inputs:
   openai-key:
     description: 'OpenAI key'
     required: true
-  resend-key:
-    description: 'Resend key'
+  email-key:
+    description: 'Email key'
+    required: true
+  email-name:
+    description: 'Email name'
     required: true
 
 runs:
@@ -33,7 +36,7 @@ runs:
       run: |
         vercel pull --yes --environment=production --token=${{ inputs.vercel-token }}
         vercel build --prod --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --prod --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env RESEND_API_KEY=${{ inputs.resend-key }} --env NEXT_ENV='production'
+        vercel deploy --prebuilt --prod --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env EMAIL_KEY=${{ inputs.email-key }} --env EMAIL_NAME=${{ inputs.email-name }} --env NEXT_ENV='production'
       shell: bash
 
     - name: DEVELOPMENT Vercel Deployment
@@ -41,5 +44,5 @@ runs:
       run: |
         vercel pull --yes --environment=development --token=${{ inputs.vercel-token }}
         vercel build --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env RESEND_API_KEY=${{ inputs.resend-key }} --env NEXT_ENV='development'
+        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env EMAIL_KEY=${{ inputs.email-key }} --env EMAIL_NAME=${{ inputs.email-name }}  --env NEXT_ENV='development'
       shell: bash
