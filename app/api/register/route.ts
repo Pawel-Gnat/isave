@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
+import { google } from 'googleapis';
 
 import prisma from '@/lib/prisma';
 
@@ -9,7 +10,7 @@ import { RegisterFormSchema } from '@/utils/formValidations';
 
 export async function POST(request: Request) {
   const baseUrl = 'https://isave-ten.vercel.app';
-  const baseEmail = 'p.gnat91@gmail.com';
+  const OAuth2 = google.auth.OAuth2;
   const body = await request.json();
 
   const validationResult = RegisterFormSchema.safeParse(body);
@@ -52,19 +53,35 @@ export async function POST(request: Request) {
     return NextResponse.json('Konto testowe utworzone');
   }
 
-  const transport = nodemailer.createTransport({
+  const oauth2Client = new OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    'https://developers.google.com/oauthplayground',
+  );
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.OAUTH_REFRESH_TOKEN,
+  });
+
+  const accessToken = oauth2Client.getAccessToken();
+
+  const transporter = nodemailer.createTransport({
     service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
     auth: {
-      user: baseEmail,
-      pass: process.env.EMAIL_KEY,
+      type: 'OAuth2',
+      user: process.env.OAUTH_EMAIL,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      accessToken: accessToken.toString(),
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 
   const mailOptions: Mail.Options = {
-    from: `iSave App <${baseEmail}>`,
+    from: `iSave App <${process.env.OAUTH_EMAIL}>`,
     to: email,
     subject: `iSave link aktywacyjny`,
     html: `
@@ -92,7 +109,7 @@ export async function POST(request: Request) {
 
   const sendMailPromise = () =>
     new Promise<string>((resolve, reject) => {
-      transport.sendMail(mailOptions, function (err) {
+      transporter.sendMail(mailOptions, function (err) {
         if (!err) {
           resolve('Wysłano link aktywacyjny');
         } else {
