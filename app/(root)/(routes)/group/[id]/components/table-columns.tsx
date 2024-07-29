@@ -101,7 +101,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
 
       return (
         <div className="flex flex-row items-center gap-4">
-          <div className="rounded-full border">
+          <div className="min-h-12 min-w-12 rounded-full border">
             <Image
               src={value > 0 ? '/income.png' : '/expense.png'}
               alt=""
@@ -194,7 +194,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
       const value = parseFloat(row.getValue('value'));
 
       return (
-        <div className="text-right">
+        <div className="text-nowrap text-right">
           <EditButton
             id={id}
             groupBudgetId={groupBudgetId}

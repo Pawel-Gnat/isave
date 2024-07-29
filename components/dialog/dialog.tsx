@@ -37,7 +37,7 @@ export const Dialog: FC<DialogProps> = ({
 }) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-[90%] rounded-lg sm:max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

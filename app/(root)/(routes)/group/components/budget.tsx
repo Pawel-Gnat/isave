@@ -65,8 +65,8 @@ export const Budget: FC<BudgetProps> = ({
           <Trash2 />
         </Button>
       </div>
-      <div className="flex flex-row justify-between gap-4">
-        <div className="flex items-end gap-2">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row">
+        <div className="flex flex-wrap items-end gap-2">
           <BudgetBadge
             id={ownerId}
             owner={true}

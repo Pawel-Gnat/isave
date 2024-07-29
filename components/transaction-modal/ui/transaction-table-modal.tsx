@@ -96,13 +96,13 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
     <>
       {expenseCategories && incomeCategories && (
         <>
-          <Table>
+          <Table className="min-w-[600px]">
             <TableHeader className="table w-full table-fixed">
               <TableRow>
                 <TableHead>Nazwa</TableHead>
                 <TableHead>Kategoria</TableHead>
                 <TableHead className="w-36">Kwota [zł]</TableHead>
-                <TableHead className="w-48 text-right"></TableHead>
+                <TableHead className="text-right"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="block max-h-[400px] overflow-y-auto">
@@ -149,7 +149,7 @@ export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
                       value={+transaction.value.toFixed(2)}
                     />
                   </TableCell>
-                  <TableCell className="w-48 text-right">
+                  <TableCell className="w-44 text-right">
                     <Button variant="outline" onClick={() => deleteRow(transaction.id)}>
                       Usuń pozycję
                       <Trash2 className="ml-2 h-4 w-4 shrink-0" />
