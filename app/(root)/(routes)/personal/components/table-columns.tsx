@@ -87,7 +87,7 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
 
       return (
         <div className="flex flex-row items-center gap-4">
-          <div className="rounded-full border">
+          <div className="min-h-12 min-w-12 rounded-full border">
             <Image
               src={value > 0 ? '/income.png' : '/expense.png'}
               alt=""
@@ -155,7 +155,7 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
       const value = parseFloat(row.getValue('value'));
 
       return (
-        <div className="text-right">
+        <div className="text-nowrap text-right">
           <EditButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
           <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
         </div>

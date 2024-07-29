@@ -26,7 +26,7 @@ export const LoadingButton: FC<LoadingButtonProps> = ({
   return (
     <Button
       type="button"
-      className={cn('w-fit min-w-32', isLoading ? 'opacity-60' : '')}
+      className={cn('md:w-fit min-w-32', isLoading ? 'opacity-60' : '')}
       onClick={onClick}
       disabled={disabled}
     >

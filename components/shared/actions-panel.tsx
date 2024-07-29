@@ -24,7 +24,7 @@ export const ActionsPanel: FC<ActionsPanelProps> = ({ id, category }) => {
   };
 
   return (
-    <div className="mb-4 flex flex-row justify-between">
+    <div className="mb-4 flex flex-col items-end justify-between gap-4 md:flex-row">
       <DatePicker date={date} setDate={handleSetDate} />
       <div className="space-x-4">
         <Button

@@ -153,6 +153,7 @@ export const AddIncome = () => {
           Anuluj
         </Button>
         <LoadingButton
+        
           isLoading={isLoading}
           onClick={handleSubmit(saveData)}
           text="Zapisz"
