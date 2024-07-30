@@ -256,7 +256,7 @@ export const AddExpense = () => {
           {previousActionButtonLabel()}
         </Button>
 
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           {handleActionButtonState() && (
             <LoadingButton
               isLoading={isLoading}

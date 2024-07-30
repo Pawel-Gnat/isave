@@ -87,11 +87,11 @@ export const FileInput: FC<FileInputProps> = ({ onSelect }) => {
         alt=""
         width={300}
         height={300}
-        className="absolute inset-0 m-auto aspect-square max-h-72"
+        className="absolute inset-0 m-auto max-h-72 w-1/2"
       />
       <Label
         htmlFor="file"
-        className="absolute inset-0 z-10 rounded-md border-2 border-dashed text-lg"
+        className="text-md absolute inset-0 z-10 rounded-md border-2 border-dashed lg:text-lg"
       >
         <p className="relative top-[80%] text-center">{handleLabelText()}</p>
         <Input
