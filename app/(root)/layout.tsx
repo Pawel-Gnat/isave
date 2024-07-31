@@ -20,7 +20,7 @@ export default async function DashboardLayout({
       <TransactionsProvider>
         <AlertProvider>
           <Navbar />
-          <div className="flex min-h-screen w-full flex-col overflow-y-auto">
+          <div className="flex min-h-screen w-full flex-col overflow-y-auto sm:h-screen">
             <Header />
             <main className="flex flex-1 flex-col p-4 sm:p-6 lg:px-12">{children}</main>
             <EditTransaction />
