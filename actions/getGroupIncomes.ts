@@ -22,6 +22,9 @@ const getGroupIncomes = async (date: DateRange, id: string) => {
           lte: date.to,
         },
       },
+      orderBy: {
+        date: 'desc',
+      },
       include: {
         transactions: true,
       },
