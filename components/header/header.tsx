@@ -13,9 +13,9 @@ const Header = async () => {
     redirect('/auth');
   }
   return (
-    <header className="absolute left-0 right-0 flex items-center justify-end px-4 sm:p-6">
+    <header className="absolute left-0 top-0 flex w-fit items-center p-4 sm:left-auto sm:right-0 sm:top-auto sm:justify-end sm:p-6">
       <NotificationContainer userId={user.id} />
-      <Badge variant="outline" className="ml-4 px-4 py-2 text-base">
+      <Badge variant="outline" className="ml-4 hidden px-4 py-2 text-base sm:block">
         <span className="">{user.name}</span>
       </Badge>
     </header>

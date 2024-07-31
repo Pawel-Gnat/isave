@@ -31,10 +31,10 @@ const PAGES = [
 
 const Navbar = () => {
   return (
-    <nav className=" flex flex-row items-center gap-2 p-4 sm:sticky sm:h-screen sm:flex-col sm:gap-4 sm:p-6">
+    <nav className="flex flex-row items-center justify-end gap-2 p-4 sm:sticky sm:h-screen sm:flex-col sm:gap-4 sm:p-6">
       <Link
         href="/"
-        className="mr-auto font-bold text-primary sm:mr-0 sm:pb-2 sm:text-5xl"
+        className="mr-auto hidden font-bold text-primary sm:mr-0 sm:block sm:pb-2 sm:text-5xl"
       >
         <Image src="/isave.svg" alt="iSave" width={60} height={60} />
       </Link>

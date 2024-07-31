@@ -22,6 +22,9 @@ const getPersonalIncomes = async (date: DateRange) => {
           lte: date.to,
         },
       },
+      orderBy: {
+        date: 'desc',
+      },
       include: {
         transactions: true,
       },

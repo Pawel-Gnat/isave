@@ -15,7 +15,7 @@ const PersonalBudgetStatistics = async () => {
 
   return (
     <>
-      <Heading text="Statystyki własnych transakcji" />
+      <Heading text="Statystyki własne" />
       <ChartsContainer />
     </>
   );

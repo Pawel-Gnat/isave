@@ -19,7 +19,7 @@ const GroupBudgetStatistics = async ({ params }: GroupBudgetStatisticsProps) => 
 
   return (
     <>
-      <Heading text="Statystyki transakcji grupowych" />
+      <Heading text="Statystyki grupowe" />
       <ChartsContainer budgetId={params.budgetId} />
     </>
   );
