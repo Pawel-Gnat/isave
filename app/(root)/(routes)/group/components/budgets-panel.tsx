@@ -10,7 +10,7 @@ export const BudgetsPanel = () => {
   const { dispatch } = useContext(AlertContext);
 
   return (
-    <div className="mb-4 ml-auto flex">
+    <div className="mb-4 flex justify-center sm:ml-auto">
       <Button
         variant="outline"
         onClick={() => dispatch({ type: 'SET_SHOW_CREATE_BUDGET' })}
