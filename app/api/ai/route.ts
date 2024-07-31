@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
-import { isBefore, startOfToday } from 'date-fns';
+import { isSameDay, startOfToday } from 'date-fns';
 
 import { simplifyCategories } from '@/utils/categoryUtils';
 import { capitalizeFirstLetter } from '@/utils/textUtils';
@@ -41,14 +41,14 @@ export async function POST(request: Request) {
     );
   }
 
-  if (isBefore(user?.lastApiCall, startOfToday())) {
+  if (!isSameDay(user?.lastApiCall, startOfToday())) {
     await prisma.user.update({
       where: {
         id: user.id,
       },
       data: {
         lastApiCall: new Date(),
-        apiCallLimit: 9,
+        apiCallLimit: 10,
       },
     });
   }
