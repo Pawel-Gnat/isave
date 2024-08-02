@@ -44,9 +44,9 @@ export const Transactions = () => {
           <Image
             src="/empty.png"
             alt="Brak transakcji"
-            width={300}
-            height={300}
-            className="aspect-square"
+            width={200}
+            height={200}
+            className="mx-auto h-5/6 max-h-72 w-auto"
           />
           <p className="font-medium">Brak transakcji dla wybranego okresu</p>
         </div>
