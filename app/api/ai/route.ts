@@ -51,6 +51,8 @@ export async function POST(request: Request) {
         apiCallLimit: 10,
       },
     });
+
+    user.apiCallLimit = 10;
   }
 
   if (user.apiCallLimit <= 0) {
