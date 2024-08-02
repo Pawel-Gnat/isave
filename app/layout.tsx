@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`flex flex-col sm:flex-row ${font.className}`}>
+      <body className={`flex min-h-screen flex-col sm:flex-row ${font.className}`}>
         {children}
         <Toaster richColors />
         <Banner />

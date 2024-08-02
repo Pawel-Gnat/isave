@@ -87,7 +87,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect }) => {
         alt=""
         width={300}
         height={300}
-        className="absolute inset-0 m-auto max-h-72 w-1/2"
+        className="absolute inset-0 m-auto h-4/6 max-h-72 w-auto"
       />
       <Label
         htmlFor="file"
