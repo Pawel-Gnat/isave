@@ -3,10 +3,12 @@ import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { google } from 'googleapis';
+import { captureException } from '@sentry/nextjs';
 
 import prisma from '@/lib/prisma';
 
 import { RegisterFormSchema } from '@/utils/formValidations';
+import { logError } from '@/utils/errorUtils';
 
 export async function POST(request: Request) {
   const baseUrl = 'https://isave-ten.vercel.app';
@@ -113,7 +115,7 @@ export async function POST(request: Request) {
         if (!err) {
           resolve('Wysłano link aktywacyjny');
         } else {
-          console.log(err);
+          logError(() => captureException(`Backend - send email failed: ${err}`), err);
           reject(err.message);
         }
       });

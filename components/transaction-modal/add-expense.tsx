@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { endOfMonth, startOfMonth } from 'date-fns';
+import { captureException } from '@sentry/nextjs';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import useGroupExpenses from '@/hooks/useGroupExpenses';
@@ -14,6 +15,7 @@ import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { handleExpenseApiPostRoute } from '@/utils/dialogUtils';
 import { TransactionSchema } from '@/utils/formValidations';
+import { logError } from '@/utils/errorUtils';
 
 import { Button } from '@/components/ui/button';
 
@@ -130,6 +132,8 @@ export const AddExpense = () => {
         );
         setValue('transactions', response.data.expenses);
       } catch (error) {
+        logError(() => captureException(`Frontend - read file input: ${error}`), error);
+
         if (axios.isCancel(error)) {
           return toast.warning('Anulowano zapytanie');
         }
@@ -165,6 +169,8 @@ export const AddExpense = () => {
         handleRefetch();
         hideModal();
       } catch (error) {
+        logError(() => captureException(`Frontend - add expense: ${error}`), error);
+
         if (axios.isCancel(error)) {
           return toast.warning('Anulowano zapytanie');
         }

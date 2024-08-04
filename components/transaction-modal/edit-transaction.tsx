@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { endOfMonth, startOfMonth } from 'date-fns';
+import { captureException } from '@sentry/nextjs';
 
 import usePersonalExpenses from '@/hooks/usePersonalExpenses';
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
@@ -22,6 +23,7 @@ import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
 import { handleApiEditTransactionRoute } from '@/utils/dialogUtils';
+import { logError } from '@/utils/errorUtils';
 
 import { Button } from '@/components/ui/button';
 
@@ -194,6 +196,8 @@ export const EditTransaction = () => {
       handleRefetch();
       hideModal();
     } catch (error) {
+      logError(() => captureException(`Frontend - edit transaction: ${error}`), error);
+
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');
       }

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+import { captureException } from '@sentry/nextjs';
 
 import getUserById from '@/actions/getUserById';
+
+import { logError } from '@/utils/errorUtils';
 
 import { User } from '@prisma/client';
 
@@ -16,7 +19,7 @@ export default function useBudgetMember(id: string) {
         const user = await getUserById(id);
         setMember(user);
       } catch (error) {
-        console.log(error);
+        logError(() => captureException(`Hooks - useBudgetMember: ${error}`), error);
       } finally {
         setIsLoading(false);
       }

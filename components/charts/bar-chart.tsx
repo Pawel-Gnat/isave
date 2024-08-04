@@ -1,6 +1,5 @@
 'use client';
 
-import { FC } from 'react';
 import { Bar, BarChart as BarChartUI, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 import {
@@ -19,12 +18,12 @@ interface BarChartProps {
   description: string;
 }
 
-export const BarChart: FC<BarChartProps> = ({
+export const BarChart = ({
   title,
   description,
   chartData,
   chartConfig,
-}) => {
+}: BarChartProps) => {
   return (
     <Card>
       <CardHeader>

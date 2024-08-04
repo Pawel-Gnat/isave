@@ -1,8 +1,11 @@
 import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { createWorker } from 'tesseract.js';
+import { captureException } from '@sentry/nextjs';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
+
+import { logError } from '@/utils/errorUtils';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -73,7 +76,7 @@ export const FileInput: FC<FileInputProps> = ({ onSelect }) => {
       };
 
       reader.onerror = (error) => {
-        console.error('Error reading file:', error);
+        logError(() => captureException(`Frontend - process image: ${error}`), error);
         setIsError(true);
         dispatch({ type: 'SET_IS_LOADING', payload: { isLoading: false } });
       };

@@ -2,9 +2,11 @@ import OpenAI from 'openai';
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { isSameDay, startOfToday } from 'date-fns';
+import { captureException } from '@sentry/nextjs';
 
 import { simplifyCategories } from '@/utils/categoryUtils';
 import { capitalizeFirstLetter } from '@/utils/textUtils';
+import { logError } from '@/utils/errorUtils';
 
 import getExpenseCategories from '@/actions/getExpenseCategories';
 import getCurrentUser from '@/actions/getCurrentUser';
@@ -108,14 +110,14 @@ export async function POST(request: Request) {
 
       return NextResponse.json(modifiedResponse);
     } catch (err) {
+      logError(() => captureException(`Backend - AI response failed: ${err}`), err);
+
       if (err instanceof OpenAI.APIError) {
-        console.log(err.status, err.name, err.headers);
         return NextResponse.json(
           { error: 'Błąd po stronie modelu językowego' },
           { status: err.status },
         );
       } else {
-        console.log(err);
         return NextResponse.json({ error: 'Błąd przetwarzania' }, { status: 422 });
       }
     }
