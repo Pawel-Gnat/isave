@@ -29,6 +29,9 @@ inputs:
   oauth-refresh-token:
     description: 'OAuth refresh token'
     required: true
+  sentry-auth-token:
+    description: 'Sentry auth token'
+    required: true
 
 runs:
   using: 'composite'
@@ -42,7 +45,16 @@ runs:
       run: |
         vercel pull --yes --environment=production --token=${{ inputs.vercel-token }}
         vercel build --prod --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --prod --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env OAUTH_EMAIL=${{ inputs.oauth-email }} --env OAUTH_CLIENT_ID=${{ inputs.oauth-client-id }} --env OAUTH_CLIENT_SECRET=${{ inputs.oauth-client-secret }} --env OAUTH_REFRESH_TOKEN=${{ inputs.oauth-refresh-token }} --env NEXT_ENV='production'
+        vercel deploy --prebuilt --prod --token=${{ inputs.vercel-token }} \
+          --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} \
+          --env DATABASE_URL=${{ inputs.database-url }} \
+          --env API_KEY=${{ inputs.openai-key }} \
+          --env OAUTH_EMAIL=${{ inputs.oauth-email }} \
+          --env OAUTH_CLIENT_ID=${{ inputs.oauth-client-id }} \
+          --env OAUTH_CLIENT_SECRET=${{ inputs.oauth-client-secret }} \
+          --env OAUTH_REFRESH_TOKEN=${{ inputs.oauth-refresh-token }} \
+          --env SENTRY_AUTH_TOKEN=`${{ inputs.sentry-auth-token }}` \
+          --env NEXT_ENV='production'
       shell: bash
 
     - name: DEVELOPMENT Vercel Deployment
@@ -50,5 +62,16 @@ runs:
       run: |
         vercel pull --yes --environment=development --token=${{ inputs.vercel-token }}
         vercel build --token=${{ inputs.vercel-token }}
-        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} --env DATABASE_URL=${{ inputs.database-url }} --env API_KEY=${{ inputs.openai-key }} --env OAUTH_EMAIL=${{ inputs.oauth-email }} --env OAUTH_CLIENT_ID=${{ inputs.oauth-client-id }} --env OAUTH_CLIENT_SECRET=${{ inputs.oauth-client-secret }} --env OAUTH_REFRESH_TOKEN=${{ inputs.oauth-refresh-token }} --env NEXT_ENV='development'
+        vercel deploy --prebuilt --token=${{ inputs.vercel-token }} \
+          --env VERCEL_ORG_ID=${{ inputs.vercel-org-id }} \
+          --env VERCEL_PROJECT_ID=${{ inputs.vercel-project-id }} \
+          --env NEXTAUTH_SECRET=${{ inputs.auth-secret }} \
+          --env DATABASE_URL=${{ inputs.database-url }} \
+          --env API_KEY=${{ inputs.openai-key }} \
+          --env OAUTH_EMAIL=${{ inputs.oauth-email }} \
+          --env OAUTH_CLIENT_ID=${{ inputs.oauth-client-id }} \
+          --env OAUTH_CLIENT_SECRET=${{ inputs.oauth-client-secret }} \
+          --env OAUTH_REFRESH_TOKEN=${{ inputs.oauth-refresh-token }} \
+          --env SENTRY_AUTH_TOKEN=`${{ inputs.sentry-auth-token }}` \
+          --env NEXT_ENV='development'
       shell: bash

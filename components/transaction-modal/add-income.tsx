@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { endOfMonth, startOfMonth } from 'date-fns';
+import { captureException } from '@sentry/nextjs';
 
 import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 import useGroupIncomes from '@/hooks/useGroupIncomes';
@@ -13,6 +14,8 @@ import useGroupIncomes from '@/hooks/useGroupIncomes';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { TransactionSchema } from '@/utils/formValidations';
+import { handleIncomeApiPostRoute } from '@/utils/dialogUtils';
+import { logError } from '@/utils/errorUtils';
 
 import { Button } from '@/components/ui/button';
 
@@ -24,7 +27,6 @@ import { TransactionDatePicker } from './ui/transaction-date-picker';
 import { TransactionModal } from './transaction-modal';
 
 import { TransactionValues } from '@/types/types';
-import { handleIncomeApiPostRoute } from '@/utils/dialogUtils';
 
 export const AddIncome = () => {
   const {
@@ -111,6 +113,8 @@ export const AddIncome = () => {
       handleRefetch();
       hideModal();
     } catch (error) {
+      logError(() => captureException(`Frontend - add income: ${error}`), error);
+
       if (axios.isCancel(error)) {
         return toast.warning('Anulowano zapytanie');
       }

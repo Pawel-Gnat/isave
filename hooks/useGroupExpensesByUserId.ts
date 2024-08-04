@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+import { captureException } from '@sentry/nextjs';
 
 import getGroupExpensesByUserId from '@/actions/getGroupExpensesByUserId';
+
+import { logError } from '@/utils/errorUtils';
 
 import { GroupExpenses } from '@prisma/client';
 
@@ -25,7 +28,10 @@ export default function useGroupExpensesByUserId(
         );
         setGroupExpenses(groupExpenses);
       } catch (error) {
-        console.log(error);
+        logError(
+          () => captureException(`Hooks - useGroupExpensesByUserId: ${error}`),
+          error,
+        );
       } finally {
         setIsLoading(false);
       }
