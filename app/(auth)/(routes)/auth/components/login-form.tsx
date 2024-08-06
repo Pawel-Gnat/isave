@@ -32,7 +32,7 @@ const LoginForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+  function onLogin(values: z.infer<typeof LoginFormSchema>) {
     if (loading) return;
     setIsLoading(true);
 
@@ -52,7 +52,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-8">
+      <form onSubmit={form.handleSubmit(onLogin)} className="space-y-4 sm:space-y-8">
         <FormField
           control={form.control}
           name="email"
