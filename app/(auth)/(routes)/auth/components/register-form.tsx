@@ -23,7 +23,7 @@ interface RegisterFormProps {
   toggleAuthStatus: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ toggleAuthStatus }) => {
+const RegisterForm = ({ toggleAuthStatus }: RegisterFormProps) => {
   const [loading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof RegisterFormSchema>>({
     resolver: zodResolver(RegisterFormSchema),
