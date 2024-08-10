@@ -11,17 +11,16 @@ vi.mock('sonner', () => ({
     success: vi.fn(),
   },
 }));
-
 vi.mock('axios');
 
-describe('RegisterForm', () => {
+describe('Register form component', () => {
   beforeEach(() => {
     render(<RegisterForm toggleAuthStatus={() => {}} />);
   });
 
   it('should render register form', () => {
     const nameInput = screen.getByLabelText('Imię', { selector: 'input' });
-    const emailInput = screen.getByLabelText('Email', { selector: 'input' });
+    const emailInput = screen.getByRole('textbox', { name: 'Email' });
     const passwordInput = screen.getByLabelText('Hasło', { selector: 'input' });
     const createButton = screen.getByRole('button', { name: 'Utwórz konto' });
 
@@ -45,12 +44,12 @@ describe('RegisterForm', () => {
   it(`shouldn render a toast with activation link sent message`, async () => {
     const user = userEvent.setup();
     const nameInput = screen.getByLabelText('Imię', { selector: 'input' });
-    const emailInput = screen.getByLabelText('Email', { selector: 'input' });
+    const emailInput = screen.getByRole('textbox', { name: 'Email' });
     const passwordInput = screen.getByLabelText('Hasło', { selector: 'input' });
     const createButton = screen.getByRole('button', { name: 'Utwórz konto' });
 
     const apiResponseMsg = 'Wysłano link aktywacyjny';
-    axios.post = vi.fn().mockResolvedValue({ data: apiResponseMsg });
+    vi.spyOn(axios, 'post').mockResolvedValue({ data: apiResponseMsg });
 
     await user.type(nameInput, 'Test');
     await user.type(emailInput, 'test@test.com');

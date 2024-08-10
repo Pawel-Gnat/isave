@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 
 import { TransactionsContext } from '@/contexts/transactions-context';
 
@@ -16,7 +16,7 @@ interface ActionsPanelProps {
   category: TransactionCategory;
 }
 
-export const ActionsPanel: FC<ActionsPanelProps> = ({ id, category }) => {
+export const ActionsPanel = ({ id, category }: ActionsPanelProps) => {
   const { date, dispatch } = useContext(TransactionsContext);
 
   const handleSetDate = (date: DateRange | undefined) => {

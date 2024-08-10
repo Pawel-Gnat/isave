@@ -26,6 +26,7 @@ export const DatePicker = ({ date, setDate }: DatePickerProps) => {
             'w-[300px] justify-start self-center text-left font-normal sm:self-start',
             !date && 'text-muted-foreground',
           )}
+          data-testid="date-picker"
         >
           <CalendarDays className="mr-2 h-4 w-4" />
           {date?.from ? (

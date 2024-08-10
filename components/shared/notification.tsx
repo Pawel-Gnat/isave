@@ -1,7 +1,7 @@
 'use client';
 
 import axios from 'axios';
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { toast } from 'sonner';
 
 import useNotifications from '@/hooks/useNotifications';
@@ -23,7 +23,7 @@ const override: CSSProperties = {
   borderColor: 'var(--background) var(--background) transparent',
 };
 
-export const Notification: FC<NotificationProps> = ({ notification, userId }) => {
+export const Notification = ({ notification, userId }: NotificationProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { groupBudgetsRefetch } = useGroupBudgets();
   const { notificationsRefetch } = useNotifications(userId);
@@ -40,7 +40,17 @@ export const Notification: FC<NotificationProps> = ({ notification, userId }) =>
         notificationsRefetch();
       })
       .catch((error) => {
-        toast.error(`${error.response.data.error}`);
+        // toast.error(`${error.response.data.error}`);
+
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.data) {
+            toast.error(error.response.data.error);
+          } else {
+            toast.error('Błąd wysyłania', { description: 'Nieznany błąd' });
+          }
+        } else {
+          toast.error('Nieznany błąd');
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -58,7 +68,17 @@ export const Notification: FC<NotificationProps> = ({ notification, userId }) =>
         notificationsRefetch();
       })
       .catch((error) => {
-        toast.error(`${error.response.data.error}`);
+        // toast.error(`${error.response.data.error}`);
+
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.data) {
+            toast.error(error.response.data.error);
+          } else {
+            toast.error('Błąd wysyłania', { description: 'Nieznany błąd' });
+          }
+        } else {
+          toast.error('Nieznany błąd');
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -72,10 +92,20 @@ export const Notification: FC<NotificationProps> = ({ notification, userId }) =>
         <span className="font-bold">{notification.groupBudget.name}</span>
       </p>
       <div className="flex gap-2">
-        <Button size="icon" variant="outline" onClick={handleRejectButton}>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={handleRejectButton}
+          aria-label="Odrzuć zaproszenie"
+        >
           {isLoading ? <PuffLoader size={20} cssOverride={override} /> : <X />}
         </Button>
-        <Button size="icon" variant="outline" onClick={handleAcceptButton}>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={handleAcceptButton}
+          aria-label="Akceptuj zaproszenie"
+        >
           {isLoading ? <PuffLoader size={20} cssOverride={override} /> : <Check />}
         </Button>
       </div>
