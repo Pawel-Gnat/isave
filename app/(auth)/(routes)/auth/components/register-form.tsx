@@ -10,6 +10,7 @@ import { RegisterFormSchema } from '@/utils/formValidations';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,7 +55,10 @@ const RegisterForm = ({ toggleAuthStatus }: RegisterFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 [&>*:last-child]:mt-2"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -75,7 +79,7 @@ const RegisterForm = ({ toggleAuthStatus }: RegisterFormProps) => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="email@poczta.pl" {...field} />
+                <Input type="email" placeholder="email@address.pl" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,6 +98,9 @@ const RegisterForm = ({ toggleAuthStatus }: RegisterFormProps) => {
             </FormItem>
           )}
         />
+        <FormDescription>
+          Po utworzeniu konta wysyłany jest link aktywacyjny na podany adres email.
+        </FormDescription>
         <FormLoadingButton isLoading={loading} text="Utwórz konto" />
       </form>
     </Form>

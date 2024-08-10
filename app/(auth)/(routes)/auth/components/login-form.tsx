@@ -52,7 +52,10 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onLogin)} className="space-y-4 sm:space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onLogin)}
+        className="flex flex-col gap-4 [&>*:last-child]:mt-2"
+      >
         <FormField
           control={form.control}
           name="email"
