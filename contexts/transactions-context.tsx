@@ -14,13 +14,13 @@ import { Action, transactionReducer } from '@/reducers/transaction-modal-reducer
 
 import { TransactionState } from '@/types/types';
 
-interface TransactionsContextProps extends TransactionState {
+export interface TransactionsContextProps extends TransactionState {
   dispatch: React.Dispatch<Action>;
   setUserId: Dispatch<SetStateAction<string>>;
   userId: string;
 }
 
-const initialState: TransactionState = {
+export const initialState: TransactionState = {
   isIncomeModalOpen: false,
   isExpenseModalOpen: false,
   isEditTransactionModalOpen: false,

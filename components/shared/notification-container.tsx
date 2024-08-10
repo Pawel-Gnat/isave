@@ -1,7 +1,5 @@
 'use client';
 
-import { FC } from 'react';
-
 import useNotifications from '@/hooks/useNotifications';
 
 import { Button } from '@/components/ui/button';
@@ -15,7 +13,7 @@ interface NotificationContainerProps {
   userId: string;
 }
 
-export const NotificationContainer: FC<NotificationContainerProps> = ({ userId }) => {
+export const NotificationContainer = ({ userId }: NotificationContainerProps) => {
   const { notifications, isNotificationsLoading } = useNotifications(userId);
 
   return (
