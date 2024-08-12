@@ -4,8 +4,7 @@ import { ReactElement } from 'react';
 
 import { initialState, TransactionsContextProps } from '@/contexts/transactions-context';
 
-import { ModifiedPersonalExpense } from '@/types/types';
-import { hash } from 'crypto';
+import { ModifiedGroupExpense, ModifiedPersonalExpense } from '@/types/types';
 
 export const renderWithQueryClient = (children: ReactElement) => {
   const queryClient = new QueryClient();
@@ -19,6 +18,69 @@ export const mockedTransactionsContext: TransactionsContextProps = {
   setUserId: vi.fn(),
   userId: 'test-user-id',
 };
+
+export const mockedGroupExpenses: ModifiedGroupExpense[] = [
+  {
+    id: '1',
+    createdAt: new Date('2023-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2023-01-02T00:00:00.000Z'),
+    date: new Date('2023-01-01T00:00:00.000Z'),
+    value: -500,
+    groupBudgetId: '1',
+    userId: 'user1',
+    userName: 'User 1',
+    transactions: [
+      {
+        id: '1a',
+        title: 'Groceries',
+        value: 100,
+        categoryId: 'cat1',
+      },
+      {
+        id: '1b',
+        title: 'Utilities',
+        value: 150,
+        categoryId: 'cat2',
+      },
+      {
+        id: '1c',
+        title: 'Transport',
+        value: 50,
+        categoryId: 'cat3',
+      },
+    ],
+  },
+  {
+    id: '2',
+    createdAt: new Date('2023-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2023-01-02T00:00:00.000Z'),
+    date: new Date('2023-01-01T00:00:00.000Z'),
+    value: -500,
+    groupBudgetId: '1',
+    userId: 'user1',
+    userName: 'User 1',
+    transactions: [
+      {
+        id: '2a',
+        title: 'Groceries',
+        value: 100,
+        categoryId: 'cat1',
+      },
+      {
+        id: '2b',
+        title: 'Utilities',
+        value: 150,
+        categoryId: 'cat2',
+      },
+      {
+        id: '2c',
+        title: 'Transport',
+        value: 50,
+        categoryId: 'cat3',
+      },
+    ],
+  },
+];
 
 export const mockedPersonalExpenses: ModifiedPersonalExpense[] = [
   {
@@ -243,5 +305,24 @@ export const mockNotifications = [
       apiCallLimit: 10,
       lastApiCall: new Date('2023-08-01T10:00:00Z'),
     },
+  },
+];
+
+export const mockedGroupBudgets = [
+  {
+    id: 'budget1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: 'Budget 1',
+    ownerId: 'owner1',
+    members: [],
+  },
+  {
+    id: 'budget2',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: 'Budget 2',
+    ownerId: 'owner2',
+    members: [],
   },
 ];

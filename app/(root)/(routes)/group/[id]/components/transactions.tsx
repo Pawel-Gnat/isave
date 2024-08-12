@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
@@ -19,7 +19,7 @@ interface TransactionsProps {
   userId: string;
 }
 
-export const Transactions: FC<TransactionsProps> = ({ id, userId }) => {
+export const Transactions = ({ id, userId }: TransactionsProps) => {
   const { date, setUserId } = useContext(TransactionsContext);
 
   useEffect(() => {
