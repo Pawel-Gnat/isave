@@ -10,6 +10,10 @@
     "prettier",
     "next/core-web-vitals"
   ],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
   "rules": {
     "no-console": 1,
     "prettier/prettier": 2,
