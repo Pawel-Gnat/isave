@@ -6,15 +6,28 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:playwright/recommended",
     "prettier",
     "next/core-web-vitals"
   ],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
   "rules": {
     "no-console": 1,
     "prettier/prettier": 2,
     "camelcase": 1,
     "react/jsx-pascal-case": 2,
     "@typescript-eslint/no-unused-vars": 1,
-    "@typescript-eslint/no-explicit-any": 1
-  }
+    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-floating-promises": 1,
+    "@typescript-eslint/require-await": 1
+  },
+  "overrides": [
+    {
+      "files": ["e2e/**/*.ts", "e2e/**/*.tsx"],
+      "extends": ["plugin:playwright/recommended"]
+    }
+  ]
 }
