@@ -40,6 +40,9 @@ next-env.d.ts
 
 .vercel
 /test-results/
+/e2e/test-results/
 /playwright-report/
+/e2e/playwright-report/
 /blob-report/
+/e2e/blob-report/
 /playwright/.cache/
