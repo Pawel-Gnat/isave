@@ -20,6 +20,9 @@ export default defineConfig({
     navigationTimeout: process.env.CI ? 30000 : 15000,
   },
   outputDir: `${PROJECT_DIR}/test-results`,
+  expect: {
+    timeout: 15000,
+  },
   projects: [
     {
       name: 'chromium',
