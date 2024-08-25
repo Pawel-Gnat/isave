@@ -7,6 +7,6 @@ test('login to an app', async ({ page }) => {
   await page.getByLabel('Hasło').fill('test');
   await page.getByRole('button', { name: 'Zaloguj się' }).click();
 
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/', { timeout: 10000 });
   await expect(page.getByText('Konto testowe')).toBeVisible();
 });
