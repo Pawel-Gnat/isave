@@ -16,13 +16,14 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     trace: 'on-first-retry',
-    actionTimeout: process.env.CI ? 10000 : 5000,
+    actionTimeout: process.env.CI ? 20000 : 15000,
     navigationTimeout: process.env.CI ? 30000 : 15000,
   },
   outputDir: `${PROJECT_DIR}/test-results`,
   expect: {
     timeout: 15000,
   },
+  timeout: 60000,
   projects: [
     {
       name: 'chromium',

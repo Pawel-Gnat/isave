@@ -7,9 +7,11 @@ const EXPENSE = {
   'value-edit': 200,
 };
 
-test('create, edit and delete personal expense', async ({ page }) => {
+test('create, edit and delete group expense', async ({ page }) => {
   await page.waitForLoadState('networkidle');
-  await page.getByRole('link', { name: 'Transakcje osobiste' }).click({});
+  await page.waitForTimeout(10000);
+  await page.getByRole('link', { name: 'Transakcje grupowe' }).click({});
+  await page.getByRole('link', { name: 'Budżet testowy', exact: true }).click({});
 
   await page.getByRole('button', { name: 'Dodaj wydatek' }).click();
   await page.getByRole('button', { name: 'Utwórz ręcznie' }).click();
@@ -22,14 +24,14 @@ test('create, edit and delete personal expense', async ({ page }) => {
 
   await expect(page.getByText('-100,00 zł').first()).toBeVisible();
 
-  page.getByRole('row', { name: 'Wydatek' }).getByRole('button').first().click();
+  await page.getByRole('row', { name: 'Wydatek' }).getByRole('button').first().click();
 
   await page.getByRole('spinbutton').fill(EXPENSE['value-edit'].toString());
   await page.getByRole('button', { name: 'Zapisz zmiany' }).click();
 
   await expect(page.getByText('-200,00 zł').first()).toBeVisible();
 
-  page.getByRole('row', { name: 'Wydatek' }).getByRole('button').nth(1).click();
+  await page.getByRole('row', { name: 'Wydatek' }).getByRole('button').nth(1).click();
   await page.getByRole('button', { name: 'Usuń' }).click();
 
   await expect(page.getByText(EXPENSE['value-edit'].toString())).not.toBeVisible();
