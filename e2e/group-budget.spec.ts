@@ -9,8 +9,8 @@ const EXPENSE = {
 
 test('create, edit and delete group expense', async ({ page }) => {
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(10000);
   await page.getByRole('link', { name: 'Transakcje grupowe' }).click({});
+  await page.waitForURL('/group');
   await page.getByRole('link', { name: 'Budżet testowy', exact: true }).click({});
 
   await page.getByRole('button', { name: 'Dodaj wydatek' }).click();

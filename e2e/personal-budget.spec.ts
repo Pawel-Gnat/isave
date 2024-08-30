@@ -9,8 +9,8 @@ const EXPENSE = {
 
 test('create, edit and delete personal expense', async ({ page }) => {
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(10000);
   await page.getByRole('link', { name: 'Transakcje osobiste' }).click({});
+  await page.waitForURL('/personal');
 
   await page.getByRole('button', { name: 'Dodaj wydatek' }).click();
   await page.getByRole('button', { name: 'Utwórz ręcznie' }).click();

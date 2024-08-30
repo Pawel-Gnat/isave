@@ -3,8 +3,8 @@ import { test } from './fixture';
 
 test('create and delete group budget', async ({ page }) => {
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(10000);
   await page.getByRole('link', { name: 'Transakcje grupowe' }).click({});
+  await page.waitForURL('/group');
 
   await page.getByRole('button', { name: 'Stwórz grupowy budżet' }).click();
   await page.getByRole('textbox').fill('Test budget');
