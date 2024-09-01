@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from './fixture';
+import { test } from './fixture/fixture';
 
 test('create and delete group budget', async ({ page }) => {
   await page.waitForLoadState('networkidle');
