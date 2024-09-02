@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 
 import { cn } from '@/lib/className';
 
@@ -29,7 +29,7 @@ interface TransactionCategorySelectProps {
   expenseCategories: ExpenseCategory[];
 }
 
-export const TransactionCategorySelect: FC<TransactionCategorySelectProps> = forwardRef<
+export const TransactionCategorySelect = forwardRef<
   HTMLButtonElement,
   TransactionCategorySelectProps
 >(

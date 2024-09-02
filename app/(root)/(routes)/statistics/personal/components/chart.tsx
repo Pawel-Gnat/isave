@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { createChartData, flatTransactions, groupTransactions } from '@/utils/chartUtils';
 
@@ -22,14 +22,14 @@ interface ExpenseChartProps {
   ) => ReactNode;
 }
 
-export const Chart: FC<ExpenseChartProps> = ({
+export const Chart = ({
   title,
   description,
   isLoading,
   categories,
   transactions,
   chart,
-}) => {
+}: ExpenseChartProps) => {
   if (isLoading || !categories || !transactions) {
     return <Skeleton className="h-full max-h-[450px] w-full" />;
   }

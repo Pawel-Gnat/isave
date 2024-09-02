@@ -1,6 +1,5 @@
 'use client';
 
-import { FC } from 'react';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
@@ -17,10 +16,7 @@ interface TransactionDatePickerProps {
   setDate: (date: Date) => void;
 }
 
-export const TransactionDatePicker: FC<TransactionDatePickerProps> = ({
-  date,
-  setDate,
-}) => {
+export const TransactionDatePicker = ({ date, setDate }: TransactionDatePickerProps) => {
   const handleDateSelect = (day: Date | undefined) => {
     if (day) {
       setDate(day);

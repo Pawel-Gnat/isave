@@ -1,5 +1,3 @@
-import { FC } from 'react';
-
 import useBudgetMember from '@/hooks/useBudgetMember';
 
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +10,7 @@ interface BudgetBadgeProps {
   onClick: (id: string) => void;
 }
 
-export const BudgetBadge: FC<BudgetBadgeProps> = ({ id, owner, onClick }) => {
+export const BudgetBadge = ({ id, owner, onClick }: BudgetBadgeProps) => {
   const { member, isLoading } = useBudgetMember(id);
 
   if (isLoading) {

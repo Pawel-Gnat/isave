@@ -28,7 +28,7 @@ interface DeleteButtonProps extends ButtonProps {
   transactionOwnerId: string;
 }
 
-const EditButton: React.FC<ButtonProps> = ({ id, groupBudgetId, transactionType }) => {
+const EditButton = ({ id, groupBudgetId, transactionType }: ButtonProps) => {
   const { dispatch } = useContext(TransactionsContext);
 
   return (

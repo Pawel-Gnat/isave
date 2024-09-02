@@ -13,10 +13,7 @@ interface FormLoadingButtonProps {
   isLoading: boolean;
 }
 
-export const FormLoadingButton: React.FC<FormLoadingButtonProps> = ({
-  isLoading,
-  text,
-}) => {
+export const FormLoadingButton = ({ isLoading, text }: FormLoadingButtonProps) => {
   return (
     <Button type="submit" className={isLoading ? 'w-full opacity-60' : 'w-full'}>
       {isLoading ? <PuffLoader size={25} cssOverride={override} /> : text}

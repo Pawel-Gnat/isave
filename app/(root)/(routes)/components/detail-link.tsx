@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import Link from 'next/link';
 
 interface DetailLinkProps {
   src: string;
 }
 
-export const DetailLink: FC<DetailLinkProps> = ({ src }) => {
+export const DetailLink = ({ src }: DetailLinkProps) => {
   return (
     <Link
       href={src}

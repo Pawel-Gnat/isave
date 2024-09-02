@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 
 import { AlertContext } from '@/contexts/alert-context';
 
@@ -23,14 +23,7 @@ interface BudgetProps {
   userId: string;
 }
 
-export const Budget: FC<BudgetProps> = ({
-  title,
-  id,
-  href,
-  ownerId,
-  members,
-  userId,
-}) => {
+export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProps) => {
   const { dispatch } = useContext(AlertContext);
 
   const handleSaveInvideIdToClipboard = (id: string) => {

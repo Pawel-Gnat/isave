@@ -30,13 +30,13 @@ interface TransactionTableModalProps {
   errors: FieldErrors<TransactionValues>;
 }
 
-export const TransactionTableModal: React.FC<TransactionTableModalProps> = ({
+export const TransactionTableModal = ({
   transactions,
   setValue,
   transactionType,
   register,
   errors,
-}) => {
+}: TransactionTableModalProps) => {
   const { incomeCategories, isIncomeCategoriesLoading } = useIncomeCategories();
   const { expenseCategories, isExpenseCategoriesLoading } = useExpenseCategories();
 

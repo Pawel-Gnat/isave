@@ -9,7 +9,7 @@ interface NavLinkProps {
   icon?: React.ReactElement;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, icon, label }) => {
+const NavLink = ({ href, icon, label }: NavLinkProps) => {
   const currentRoute = usePathname();
 
   return (

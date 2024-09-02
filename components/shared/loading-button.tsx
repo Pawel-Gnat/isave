@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from 'react';
+import { CSSProperties } from 'react';
 
 import { cn } from '@/lib/className';
 
@@ -17,12 +17,12 @@ interface LoadingButtonProps {
   disabled?: boolean;
 }
 
-export const LoadingButton: FC<LoadingButtonProps> = ({
+export const LoadingButton = ({
   isLoading,
   text,
   onClick,
   disabled,
-}) => {
+}: LoadingButtonProps) => {
   return (
     <Button
       type="button"
