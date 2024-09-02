@@ -15,29 +15,29 @@ interface ActivatePageProps {
 const ActivatePage = ({ params }: { params: ActivatePageProps }) => {
   const router = useRouter();
 
-  useEffect(() => {
-    const activateAccount = async () => {
-      try {
-        const response = await axios.patch(`/api/activate/${params.id}`);
-        toast.success(`${response.data}`);
-      } catch (error) {
-        logError(
-          () => captureException(`Activate page - activation failed: ${error}`),
-          error,
-        );
+  const activateAccount = async () => {
+    try {
+      const response = await axios.patch(`/api/activate/${params.id}`);
+      toast.success(`${response.data}`);
+    } catch (error) {
+      logError(
+        () => captureException(`Activate page - activation failed: ${error}`),
+        error,
+      );
 
-        if (axios.isAxiosError(error)) {
-          toast.error(error?.response?.data.error);
-        } else {
-          toast.error('Błąd aktywacji');
-        }
-      } finally {
-        router.push('/auth');
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data.error);
+      } else {
+        toast.error('Błąd aktywacji');
       }
-    };
+    } finally {
+      router.push('/auth');
+    }
+  };
 
+  useEffect(() => {
     activateAccount();
-  }, [params.id]);
+  }, [params.id, router]);
 
   return <></>;
 };

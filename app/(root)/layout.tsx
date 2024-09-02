@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import QueryProvider from '@/contexts/query-context';
 import { AlertProvider } from '@/contexts/alert-context';
 import { TransactionsProvider } from '@/contexts/transactions-context';
@@ -10,11 +12,7 @@ import { EditTransaction } from '@/components/transaction-modal/edit-transaction
 import { AddExpense } from '@/components/transaction-modal/add-expense';
 import { AddIncome } from '@/components/transaction-modal/add-income';
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <QueryProvider>
       <TransactionsProvider>

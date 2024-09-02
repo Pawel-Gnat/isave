@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
+import { captureException } from '@sentry/nextjs';
 
 import { LoginFormSchema } from '@/utils/formValidations';
+import { logError } from '@/utils/errorUtils';
 
 import {
   Form,
@@ -36,18 +38,23 @@ const LoginForm = () => {
     if (loading) return;
     setIsLoading(true);
 
-    signIn('credentials', { ...values, redirect: false }).then((callback) => {
-      setIsLoading(false);
+    signIn('credentials', { ...values, redirect: false })
+      .then((callback) => {
+        setIsLoading(false);
 
-      if (callback?.ok) {
-        router.push('/');
-        toast.success('Pomyślnie zalogowano');
-      }
+        if (callback?.ok) {
+          router.push('/');
+          toast.success('Pomyślnie zalogowano');
+        }
 
-      if (callback?.error) {
-        toast.warning(`${callback.error}`);
-      }
-    });
+        if (callback?.error) {
+          toast.warning(`${callback.error}`);
+        }
+      })
+      .catch((error) => {
+        toast.error('Błąd logowania');
+        logError(() => captureException(`Sign in - logging in failed: ${error}`), error);
+      });
   }
 
   return (

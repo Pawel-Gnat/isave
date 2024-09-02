@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { createWorker } from 'tesseract.js';
 import { captureException } from '@sentry/nextjs';
@@ -14,7 +14,7 @@ interface FileInputProps {
   onSelect: (value: string) => void;
 }
 
-export const FileInput: FC<FileInputProps> = ({ onSelect }) => {
+export const FileInput = ({ onSelect }: FileInputProps) => {
   const [value, setValue] = useState('');
   const [isError, setIsError] = useState(false);
   const { isLoading, dispatch } = useContext(TransactionsContext);

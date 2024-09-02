@@ -1,4 +1,4 @@
-import { FC, forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 import { Input } from '@/components/ui/input';
 
@@ -8,7 +8,7 @@ interface TransactionTitleInputProps {
   className: string;
 }
 
-export const TransactionTitleInput: FC<TransactionTitleInputProps> = forwardRef<
+export const TransactionTitleInput = forwardRef<
   HTMLInputElement,
   TransactionTitleInputProps
 >(({ value, onChange, className }, ref) => {

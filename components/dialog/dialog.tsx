@@ -1,7 +1,5 @@
 'use client';
 
-import { FC } from 'react';
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,7 +23,7 @@ interface DialogProps {
   isLoading: boolean;
 }
 
-export const Dialog: FC<DialogProps> = ({
+export const Dialog = ({
   open,
   onOpenChange,
   title,
@@ -34,7 +32,7 @@ export const Dialog: FC<DialogProps> = ({
   handleDialog,
   actionText,
   isLoading,
-}) => {
+}: DialogProps) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-[90%] rounded-lg sm:max-w-lg">

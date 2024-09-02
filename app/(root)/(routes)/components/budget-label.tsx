@@ -1,5 +1,3 @@
-import { FC } from 'react';
-
 import { Badge } from '@/components/ui/badge';
 
 interface BudgetBadgeProps {
@@ -7,7 +5,7 @@ interface BudgetBadgeProps {
   totalExpenses: number;
 }
 
-export const BudgetLabel: FC<BudgetBadgeProps> = ({ name, totalExpenses }) => {
+export const BudgetLabel = ({ name, totalExpenses }: BudgetBadgeProps) => {
   return (
     <div>
       <Badge variant="default" className="w-fit min-w-max">
