@@ -26,7 +26,7 @@ export const ActionsPanel = ({ id, category }: ActionsPanelProps) => {
   return (
     <div className="mb-4 flex flex-col items-center justify-between gap-4 sm:items-end md:flex-row">
       <DatePicker date={date} setDate={handleSetDate} />
-      <div className="space-x-4">
+      <div className="space-x-2 sm:space-x-4">
         <Button
           variant="outline"
           onClick={() => {
