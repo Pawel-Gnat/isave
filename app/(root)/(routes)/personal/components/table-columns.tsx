@@ -21,7 +21,7 @@ interface ButtonProps {
   transactionType: TransactionType;
 }
 
-const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+const EditButton = ({ id, transactionType }: ButtonProps) => {
   const { dispatch } = useContext(TransactionsContext);
 
   return (
@@ -45,7 +45,7 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   );
 };
 
-const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
+const DeleteButton = ({ id, transactionType }: ButtonProps) => {
   const { dispatch } = useContext(AlertContext);
 
   return (

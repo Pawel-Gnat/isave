@@ -52,12 +52,12 @@ const EditButton = ({ id, groupBudgetId, transactionType }: ButtonProps) => {
   );
 };
 
-const DeleteButton: React.FC<DeleteButtonProps> = ({
+const DeleteButton = ({
   id,
   groupBudgetId,
   transactionOwnerId,
   transactionType,
-}) => {
+}: DeleteButtonProps) => {
   const { dispatch } = useContext(AlertContext);
   const { userId } = useContext(TransactionsContext);
 
