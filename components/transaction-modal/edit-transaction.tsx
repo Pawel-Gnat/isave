@@ -227,7 +227,7 @@ export const EditTransaction = () => {
         )}
 
         {!isLoading && (
-          <div className="flex w-full flex-col gap-4">
+          <>
             <TransactionDatePicker
               date={date}
               setDate={(date) => setValue('date', date)}
@@ -239,7 +239,7 @@ export const EditTransaction = () => {
               register={register}
               errors={errors}
             />
-          </div>
+          </>
         )}
       </>
     );

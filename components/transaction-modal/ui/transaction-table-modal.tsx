@@ -105,7 +105,7 @@ export const TransactionTableModal = ({
                 <TableHead className="text-right"></TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="block max-h-[400px] overflow-y-auto">
+            <TableBody className="block">
               {transactions.map((transaction, index) => (
                 <TableRow key={transaction.id} className="table w-full table-fixed">
                   <TableCell className="font-medium">
@@ -149,9 +149,9 @@ export const TransactionTableModal = ({
                       value={+transaction.value.toFixed(2)}
                     />
                   </TableCell>
-                  <TableCell className="w-44 text-right">
+                  <TableCell className="text-right">
                     <Button variant="outline" onClick={() => deleteRow(transaction.id)}>
-                      Usuń pozycję
+                      <span>Usuń pozycję</span>
                       <Trash2 className="ml-2 h-4 w-4 shrink-0" />
                     </Button>
                   </TableCell>
@@ -171,11 +171,13 @@ export const TransactionTableModal = ({
             </TableFooter>
           </Table>
 
-          <div className="relative">
-            <Button variant="outline" onClick={addNewRow} className="absolute right-0">
-              Dodaj nowy wiersz
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            onClick={addNewRow}
+            className="ml-auto w-full sm:w-fit"
+          >
+            Dodaj nowy wiersz
+          </Button>
         </>
       )}
     </>

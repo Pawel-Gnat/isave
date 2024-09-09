@@ -31,7 +31,7 @@ export const TransactionModal = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="relative flex flex-1 justify-center overflow-auto">{content}</div>
+        <div className="relative flex flex-1 flex-col gap-4 overflow-auto">{content}</div>
         <DialogFooter className="flex gap-2 sm:justify-between">{footer}</DialogFooter>
       </DialogContent>
     </Dialog>
