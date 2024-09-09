@@ -84,17 +84,9 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
 
 export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: 'type',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Nazwa
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <p className="font-medium">Typ</p>;
     },
     cell: ({ row }) => {
       const value = parseFloat(row.getValue('value'));
@@ -144,7 +136,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = format(row.getValue('date'), 'PPP', { locale: pl });
+      const date = format(row.getValue('date'), 'PP', { locale: pl });
 
       return <p className="text-center font-medium">{date}</p>;
     },

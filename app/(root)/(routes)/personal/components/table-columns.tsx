@@ -27,7 +27,7 @@ const EditButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   return (
     <Button
       variant="outline"
-      className="mr-2"
+      className="mr-2 px-2 sm:px-4"
       onClick={() => {
         dispatch({
           type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
@@ -51,6 +51,7 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
   return (
     <Button
       variant="destructive"
+      className="px-2 sm:px-4"
       onClick={() => {
         dispatch({
           type: 'SET_SHOW_ALERT',
@@ -70,17 +71,9 @@ const DeleteButton: React.FC<ButtonProps> = ({ id, transactionType }) => {
 
 export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: 'type',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Nazwa
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <p className="font-medium">Typ</p>;
     },
     cell: ({ row }) => {
       const value = parseFloat(row.getValue('value'));
@@ -96,7 +89,9 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
               className="aspect-square"
             />
           </div>
-          <p className="font-medium">{value > 0 ? 'Przychód' : 'Wydatek'}</p>
+          <p className="hidden font-medium sm:block">
+            {value > 0 ? 'Przychód' : 'Wydatek'}
+          </p>
         </div>
       );
     },
@@ -117,7 +112,7 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = format(row.getValue('date'), 'PPP', { locale: pl });
+      const date = format(row.getValue('date'), 'PP', { locale: pl });
 
       return <p className="text-center font-medium">{date}</p>;
     },
