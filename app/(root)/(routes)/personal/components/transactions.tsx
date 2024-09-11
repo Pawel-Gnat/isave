@@ -10,9 +10,9 @@ import usePersonalIncomes from '@/hooks/usePersonalIncomes';
 import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Skeleton } from '@/components/ui/skeleton';
+import { TransactionTable } from '@/components/table/transaction-table';
 
 import { columns } from './table-columns';
-import { TransactionTable } from './transaction-table';
 
 export const Transactions = () => {
   const { date } = useContext(TransactionsContext);
