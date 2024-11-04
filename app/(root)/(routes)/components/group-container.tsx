@@ -1,6 +1,6 @@
 'use client';
 
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
 import useGroupBudgetsStatistics from '@/hooks/useGroupBudgetsStatistics';
 
@@ -10,7 +10,10 @@ import { GroupBudgetCard } from './group-budget-card';
 
 export const GroupContainer = () => {
   const { groupBudgetsStatistics, isGroupBudgetsStatisticsLoading } =
-    useGroupBudgetsStatistics(startOfMonth(new Date()), endOfMonth(new Date()));
+    useGroupBudgetsStatistics(
+      startOfMonth(subMonths(new Date(), 1)),
+      endOfMonth(subMonths(new Date(), 1)),
+    );
 
   if (isGroupBudgetsStatisticsLoading) {
     return (
