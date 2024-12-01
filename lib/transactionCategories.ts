@@ -136,6 +136,11 @@
 //     name: 'Koszty prowadzenia działalności gospodarczej',
 //     description: 'wydatki związane z prowadzeniem własnej firmy',
 //   },
+//   {
+//     id: '50',
+//     name: 'Pieczywo',
+//     description: 'chleb, bułki, bagietki, inne rodzaje pieczywa',
+//   },
 // ];
 
 // export const incomeCategories = [
