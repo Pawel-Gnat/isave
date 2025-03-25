@@ -25,7 +25,7 @@ export const DoughnutChart = ({
   chartConfig,
 }: DougnnutChartProps) => {
   return (
-    <Card className=" border-0 shadow-none">
+    <Card className="border-0 shadow-none">
       <CardHeader className="p-0">
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

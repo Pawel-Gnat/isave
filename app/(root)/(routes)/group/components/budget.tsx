@@ -36,7 +36,7 @@ export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProp
       <div className="flex flex-row justify-between gap-4">
         <Link href={href} className="group flex flex-row gap-2 border-b">
           {title}
-          <SquareArrowOutUpRight className="transition-all group-hover:translate-x-2 group-hover:text-accent" />
+          <SquareArrowOutUpRight className="group-hover:text-accent transition-all group-hover:translate-x-2" />
         </Link>
 
         <Button

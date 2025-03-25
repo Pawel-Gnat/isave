@@ -176,7 +176,7 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
       const value = parseFloat(row.getValue('value'));
 
       return (
-        <div className="text-nowrap text-right">
+        <div className="text-right text-nowrap">
           <EditButton
             id={id}
             groupBudgetId={groupBudgetId}

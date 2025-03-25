@@ -150,7 +150,7 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
       const value = parseFloat(row.getValue('value'));
 
       return (
-        <div className="text-nowrap text-right">
+        <div className="text-right text-nowrap">
           <EditButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
           <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
         </div>

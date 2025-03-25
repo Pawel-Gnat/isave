@@ -61,7 +61,7 @@ export const TransactionCategorySelect = forwardRef<
             <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className=" p-0">
+        <PopoverContent className="p-0">
           <Command>
             <CommandInput placeholder="Wybierz kategorię..." className="h-9" />
             <CommandEmpty>Nie znaleziono kategorii</CommandEmpty>
