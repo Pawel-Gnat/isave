@@ -16,7 +16,7 @@ const NavLink = ({ href, icon, label }: NavLinkProps) => {
     <Link
       href={href}
       className={cn(
-        'relative flex items-center gap-2 rounded-lg p-2 text-primary transition-colors hover:bg-accent/30 sm:p-4 lg:px-6 lg:pr-16',
+        'text-primary hover:bg-accent/30 relative flex items-center gap-2 rounded-lg p-2 transition-colors sm:p-4 lg:px-6 lg:pr-16',
         currentRoute === href && 'text-tetriary bg-accent',
       )}
     >

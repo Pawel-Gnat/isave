@@ -26,7 +26,7 @@ export const TransactionModal = ({
 }: TransactionModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[80%] min-h-[75%] min-w-[50%] max-w-[90%] flex-col rounded-lg sm:min-h-[60%] md:max-w-[75%] 2xl:max-w-[50%]">
+      <DialogContent className="flex max-h-[80%] min-h-[75%] max-w-[90%] min-w-[50%] flex-col rounded-lg sm:min-h-[60%] md:max-w-[75%] 2xl:max-w-[50%]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
