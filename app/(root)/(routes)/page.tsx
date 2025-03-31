@@ -8,11 +8,11 @@ import { GroupContainer } from './components/group-container';
 import { PersonalContainer } from './components/personal-container';
 
 const HomePage = async () => {
-  const user = await getCurrentUser();
+  // const user = await getCurrentUser();
 
-  if (!user) {
-    redirect('/auth');
-  }
+  // if (!user) {
+  //   redirect('/auth');
+  // }
 
   return (
     <>

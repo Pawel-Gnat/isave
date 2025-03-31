@@ -9,6 +9,14 @@ import {
 } from '@prisma/client';
 import { DateRange } from 'react-day-picker';
 
+export type SessionUser = {
+  id: string;
+  name: string;
+  email: string;
+  inviteId: string;
+  apiCallLimit: number;
+};
+
 export type Transaction = {
   id: string;
   title: string;
