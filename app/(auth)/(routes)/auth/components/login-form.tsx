@@ -43,22 +43,19 @@ const LoginForm = () => {
       setIsLoading(true);
       const { email, password } = values;
 
-      const result = await signIn('credentials', {
+      const response = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
 
-      console.log('@@@', result);
-
-      if (result?.error) {
-        toast.warning(`${result.error}`);
+      if (response?.error) {
+        toast.warning(response.code);
       } else {
         router.push(LOGIN_REDIRECT);
         toast.success('Pomyślnie zalogowano');
       }
     } catch (error) {
-      console.log(error);
       toast.error('Błąd logowania');
       logError(() => captureException(`Sign in - logging in failed: ${error}`), error);
     } finally {

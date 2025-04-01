@@ -8,10 +8,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { Budget } from './budget';
 
-export const SharedBudgets = ({ userId }: { userId: string }) => {
+export const SharedBudgets = ({ userId }: { userId: string | undefined }) => {
   const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
 
-  if (isGroupBudgetsLoading) {
+  if (isGroupBudgetsLoading || !userId) {
     return (
       <div className="flex flex-1 flex-col gap-4">
         <Skeleton className="h-32 w-full" />

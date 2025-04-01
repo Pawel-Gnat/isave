@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { captureException } from '@sentry/nextjs';
 
@@ -15,7 +15,7 @@ interface ActivatePageProps {
 const ActivatePage = ({ params }: { params: ActivatePageProps }) => {
   const router = useRouter();
 
-  const activateAccount = async () => {
+  const activateAccount = useCallback(async () => {
     try {
       const response = await axios.patch(`/api/activate/${params.id}`);
       toast.success(`${response.data}`);
@@ -33,11 +33,11 @@ const ActivatePage = ({ params }: { params: ActivatePageProps }) => {
     } finally {
       router.push('/auth');
     }
-  };
+  }, [params.id, router]);
 
   useEffect(() => {
     activateAccount();
-  }, [params.id, router]);
+  }, [activateAccount]);
 
   return <></>;
 };

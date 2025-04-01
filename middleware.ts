@@ -26,16 +26,14 @@ export default auth((req) => {
     dynamicAuthRoutesPrefix.some((prefix) => nextUrl.pathname.startsWith(prefix));
 
   if (isApiAuthRoute) {
-    console.log('isApiAuthRoute', isLoggedIn);
+    return NextResponse.next();
   }
 
   if (isAuthRoute && !isLoggedIn) {
-    console.log('isAuthRoute', isLoggedIn);
     return NextResponse.redirect(new URL(AUTH_REDIRECT, nextUrl));
   }
 
   if (isPublicRoute && isLoggedIn) {
-    console.log('isPublicRoute', 'isLoggedIn');
     return NextResponse.redirect(new URL(LOGIN_REDIRECT, nextUrl));
   }
 

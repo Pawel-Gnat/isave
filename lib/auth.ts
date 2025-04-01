@@ -14,10 +14,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const existingUser = await getUserById(user.id);
 
-      console.log('@@@ existingUser', existingUser);
-
       if (!existingUser || !existingUser.emailVerified) {
-        return false;
+        throw new Error('Konto nie jest aktywne');
       }
 
       return true;
@@ -26,9 +24,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
+
+      if (token.inviteId && session.user) {
+        session.user.inviteId = token.inviteId;
+      }
+
       return session;
     },
     async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const user = await getUserById(token.sub);
+      if (!user) return token;
+
+      token.inviteId = user.inviteId;
       return token;
     },
   },

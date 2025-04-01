@@ -1,10 +1,17 @@
 import Credentials from 'next-auth/providers/credentials';
-import type { NextAuthConfig } from 'next-auth';
+import { CredentialsSignin, type NextAuthConfig } from 'next-auth';
 import bcrypt from 'bcryptjs';
 
 import { LoginFormSchema } from '@/utils/formValidations';
 import prisma from './lib/prisma';
 import { SessionUser } from './types/types';
+
+class CustomError extends CredentialsSignin {
+  constructor(code: string) {
+    super(code);
+    this.code = code;
+  }
+}
 
 export default {
   providers: [
@@ -22,17 +29,17 @@ export default {
           });
 
           if (!user) {
-            throw new Error('Konto nie istnieje');
+            throw new CustomError('Konto nie istnieje');
           }
 
           const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
 
           if (!isPasswordValid) {
-            throw new Error('Zweryfikuj dane');
+            throw new CustomError('Zweryfikuj dane');
           }
 
           if (!user.emailVerified) {
-            throw new Error('Konto nie jest aktywne');
+            throw new CustomError('Konto nie jest aktywne');
           }
 
           return {
@@ -44,7 +51,7 @@ export default {
           } satisfies SessionUser;
         }
 
-        throw new Error('Nieprawidłowe dane logowania');
+        throw new CustomError('Nieprawidłowe dane logowania');
       },
     }),
   ],
