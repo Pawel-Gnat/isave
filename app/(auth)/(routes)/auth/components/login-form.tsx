@@ -1,14 +1,14 @@
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 import { captureException } from '@sentry/nextjs';
 
 import { LoginFormSchema } from '@/utils/formValidations';
 import { logError } from '@/utils/errorUtils';
+
+import { signIn } from 'next-auth/react';
 
 import {
   Form,
@@ -21,6 +21,8 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
+import { LOGIN_REDIRECT } from '@/routes';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
   const [loading, setIsLoading] = useState(false);
@@ -34,27 +36,31 @@ const LoginForm = () => {
     },
   });
 
-  function onLogin(values: z.infer<typeof LoginFormSchema>) {
+  async function onLogin(values: z.infer<typeof LoginFormSchema>) {
     if (loading) return;
-    setIsLoading(true);
 
-    signIn('credentials', { ...values, redirect: false })
-      .then((callback) => {
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const { email, password } = values;
 
-        if (callback?.ok) {
-          router.push('/');
-          toast.success('Pomyślnie zalogowano');
-        }
-
-        if (callback?.error) {
-          toast.warning(`${callback.error}`);
-        }
-      })
-      .catch((error) => {
-        toast.error('Błąd logowania');
-        logError(() => captureException(`Sign in - logging in failed: ${error}`), error);
+      const response = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       });
+
+      if (response?.error) {
+        toast.warning(response.code);
+      } else {
+        router.push(LOGIN_REDIRECT);
+        toast.success('Pomyślnie zalogowano');
+      }
+    } catch (error) {
+      toast.error('Błąd logowania');
+      logError(() => captureException(`Sign in - logging in failed: ${error}`), error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -70,7 +76,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Email" {...field} />
+                <Input type="email" placeholder="Email" {...field} disabled={loading} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,7 +89,12 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Hasło</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="*****" {...field} />
+                <Input
+                  type="password"
+                  placeholder="*****"
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

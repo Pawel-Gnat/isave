@@ -1,11 +1,10 @@
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@/lib/auth';
 
 import prisma from '@/lib/prisma';
 
 const getCurrentUser = async () => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (!session?.user?.email) {
       return null;
