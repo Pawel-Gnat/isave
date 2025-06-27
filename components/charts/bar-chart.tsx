@@ -24,11 +24,17 @@ export const BarChart = ({
   chartData,
   chartConfig,
 }: BarChartProps) => {
+  const totalValue =
+    chartData?.reduce((sum: number, item: any) => {
+      return sum + (item.value || 0);
+    }, 0) || 0;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
+        <CardDescription>Łączna wartość: {totalValue.toFixed(2)} zł</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer

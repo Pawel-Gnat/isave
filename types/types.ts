@@ -77,6 +77,28 @@ export type GroupBudgetStatistics = {
   members: { name: string; totalExpenses: number; totalIncomes: number }[];
 };
 
+export type MemberStatistics = {
+  name: string;
+  totalExpenses: number;
+  totalIncomes: number;
+};
+
+export type GroupExpensesWithStatistics = {
+  transactions: ModifiedGroupExpense[];
+  memberStatistics: MemberStatistics[];
+  budgetName: string;
+  totalExpenses: number;
+};
+
+export type GroupIncomesWithStatistics = {
+  transactions: ModifiedGroupIncome[];
+  memberStatistics: MemberStatistics[];
+  budgetName: string;
+  totalIncomes: number;
+};
+
+///////////////
+
 export type AlertState = {
   isAlertOpen: boolean;
   isCreateBudgetAlertOpen: boolean;
