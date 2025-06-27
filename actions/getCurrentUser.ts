@@ -1,10 +1,11 @@
 import { auth } from '@/lib/auth';
-
 import prisma from '@/lib/prisma';
 
 const getCurrentUser = async () => {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: new Headers(),
+    });
 
     if (!session?.user?.email) {
       return null;

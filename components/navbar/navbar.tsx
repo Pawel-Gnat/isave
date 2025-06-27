@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
+import { authClient } from '@/lib/auth-client';
 
 import { Button } from '@/components/ui/button';
 
@@ -49,7 +49,7 @@ const Navbar = () => {
 
       <Button
         className="p-2 text-base sm:mt-auto sm:w-full sm:p-4 lg:px-8"
-        onClick={() => signOut()}
+        onClick={() => authClient.signOut()}
         size="lg"
       >
         <Power size={24} className="lg:mr-2" />

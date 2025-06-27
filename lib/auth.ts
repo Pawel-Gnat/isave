@@ -1,46 +1,37 @@
-import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
 import prisma from '@/lib/prisma';
-import authConfig from '@/auth.config';
-import getUserById from '@/actions/getUserById';
+import { nextCookies } from 'better-auth/next-js';
+import { hashPassword, verifyPassword } from './auth-helpers';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  callbacks: {
-    async signIn({ user }) {
-      if (!user.id) {
-        return false;
-      }
-
-      const existingUser = await getUserById(user.id);
-
-      if (!existingUser || !existingUser.emailVerified) {
-        throw new Error('Konto nie jest aktywne');
-      }
-
-      return true;
-    },
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-
-      if (token.inviteId && session.user) {
-        session.user.inviteId = token.inviteId;
-      }
-
-      return session;
-    },
-    async jwt({ token }) {
-      if (!token.sub) return token;
-
-      const user = await getUserById(token.sub);
-      if (!user) return token;
-
-      token.inviteId = user.inviteId;
-      return token;
+export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
+  database: prismaAdapter(prisma, {
+    provider: 'mongodb',
+  }),
+  account: {
+    fields: {
+      accountId: 'providerAccountId',
+      refreshToken: 'refresh_token',
+      accessToken: 'access_token',
+      idToken: 'id_token',
     },
   },
-  session: { strategy: 'jwt' },
-  ...authConfig,
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: false,
+    password: {
+      hash: async (password: string) => {
+        return await hashPassword(password);
+      },
+      verify: async ({ password, hash }: { password: string; hash: string }) => {
+        return await verifyPassword(password, hash);
+      },
+    },
+  },
+  pages: {
+    signIn: '/auth',
+  },
+  secret: process.env.BETTER_AUTH_SECRET,
+  plugins: [nextCookies()],
 });

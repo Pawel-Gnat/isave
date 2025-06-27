@@ -8,8 +8,6 @@ import { captureException } from '@sentry/nextjs';
 import { LoginFormSchema } from '@/utils/formValidations';
 import { logError } from '@/utils/errorUtils';
 
-import { signIn } from 'next-auth/react';
-
 import {
   Form,
   FormControl,
@@ -23,6 +21,7 @@ import { Input } from '@/components/ui/input';
 import { FormLoadingButton } from '@/components/shared/form-loading-button';
 import { LOGIN_REDIRECT } from '@/routes';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 
 const LoginForm = () => {
   const [loading, setIsLoading] = useState(false);
@@ -43,14 +42,13 @@ const LoginForm = () => {
       setIsLoading(true);
       const { email, password } = values;
 
-      const response = await signIn('credentials', {
+      const response = await authClient.signIn.email({
         email,
         password,
-        redirect: false,
       });
 
-      if (response?.error) {
-        toast.warning(response.code);
+      if (response.error) {
+        toast.warning(response.error.code);
       } else {
         router.push(LOGIN_REDIRECT);
         toast.success('Pomyślnie zalogowano');

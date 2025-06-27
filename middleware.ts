@@ -1,6 +1,3 @@
-import { NextResponse } from 'next/server';
-import authConfig from './auth.config';
-import NextAuth from 'next-auth';
 import {
   authRoutes,
   publicRoutes,
@@ -11,11 +8,14 @@ import {
   LOGIN_REDIRECT,
 } from './routes';
 
-const { auth } = NextAuth(authConfig);
+import { NextRequest, NextResponse } from 'next/server';
+import { getSessionCookie } from 'better-auth/cookies';
 
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+export async function middleware(request: NextRequest) {
+  const nextUrl = request.nextUrl;
+  const sessionCookie = getSessionCookie(request);
+
+  const isLoggedIn = !!sessionCookie;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute =
@@ -38,7 +38,7 @@ export default auth((req) => {
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
