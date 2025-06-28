@@ -8,7 +8,6 @@ import {
   useReducer,
   useState,
 } from 'react';
-import { startOfMonth, endOfMonth } from 'date-fns';
 
 import { Action, transactionReducer } from '@/reducers/transaction-modal-reducer';
 
@@ -24,7 +23,6 @@ export const initialState: TransactionState = {
   isIncomeModalOpen: false,
   isExpenseModalOpen: false,
   isEditTransactionModalOpen: false,
-  date: { from: startOfMonth(new Date()), to: endOfMonth(new Date()) },
   transactionType: null,
   transactionCategory: null,
   groupBudgetId: '',

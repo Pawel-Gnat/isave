@@ -115,7 +115,6 @@ export type TransactionState = {
   isIncomeModalOpen: boolean;
   isExpenseModalOpen: boolean;
   isEditTransactionModalOpen: boolean;
-  date: DateRange | undefined;
   transactionType: TransactionType;
   transactionCategory: TransactionCategory;
   groupBudgetId: string;

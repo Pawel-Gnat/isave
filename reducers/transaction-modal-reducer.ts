@@ -1,4 +1,3 @@
-import { DateRange } from 'react-day-picker';
 import { TransactionCategory, TransactionState, TransactionType } from '@/types/types';
 
 export type Action =
@@ -27,12 +26,6 @@ export type Action =
     }
   | {
       type: 'SET_HIDE_MODAL';
-    }
-  | {
-      type: 'SET_DATE';
-      payload: {
-        date: DateRange | undefined;
-      };
     }
   | { type: 'SET_IS_LOADING'; payload: { isLoading: boolean } };
 
@@ -74,11 +67,6 @@ export const transactionReducer = (
         transactionType: null,
         transactionCategory: null,
         groupBudgetId: '',
-      };
-    case 'SET_DATE':
-      return {
-        ...state,
-        date: action.payload.date,
       };
     case 'SET_IS_LOADING':
       return {

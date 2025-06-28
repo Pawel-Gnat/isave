@@ -1,43 +1,34 @@
 'use client';
 
-import { useContext } from 'react';
 import Image from 'next/image';
 import { endOfMonth, startOfMonth } from 'date-fns';
-
-import usePersonalExpenses from '@/hooks/usePersonalExpenses';
-import usePersonalIncomes from '@/hooks/usePersonalIncomes';
-
-import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionTable } from '@/components/table/transaction-table';
 
 import { columns } from './table-columns';
+import usePersonalBudget from '@/hooks/usePersonalBudget';
+import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
 
 export const Transactions = () => {
-  const { date } = useContext(TransactionsContext);
+  const [searchParams] = useUrlSearchParams();
 
-  const { personalExpenses, isPersonalExpensesLoading } = usePersonalExpenses(
-    date?.from || startOfMonth(new Date()),
-    date?.to || endOfMonth(new Date()),
-  );
-  const { personalIncomes, isPersonalIncomesLoading } = usePersonalIncomes(
-    date?.from || startOfMonth(new Date()),
-    date?.to || endOfMonth(new Date()),
+  const { personalBudget, isPersonalBudgetLoading } = usePersonalBudget(
+    new Date(searchParams.get('from') || startOfMonth(new Date())),
+    new Date(searchParams.get('to') || endOfMonth(new Date())),
   );
 
-  if (isPersonalExpensesLoading || isPersonalIncomesLoading) {
+  if (isPersonalBudgetLoading) {
     return <Skeleton className="h-80 w-full" />;
   }
 
   return (
     <div className="flex flex-1 flex-col">
-      {personalExpenses &&
-      personalIncomes &&
-      (personalExpenses.length > 0 || personalIncomes.length > 0) ? (
+      {personalBudget &&
+      (personalBudget.expenses.length > 0 || personalBudget.incomes.length > 0) ? (
         <TransactionTable
           columns={columns}
-          data={[...personalExpenses, ...personalIncomes]}
+          data={[...personalBudget.expenses, ...personalBudget.incomes]}
         />
       ) : (
         <div className="m-auto text-center">

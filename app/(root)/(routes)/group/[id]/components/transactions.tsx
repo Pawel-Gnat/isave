@@ -13,6 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionTable } from '@/components/table/transaction-table';
 
 import { columns } from './table-columns';
+import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
 
 interface TransactionsProps {
   id: string;
@@ -20,20 +21,21 @@ interface TransactionsProps {
 }
 
 export const Transactions = ({ id, userId }: TransactionsProps) => {
-  const { date, setUserId } = useContext(TransactionsContext);
+  const [searchParams] = useUrlSearchParams();
+  const { setUserId } = useContext(TransactionsContext);
 
   useEffect(() => {
     setUserId(userId);
   }, [userId]);
 
   const { groupExpenses, isGroupExpensesLoading } = useGroupExpenses(
-    date?.from || startOfMonth(new Date()),
-    date?.to || endOfMonth(new Date()),
+    new Date(searchParams.get('from') || startOfMonth(new Date())),
+    new Date(searchParams.get('to') || endOfMonth(new Date())),
     id,
   );
   const { groupIncomes, isGroupIncomesLoading } = useGroupIncomes(
-    date?.from || startOfMonth(new Date()),
-    date?.to || endOfMonth(new Date()),
+    new Date(searchParams.get('from') || startOfMonth(new Date())),
+    new Date(searchParams.get('to') || endOfMonth(new Date())),
     id,
   );
 

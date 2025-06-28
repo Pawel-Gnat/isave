@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 
 import { DateRange } from 'react-day-picker';
 import { TransactionCategory } from '@/types/types';
+import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
 
 interface ActionsPanelProps {
   id?: string;
@@ -17,15 +19,25 @@ interface ActionsPanelProps {
 }
 
 export const ActionsPanel = ({ id, category }: ActionsPanelProps) => {
-  const { date, dispatch } = useContext(TransactionsContext);
+  const { dispatch } = useContext(TransactionsContext);
+  const [searchParams, updateParams] = useUrlSearchParams();
 
   const handleSetDate = (date: DateRange | undefined) => {
-    dispatch({ type: 'SET_DATE', payload: { date } });
+    updateParams((params) => {
+      params.set('from', format(date?.from || startOfMonth(new Date()), 'yyyy-MM-dd'));
+      params.set('to', format(date?.to || endOfMonth(new Date()), 'yyyy-MM-dd'));
+    });
   };
 
   return (
     <div className="mb-4 flex flex-col items-center justify-between gap-4 sm:items-end md:flex-row">
-      <DatePicker date={date} setDate={handleSetDate} />
+      <DatePicker
+        date={{
+          from: new Date(searchParams.get('from') || startOfMonth(new Date())),
+          to: new Date(searchParams.get('to') || endOfMonth(new Date())),
+        }}
+        setDate={handleSetDate}
+      />
       <div className="space-x-2 sm:space-x-4">
         <Button
           variant="outline"
