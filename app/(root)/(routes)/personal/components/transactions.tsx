@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
@@ -9,8 +7,13 @@ import { TransactionTable } from '@/components/table/transaction-table';
 import { columns } from './table-columns';
 import usePersonalBudget from '@/hooks/usePersonalBudget';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
+import { TransactionType } from '@/types/types';
 
-export const Transactions = () => {
+interface TransactionsProps {
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
+}
+
+export const Transactions = ({ onEditTransaction }: TransactionsProps) => {
   const [searchParams] = useUrlSearchParams();
 
   const { personalBudget, isPersonalBudgetLoading } = usePersonalBudget(
@@ -27,7 +30,7 @@ export const Transactions = () => {
       {personalBudget &&
       (personalBudget.expenses.length > 0 || personalBudget.incomes.length > 0) ? (
         <TransactionTable
-          columns={columns}
+          columns={columns(onEditTransaction)}
           data={[...personalBudget.expenses, ...personalBudget.incomes]}
         />
       ) : (

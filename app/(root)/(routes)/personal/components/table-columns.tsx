@@ -1,5 +1,3 @@
-'use client';
-
 import { useContext } from 'react';
 import Image from 'next/image';
 import { ColumnDef } from '@tanstack/react-table';
@@ -7,7 +5,6 @@ import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
 import { AlertContext } from '@/contexts/alert-context';
-import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -19,25 +16,16 @@ import { TransactionType } from '@/types/types';
 interface ButtonProps {
   id: string;
   transactionType: TransactionType;
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
 }
 
-const EditButton = ({ id, transactionType }: ButtonProps) => {
-  const { dispatch } = useContext(TransactionsContext);
-
+const EditButton = ({ id, transactionType, onEditTransaction }: ButtonProps) => {
   return (
     <Button
       variant="outline"
       className="mr-2 px-2 sm:px-4"
       onClick={() => {
-        dispatch({
-          type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
-          payload: {
-            transactionCategory: 'personal',
-            transactionId: id,
-            transactionType: transactionType,
-            groupBudgetId: '',
-          },
-        });
+        onEditTransaction(id, transactionType);
       }}
     >
       <Eye />
@@ -45,7 +33,10 @@ const EditButton = ({ id, transactionType }: ButtonProps) => {
   );
 };
 
-const DeleteButton = ({ id, transactionType }: ButtonProps) => {
+const DeleteButton = ({
+  id,
+  transactionType,
+}: Omit<ButtonProps, 'onEditTransaction'>) => {
   const { dispatch } = useContext(AlertContext);
 
   return (
@@ -69,7 +60,9 @@ const DeleteButton = ({ id, transactionType }: ButtonProps) => {
   );
 };
 
-export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
+export const columns = (
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void,
+): ColumnDef<PersonalIncomes | PersonalExpenses>[] => [
   {
     accessorKey: 'type',
     header: ({ column }) => {
@@ -151,7 +144,11 @@ export const columns: ColumnDef<PersonalIncomes | PersonalExpenses>[] = [
 
       return (
         <div className="text-right text-nowrap">
-          <EditButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
+          <EditButton
+            id={id}
+            transactionType={value > 0 ? 'income' : 'expense'}
+            onEditTransaction={onEditTransaction}
+          />
           <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
         </div>
       );

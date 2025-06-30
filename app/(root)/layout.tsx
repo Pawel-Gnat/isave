@@ -21,10 +21,10 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <div className="flex w-full flex-1 flex-col overflow-y-auto sm:h-screen">
             <Header />
             <main className="flex flex-1 flex-col p-4 sm:p-6 lg:px-12">{children}</main>
-            <EditTransaction />
+            {/* <EditTransaction />
             <AddExpense />
             <AddIncome />
-            <DeleteTransaction />
+            <DeleteTransaction /> */}
           </div>
         </AlertProvider>
       </TransactionsProvider>

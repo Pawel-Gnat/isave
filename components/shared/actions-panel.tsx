@@ -1,25 +1,20 @@
-'use client';
-
-import { useContext } from 'react';
-
-import { TransactionsContext } from '@/contexts/transactions-context';
-
 import { DatePicker } from '@/components/shared/date-picker';
 
 import { Button } from '@/components/ui/button';
 
 import { DateRange } from 'react-day-picker';
-import { TransactionCategory } from '@/types/types';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
 
 interface ActionsPanelProps {
-  id?: string;
-  category: TransactionCategory;
+  setIsIncomeModalOpen: (isModalOpen: boolean) => void;
+  setIsExpenseModalOpen: (isModalOpen: boolean) => void;
 }
 
-export const ActionsPanel = ({ id, category }: ActionsPanelProps) => {
-  const { dispatch } = useContext(TransactionsContext);
+export const ActionsPanel = ({
+  setIsIncomeModalOpen,
+  setIsExpenseModalOpen,
+}: ActionsPanelProps) => {
   const [searchParams, updateParams] = useUrlSearchParams();
 
   const handleSetDate = (date: DateRange | undefined) => {
@@ -39,26 +34,10 @@ export const ActionsPanel = ({ id, category }: ActionsPanelProps) => {
         setDate={handleSetDate}
       />
       <div className="space-x-2 sm:space-x-4">
-        <Button
-          variant="outline"
-          onClick={() => {
-            dispatch({
-              type: 'SET_SHOW_INCOME_MODAL',
-              payload: { groupBudgetId: id || '', transactionCategory: category },
-            });
-          }}
-        >
+        <Button variant="outline" onClick={() => setIsIncomeModalOpen(true)}>
           Dodaj przychód
         </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            dispatch({
-              type: 'SET_SHOW_EXPENSE_MODAL',
-              payload: { groupBudgetId: id || '', transactionCategory: category },
-            });
-          }}
-        >
+        <Button variant="outline" onClick={() => setIsExpenseModalOpen(true)}>
           Dodaj wydatek
         </Button>
       </div>
