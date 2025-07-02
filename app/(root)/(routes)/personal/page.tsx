@@ -8,17 +8,23 @@ import { useState } from 'react';
 import { IncomeModal } from './components/income-modal';
 import { ExpenseModal } from './components/expense-modal';
 import { TransactionType } from '@/types/types';
+import { DeleteTransaction } from './components/delete-transaction';
 
 const PersonalPage = () => {
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
-  const [editTransactionId, setEditTransactionId] = useState<string>('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [transactionId, setTransactionId] = useState<string>('');
+  const [transactionType, setTransactionType] = useState<TransactionType>(null);
+
+  console.log(transactionType);
+  console.log(transactionId);
 
   const handleEditTransaction = (
     transactionId: string,
     transactionType: TransactionType,
   ) => {
-    setEditTransactionId(transactionId);
+    setTransactionId(transactionId);
 
     if (transactionType === 'income') {
       setIsIncomeModalOpen(true);
@@ -29,12 +35,27 @@ const PersonalPage = () => {
 
   const handleCloseIncomeModal = () => {
     setIsIncomeModalOpen(false);
-    setEditTransactionId('');
+    setTransactionId('');
   };
 
   const handleCloseExpenseModal = () => {
     setIsExpenseModalOpen(false);
-    setEditTransactionId('');
+    setTransactionId('');
+  };
+
+  const handleDeleteTransaction = (
+    transactionId: string,
+    transactionType: TransactionType,
+  ) => {
+    setIsDeleteModalOpen(true);
+    setTransactionId(transactionId);
+    setTransactionType(transactionType);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setTransactionId('');
+    setTransactionType(null);
   };
 
   return (
@@ -44,16 +65,25 @@ const PersonalPage = () => {
         setIsIncomeModalOpen={setIsIncomeModalOpen}
         setIsExpenseModalOpen={setIsExpenseModalOpen}
       />
-      <Transactions onEditTransaction={handleEditTransaction} />
+      <Transactions
+        onEditTransaction={handleEditTransaction}
+        onDeleteTransaction={handleDeleteTransaction}
+      />
       <IncomeModal
         isModalOpen={isIncomeModalOpen}
         closeModal={handleCloseIncomeModal}
-        editTransactionId={editTransactionId}
+        transactionId={transactionId}
       />
       <ExpenseModal
         isModalOpen={isExpenseModalOpen}
         closeModal={handleCloseExpenseModal}
-        editTransactionId={editTransactionId}
+        transactionId={transactionId}
+      />
+      <DeleteTransaction
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        transactionId={transactionId}
+        transactionType={transactionType}
       />
     </>
   );

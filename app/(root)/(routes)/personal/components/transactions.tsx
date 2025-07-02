@@ -11,9 +11,13 @@ import { TransactionType } from '@/types/types';
 
 interface TransactionsProps {
   onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void;
 }
 
-export const Transactions = ({ onEditTransaction }: TransactionsProps) => {
+export const Transactions = ({
+  onEditTransaction,
+  onDeleteTransaction,
+}: TransactionsProps) => {
   const [searchParams] = useUrlSearchParams();
 
   const { personalBudget, isPersonalBudgetLoading } = usePersonalBudget(
@@ -30,7 +34,7 @@ export const Transactions = ({ onEditTransaction }: TransactionsProps) => {
       {personalBudget &&
       (personalBudget.expenses.length > 0 || personalBudget.incomes.length > 0) ? (
         <TransactionTable
-          columns={columns(onEditTransaction)}
+          columns={columns(onEditTransaction, onDeleteTransaction)}
           data={[...personalBudget.expenses, ...personalBudget.incomes]}
         />
       ) : (

@@ -1,10 +1,7 @@
-import { useContext } from 'react';
 import Image from 'next/image';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-
-import { AlertContext } from '@/contexts/alert-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -17,9 +14,14 @@ interface ButtonProps {
   id: string;
   transactionType: TransactionType;
   onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void;
 }
 
-const EditButton = ({ id, transactionType, onEditTransaction }: ButtonProps) => {
+const EditButton = ({
+  id,
+  transactionType,
+  onEditTransaction,
+}: Omit<ButtonProps, 'onDeleteTransaction'>) => {
   return (
     <Button
       variant="outline"
@@ -36,23 +38,14 @@ const EditButton = ({ id, transactionType, onEditTransaction }: ButtonProps) => 
 const DeleteButton = ({
   id,
   transactionType,
+  onDeleteTransaction,
 }: Omit<ButtonProps, 'onEditTransaction'>) => {
-  const { dispatch } = useContext(AlertContext);
-
   return (
     <Button
       variant="destructive"
       className="px-2 sm:px-4"
       onClick={() => {
-        dispatch({
-          type: 'SET_SHOW_ALERT',
-          payload: {
-            transactionCategory: 'personal',
-            transactionType: transactionType,
-            transactionId: id,
-            groupBudgetId: '',
-          },
-        });
+        onDeleteTransaction(id, transactionType);
       }}
     >
       <Trash2 />
@@ -62,6 +55,7 @@ const DeleteButton = ({
 
 export const columns = (
   onEditTransaction: (transactionId: string, transactionType: TransactionType) => void,
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void,
 ): ColumnDef<PersonalIncomes | PersonalExpenses>[] => [
   {
     accessorKey: 'type',
@@ -149,7 +143,11 @@ export const columns = (
             transactionType={value > 0 ? 'income' : 'expense'}
             onEditTransaction={onEditTransaction}
           />
-          <DeleteButton id={id} transactionType={value > 0 ? 'income' : 'expense'} />
+          <DeleteButton
+            id={id}
+            transactionType={value > 0 ? 'income' : 'expense'}
+            onDeleteTransaction={onDeleteTransaction}
+          />
         </div>
       );
     },

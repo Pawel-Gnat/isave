@@ -96,7 +96,9 @@ export const FileInput = ({ onSelect }: FileInputProps) => {
         htmlFor="file"
         className="text-md absolute inset-0 z-10 rounded-md border-2 border-dashed lg:text-lg"
       >
-        <p className="relative top-[80%] text-center">{handleLabelText()}</p>
+        <p className="absolute top-4/6 left-1/2 -translate-x-1/2 text-center">
+          {handleLabelText()}
+        </p>
         <Input
           id="file"
           type="file"

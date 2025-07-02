@@ -6,7 +6,10 @@ import { useForm } from 'react-hook-form';
 
 import { captureException } from '@sentry/nextjs';
 
-import { handleExpenseApiPostRoute } from '@/utils/dialogUtils';
+import {
+  handleApiEditTransactionRoute,
+  handleExpenseApiPostRoute,
+} from '@/utils/dialogUtils';
 import { TransactionSchema } from '@/utils/formValidations';
 import { logError } from '@/utils/errorUtils';
 
@@ -32,7 +35,7 @@ enum STEPS {
 interface ExpenseModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-  editTransactionId: string;
+  transactionId: string;
 }
 
 const DEFAULT_VALUES = {
@@ -44,11 +47,12 @@ const DEFAULT_VALUES = {
 export const ExpenseModal = ({
   isModalOpen,
   closeModal,
-  editTransactionId,
+  transactionId,
 }: ExpenseModalProps) => {
   const queryClient = useQueryClient();
   const [step, setStep] = useState<STEPS>(STEPS.FILE);
   const controllerRef = useRef<AbortController | null>(null);
+  const isEditMode = Boolean(transactionId);
 
   const {
     register,
@@ -68,8 +72,12 @@ export const ExpenseModal = ({
 
   useEffect(() => {
     (async () => {
-      if (!editTransactionId) return;
-      const transaction = await getPersonalExpenseById(editTransactionId);
+      if (!transactionId) {
+        reset(DEFAULT_VALUES);
+        setStep(STEPS.FILE);
+        return;
+      }
+      const transaction = await getPersonalExpenseById(transactionId);
 
       if (transaction) {
         reset({
@@ -79,7 +87,7 @@ export const ExpenseModal = ({
         setStep(STEPS.TABLE);
       }
     })();
-  }, [editTransactionId]);
+  }, [transactionId]);
 
   const hideModal = () => {
     if (controllerRef.current) {
@@ -94,7 +102,7 @@ export const ExpenseModal = ({
   const goBack = () => {
     if (isSubmitting) return;
 
-    if (step === STEPS.FILE) {
+    if (step === STEPS.FILE || isEditMode) {
       return hideModal();
     }
 
@@ -106,7 +114,7 @@ export const ExpenseModal = ({
     controllerRef.current = newController;
 
     try {
-      if (step === STEPS.FILE && fileText) {
+      if (step === STEPS.FILE && fileText && !isEditMode) {
         const response = await axios.post(
           `/api/ai`,
           { fileText },
@@ -119,11 +127,21 @@ export const ExpenseModal = ({
       }
 
       if (step === STEPS.TABLE) {
-        const response = await axios.post(
-          handleExpenseApiPostRoute('personal'),
-          { date: data.date, transactions: data.transactions },
-          { signal: newController.signal },
-        );
+        let response;
+
+        if (isEditMode) {
+          response = await axios.patch(
+            handleApiEditTransactionRoute('personal', 'expense', transactionId, ''),
+            { date: data.date, transactions: data.transactions },
+            { signal: newController.signal },
+          );
+        } else {
+          response = await axios.post(
+            handleExpenseApiPostRoute('personal'),
+            { date: data.date, transactions: data.transactions },
+            { signal: newController.signal },
+          );
+        }
 
         toast.success(`${response.data}`);
         queryClient.invalidateQueries({ queryKey: ['personalBudget'] });
@@ -157,6 +175,10 @@ export const ExpenseModal = ({
   };
 
   const handleTitle = () => {
+    if (isEditMode) {
+      return 'Edycja wydatku';
+    }
+
     if (step === STEPS.FILE) {
       return 'Utwórz nowy wydatek';
     }
@@ -165,6 +187,10 @@ export const ExpenseModal = ({
   };
 
   const handleDescription = () => {
+    if (isEditMode) {
+      return 'Skoryguj wybrane pozycje i zapisz zmiany';
+    }
+
     if (step === STEPS.FILE) {
       return 'Dodaj zdjęcie swojego rachunku lub przejdź dalej';
     }
@@ -175,6 +201,10 @@ export const ExpenseModal = ({
   const handleActionButtonState = () => step === STEPS.FILE && !fileText;
 
   const actionButtonLabel = () => {
+    if (isEditMode) {
+      return 'Zapisz zmiany';
+    }
+
     if (step === STEPS.FILE) {
       return 'Utwórz automatycznie';
     }
@@ -183,6 +213,10 @@ export const ExpenseModal = ({
   };
 
   const secondaryActionButtonLabel = () => {
+    if (isEditMode) {
+      return '';
+    }
+
     if (step === STEPS.FILE) {
       return 'Utwórz ręcznie';
     }
@@ -191,7 +225,7 @@ export const ExpenseModal = ({
   };
 
   const previousActionButtonLabel = () => {
-    if (step === STEPS.FILE) {
+    if (step === STEPS.FILE || isEditMode) {
       return 'Anuluj';
     }
 
@@ -199,7 +233,7 @@ export const ExpenseModal = ({
   };
 
   const content = () => {
-    if (step === STEPS.FILE) {
+    if (step === STEPS.FILE && !isEditMode) {
       return <FileInput onSelect={(fileText) => setValue('fileText', fileText)} />;
     }
 

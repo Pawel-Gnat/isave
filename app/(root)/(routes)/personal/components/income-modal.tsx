@@ -7,7 +7,10 @@ import { useForm } from 'react-hook-form';
 import { captureException } from '@sentry/nextjs';
 
 import { TransactionSchema } from '@/utils/formValidations';
-import { handleIncomeApiPostRoute } from '@/utils/dialogUtils';
+import {
+  handleApiEditTransactionRoute,
+  handleIncomeApiPostRoute,
+} from '@/utils/dialogUtils';
 import { logError } from '@/utils/errorUtils';
 
 import { Button } from '@/components/ui/button';
@@ -26,7 +29,7 @@ import getPersonalIncomeById from '@/actions/getPersonalIncomeById';
 interface IncomeModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-  editTransactionId: string;
+  transactionId: string;
 }
 
 const DEFAULT_VALUES = {
@@ -37,10 +40,11 @@ const DEFAULT_VALUES = {
 export const IncomeModal = ({
   isModalOpen,
   closeModal,
-  editTransactionId,
+  transactionId,
 }: IncomeModalProps) => {
-  const controllerRef = useRef<AbortController | null>(null);
   const queryClient = useQueryClient();
+  const controllerRef = useRef<AbortController | null>(null);
+  const isEditMode = Boolean(transactionId);
 
   const {
     register,
@@ -59,8 +63,11 @@ export const IncomeModal = ({
 
   useEffect(() => {
     (async () => {
-      if (!editTransactionId) return;
-      const transaction = await getPersonalIncomeById(editTransactionId);
+      if (!transactionId) {
+        reset(DEFAULT_VALUES);
+        return;
+      }
+      const transaction = await getPersonalIncomeById(transactionId);
 
       if (transaction) {
         reset({
@@ -69,12 +76,13 @@ export const IncomeModal = ({
         });
       }
     })();
-  }, [editTransactionId]);
+  }, [transactionId]);
 
   const hideModal = () => {
     if (controllerRef.current) {
       controllerRef.current.abort();
     }
+
     closeModal();
     reset(DEFAULT_VALUES);
   };
@@ -86,9 +94,19 @@ export const IncomeModal = ({
     controllerRef.current = newController;
 
     try {
-      const response = await axios.post(handleIncomeApiPostRoute('personal'), data, {
-        signal: newController.signal,
-      });
+      let response;
+
+      if (isEditMode) {
+        response = await axios.patch(
+          handleApiEditTransactionRoute('personal', 'income', transactionId, ''),
+          data,
+          { signal: newController.signal },
+        );
+      } else {
+        response = await axios.post(handleIncomeApiPostRoute('personal'), data, {
+          signal: newController.signal,
+        });
+      }
 
       toast.success(`${response.data}`);
       queryClient.invalidateQueries({ queryKey: ['personalBudget'] });
@@ -110,6 +128,27 @@ export const IncomeModal = ({
         toast.error('Nieznany błąd');
       }
     }
+  };
+
+  const handleTitle = () => {
+    if (isEditMode) {
+      return 'Edycja przychodu';
+    }
+    return 'Utwórz nowy przychód';
+  };
+
+  const handleDescription = () => {
+    if (isEditMode) {
+      return 'Skoryguj wybrane pozycje i zapisz zmiany';
+    }
+    return 'Dodaj pozycje i zapisz dane';
+  };
+
+  const actionButtonLabel = () => {
+    if (isEditMode) {
+      return 'Zapisz zmiany';
+    }
+    return 'Zapisz';
   };
 
   const content = () => {
@@ -138,7 +177,7 @@ export const IncomeModal = ({
         <LoadingButton
           isLoading={isSubmitting}
           onClick={handleSubmit(submitIncome)}
-          text="Zapisz"
+          text={actionButtonLabel()}
         />
       </>
     );
@@ -148,8 +187,8 @@ export const IncomeModal = ({
     <TransactionModal
       open={isModalOpen}
       onOpenChange={hideModal}
-      title="Utwórz nowy przychód"
-      description="Dodaj pozycje i zapisz dane"
+      title={handleTitle()}
+      description={handleDescription()}
       content={content()}
       footer={footer()}
     />
