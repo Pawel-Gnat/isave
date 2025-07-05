@@ -1,20 +1,13 @@
-'use client';
-
-import { useContext } from 'react';
-
-import { AlertContext } from '@/contexts/alert-context';
-
 import { Button } from '@/components/ui/button';
 
-export const BudgetsPanel = () => {
-  const { dispatch } = useContext(AlertContext);
+interface BudgetsPanelProps {
+  setIsNewBudgetModalOpen: (isOpen: boolean) => void;
+}
 
+export const BudgetsPanel = ({ setIsNewBudgetModalOpen }: BudgetsPanelProps) => {
   return (
     <div className="mb-4 flex justify-center sm:ml-auto">
-      <Button
-        variant="outline"
-        onClick={() => dispatch({ type: 'SET_SHOW_CREATE_BUDGET' })}
-      >
+      <Button variant="outline" onClick={() => setIsNewBudgetModalOpen(true)}>
         Stwórz grupowy budżet
       </Button>
     </div>

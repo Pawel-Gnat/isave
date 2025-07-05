@@ -14,6 +14,7 @@ interface DeleteTransactionProps {
   onClose: () => void;
   transactionId: string;
   transactionType: TransactionType;
+  groupBudgetId: string;
 }
 
 export const DeleteTransaction = ({
@@ -21,18 +22,23 @@ export const DeleteTransaction = ({
   onClose,
   transactionId,
   transactionType,
+  groupBudgetId,
 }: DeleteTransactionProps) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = () => {
     if (isLoading) return;
+    setIsLoading(true);
 
     axios
-      .delete(handleApiDeleteRoute('personal', transactionType, transactionId, ''))
+      .delete(
+        handleApiDeleteRoute('group', transactionType, transactionId, groupBudgetId),
+      )
       .then((response) => {
         toast.success(`${response.data}`);
-        queryClient.invalidateQueries({ queryKey: ['personalBudget'] });
+        queryClient.invalidateQueries({ queryKey: ['groupExpenses'] });
+        queryClient.invalidateQueries({ queryKey: ['groupIncomes'] });
         onClose();
       })
       .catch((error) => {

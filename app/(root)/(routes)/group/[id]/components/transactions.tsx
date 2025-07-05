@@ -1,32 +1,30 @@
-'use client';
-
-import { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import useGroupExpenses from '@/hooks/useGroupExpenses';
 import useGroupIncomes from '@/hooks/useGroupIncomes';
 
-import { TransactionsContext } from '@/contexts/transactions-context';
-
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionTable } from '@/components/table/transaction-table';
 
 import { columns } from './table-columns';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
+import { TransactionType } from '@/types/types';
 
 interface TransactionsProps {
   id: string;
   userId: string;
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void;
 }
 
-export const Transactions = ({ id, userId }: TransactionsProps) => {
+export const Transactions = ({
+  id,
+  userId,
+  onEditTransaction,
+  onDeleteTransaction,
+}: TransactionsProps) => {
   const [searchParams] = useUrlSearchParams();
-  const { setUserId } = useContext(TransactionsContext);
-
-  useEffect(() => {
-    setUserId(userId);
-  }, [userId]);
 
   const { groupExpenses, isGroupExpensesLoading } = useGroupExpenses(
     new Date(searchParams.get('from') || startOfMonth(new Date())),
@@ -48,7 +46,10 @@ export const Transactions = ({ id, userId }: TransactionsProps) => {
       {groupExpenses &&
       groupIncomes &&
       (groupExpenses.length > 0 || groupIncomes.length > 0) ? (
-        <TransactionTable columns={columns} data={[...groupExpenses, ...groupIncomes]} />
+        <TransactionTable
+          columns={columns(onEditTransaction, onDeleteTransaction, userId)}
+          data={[...groupExpenses, ...groupIncomes]}
+        />
       ) : (
         <div className="m-auto text-center">
           <Image

@@ -3,12 +3,8 @@ import { redirect } from 'next/navigation';
 import getCurrentUser from '@/actions/getCurrentUser';
 import getGroupBudgetById from '@/actions/getGroupBudgetById';
 
-import { ActionsPanel } from '@/components/shared/actions-panel';
-import { Heading } from '@/components/shared/heading';
-
-import { Transactions } from './components/transactions';
-
 import { GroupBudget } from '@prisma/client';
+import ClientSharedBudgetPage from './components/client-page';
 
 interface SharedBudgetPageProps {
   id: string;
@@ -28,11 +24,11 @@ const SharedBudgetPage = async ({ params }: { params: SharedBudgetPageProps }) =
   }
 
   return (
-    <>
-      <Heading text={currentBudget.name} />
-      <ActionsPanel id={params.id} category="group" />
-      <Transactions id={params.id} userId={user.id} />
-    </>
+    <ClientSharedBudgetPage
+      id={params.id}
+      userId={user.id}
+      currentBudget={currentBudget}
+    />
   );
 };
 

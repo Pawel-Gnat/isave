@@ -1,24 +1,16 @@
-import { MemberDialog } from '@/components/dialog/members-dialog';
-import { NewBudget } from '@/components/dialog/new-budget';
-
-import { Heading } from '@/components/shared/heading';
-
-import { SharedBudgets } from './components/shared-budgets';
-import { BudgetsPanel } from './components/budgets-panel';
 import { auth } from '@/lib/auth';
+
+import ClientGroupPage from './components/client-page';
+import { redirect } from 'next/navigation';
 
 const GroupPage = async () => {
   const session = await auth();
 
-  return (
-    <>
-      <Heading text="Transakcje grupowe" />
-      <BudgetsPanel />
-      <SharedBudgets userId={session?.user?.id} />
-      <NewBudget />
-      <MemberDialog />
-    </>
-  );
+  if (!session?.user?.id) {
+    redirect('/auth');
+  }
+
+  return <ClientGroupPage userId={session.user.id} />;
 };
 
 export default GroupPage;

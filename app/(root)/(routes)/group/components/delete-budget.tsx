@@ -7,33 +7,27 @@ import { handleApiDeleteRoute } from '@/utils/dialogUtils';
 import { Dialog } from '@/components/dialog/dialog';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { TransactionType } from '@/types/types';
+import { DeleteBudgetInitialState } from './client-page';
 
-interface DeleteTransactionProps {
-  isOpen: boolean;
-  onClose: () => void;
-  transactionId: string;
-  transactionType: TransactionType;
+interface DeleteBudgetProps {
+  isOpen: DeleteBudgetInitialState;
+  setIsOpen: (isOpen: DeleteBudgetInitialState) => void;
 }
 
-export const DeleteTransaction = ({
-  isOpen,
-  onClose,
-  transactionId,
-  transactionType,
-}: DeleteTransactionProps) => {
+export const DeleteBudget = ({ isOpen, setIsOpen }: DeleteBudgetProps) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = () => {
     if (isLoading) return;
+    setIsLoading(true);
 
     axios
-      .delete(handleApiDeleteRoute('personal', transactionType, transactionId, ''))
+      .delete(handleApiDeleteRoute('group', null, '', isOpen.groupBudgetId))
       .then((response) => {
         toast.success(`${response.data}`);
-        queryClient.invalidateQueries({ queryKey: ['personalBudget'] });
-        onClose();
+        queryClient.invalidateQueries({ queryKey: ['groupBudgets'] });
+        setIsOpen({ isDeleteBudgetOpen: false, groupBudgetId: '' });
       })
       .catch((error) => {
         toast.error(`${error.response.data.error}`);
@@ -45,11 +39,11 @@ export const DeleteTransaction = ({
 
   return (
     <Dialog
-      open={isOpen}
-      onOpenChange={onClose}
+      open={isOpen.isDeleteBudgetOpen}
+      onOpenChange={() => setIsOpen({ isDeleteBudgetOpen: false, groupBudgetId: '' })}
       isLoading={isLoading}
       title="Potwierdzenie operacji"
-      description="Czy na pewno chcesz usunąć tę pozycję? Ta operacja jest nieodwracalna i spowoduje trwałe usunięcie danych."
+      description="Czy na pewno chcesz usunąć ten budżet? Ta operacja jest nieodwracalna i spowoduje trwałe usunięcie danych."
       handleDialog={handleDelete}
       actionText="Usuń"
     />

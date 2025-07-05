@@ -3,14 +3,26 @@
 import { ActionsPanel } from '@/components/shared/actions-panel';
 import { Heading } from '@/components/shared/heading';
 
-import { Transactions } from './components/transactions';
-import { useState } from 'react';
-import { IncomeModal } from './components/income-modal';
-import { ExpenseModal } from './components/expense-modal';
-import { TransactionType } from '@/types/types';
-import { DeleteTransaction } from './components/delete-transaction';
+import { Transactions } from './transactions';
 
-const PersonalPage = () => {
+import { GroupBudget } from '@prisma/client';
+import { TransactionType } from '@/types/types';
+import { useState } from 'react';
+import { IncomeModal } from './income-modal';
+import { ExpenseModal } from './expense-modal';
+import { DeleteTransaction } from './delete-transaction';
+
+interface ClientSharedBudgetPageProps {
+  id: string;
+  userId: string;
+  currentBudget: GroupBudget;
+}
+
+const ClientSharedBudgetPage = ({
+  id,
+  userId,
+  currentBudget,
+}: ClientSharedBudgetPageProps) => {
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -57,12 +69,14 @@ const PersonalPage = () => {
 
   return (
     <>
-      <Heading text="Transakcje osobiste" />
+      <Heading text={currentBudget.name} />
       <ActionsPanel
-        setIsIncomeModalOpen={setIsIncomeModalOpen}
-        setIsExpenseModalOpen={setIsExpenseModalOpen}
+        setIsIncomeModalOpen={() => setIsIncomeModalOpen(true)}
+        setIsExpenseModalOpen={() => setIsExpenseModalOpen(true)}
       />
       <Transactions
+        id={id}
+        userId={userId}
         onEditTransaction={handleEditTransaction}
         onDeleteTransaction={handleDeleteTransaction}
       />
@@ -70,20 +84,23 @@ const PersonalPage = () => {
         isModalOpen={isIncomeModalOpen}
         closeModal={handleCloseIncomeModal}
         transactionId={transactionId}
+        groupBudgetId={currentBudget.id}
       />
       <ExpenseModal
         isModalOpen={isExpenseModalOpen}
         closeModal={handleCloseExpenseModal}
         transactionId={transactionId}
+        groupBudgetId={currentBudget.id}
       />
       <DeleteTransaction
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         transactionId={transactionId}
         transactionType={transactionType}
+        groupBudgetId={currentBudget.id}
       />
     </>
   );
 };
 
-export default PersonalPage;
+export default ClientSharedBudgetPage;

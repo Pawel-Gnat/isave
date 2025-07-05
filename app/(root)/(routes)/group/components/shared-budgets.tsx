@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 import useGroupBudgets from '@/hooks/useGroupBudgets';
@@ -7,8 +5,19 @@ import useGroupBudgets from '@/hooks/useGroupBudgets';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { Budget } from './budget';
+import { DeleteBudgetInitialState, MembersInitialState } from './client-page';
 
-export const SharedBudgets = ({ userId }: { userId: string | undefined }) => {
+interface SharedBudgetsProps {
+  userId: string;
+  setIsMembersDialogOpen: (isOpen: MembersInitialState) => void;
+  setIsDeleteBudgetOpen: (isOpen: DeleteBudgetInitialState) => void;
+}
+
+export const SharedBudgets = ({
+  userId,
+  setIsMembersDialogOpen,
+  setIsDeleteBudgetOpen,
+}: SharedBudgetsProps) => {
   const { groupBudgets, isGroupBudgetsLoading } = useGroupBudgets();
 
   if (isGroupBudgetsLoading || !userId) {
@@ -32,6 +41,8 @@ export const SharedBudgets = ({ userId }: { userId: string | undefined }) => {
             ownerId={budget.ownerId}
             members={budget.members}
             userId={userId}
+            setIsMembersDialogOpen={setIsMembersDialogOpen}
+            setIsDeleteBudgetOpen={setIsDeleteBudgetOpen}
           />
         ))
       ) : (

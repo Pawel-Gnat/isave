@@ -1,13 +1,7 @@
-'use client';
-
-import { useContext } from 'react';
 import Image from 'next/image';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-
-import { AlertContext } from '@/contexts/alert-context';
-import { TransactionsContext } from '@/contexts/transactions-context';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,32 +13,27 @@ import { TransactionType } from '@/types/types';
 
 interface ButtonProps {
   id: string;
-  groupBudgetId: string;
-
   transactionType: TransactionType;
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void;
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void;
 }
 
 interface DeleteButtonProps extends ButtonProps {
   transactionOwnerId: string;
+  userId: string;
 }
 
-const EditButton = ({ id, groupBudgetId, transactionType }: ButtonProps) => {
-  const { dispatch } = useContext(TransactionsContext);
-
+const EditButton = ({
+  id,
+  transactionType,
+  onEditTransaction,
+}: Omit<ButtonProps, 'onDeleteTransaction'>) => {
   return (
     <Button
       variant="outline"
       className="mr-2"
       onClick={() => {
-        dispatch({
-          type: 'SET_SHOW_EDIT_TRANSACTION_MODAL',
-          payload: {
-            transactionCategory: 'group',
-            transactionType: transactionType,
-            transactionId: id,
-            groupBudgetId: groupBudgetId,
-          },
-        });
+        onEditTransaction(id, transactionType);
       }}
     >
       <Eye />
@@ -54,27 +43,17 @@ const EditButton = ({ id, groupBudgetId, transactionType }: ButtonProps) => {
 
 const DeleteButton = ({
   id,
-  groupBudgetId,
+  userId,
   transactionOwnerId,
+  onDeleteTransaction,
   transactionType,
-}: DeleteButtonProps) => {
-  const { dispatch } = useContext(AlertContext);
-  const { userId } = useContext(TransactionsContext);
-
+}: Omit<DeleteButtonProps, 'onEditTransaction'>) => {
   return (
     <Button
       variant="destructive"
       disabled={userId !== transactionOwnerId}
       onClick={() => {
-        dispatch({
-          type: 'SET_SHOW_ALERT',
-          payload: {
-            transactionCategory: 'group',
-            transactionType: transactionType,
-            transactionId: id,
-            groupBudgetId: groupBudgetId,
-          },
-        });
+        onDeleteTransaction(id, transactionType);
       }}
     >
       <Trash2 />
@@ -82,7 +61,11 @@ const DeleteButton = ({
   );
 };
 
-export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
+export const columns = (
+  onEditTransaction: (transactionId: string, transactionType: TransactionType) => void,
+  onDeleteTransaction: (transactionId: string, transactionType: TransactionType) => void,
+  userId: string,
+): ColumnDef<GroupIncomes | GroupExpenses>[] => [
   {
     accessorKey: 'type',
     header: ({ column }) => {
@@ -171,7 +154,6 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
     header: () => <div className="text-right">Szczegóły</div>,
     cell: ({ row }) => {
       const id = row.original.id;
-      const groupBudgetId = row.original.groupBudgetId;
       const transactionOwnerId = row.original.userId;
       const value = parseFloat(row.getValue('value'));
 
@@ -179,14 +161,15 @@ export const columns: ColumnDef<GroupIncomes | GroupExpenses>[] = [
         <div className="text-right text-nowrap">
           <EditButton
             id={id}
-            groupBudgetId={groupBudgetId}
             transactionType={value > 0 ? 'income' : 'expense'}
+            onEditTransaction={onEditTransaction}
           />
           <DeleteButton
             id={id}
             transactionOwnerId={transactionOwnerId || ''}
-            groupBudgetId={groupBudgetId}
             transactionType={value > 0 ? 'income' : 'expense'}
+            onDeleteTransaction={onDeleteTransaction}
+            userId={userId}
           />
         </div>
       );

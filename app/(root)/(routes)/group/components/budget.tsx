@@ -1,10 +1,5 @@
-'use client';
-
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { useContext } from 'react';
-
-import { AlertContext } from '@/contexts/alert-context';
 
 import { Button } from '@/components/ui/button';
 
@@ -13,6 +8,7 @@ import { BudgetBadge } from './budget-badge';
 import { SquareArrowOutUpRight, Trash2, UserMinus, UserPlus } from 'lucide-react';
 
 import { GroupBudgetMember } from '@prisma/client';
+import { DeleteBudgetInitialState, MembersInitialState } from './client-page';
 
 interface BudgetProps {
   title: string;
@@ -21,11 +17,20 @@ interface BudgetProps {
   ownerId: string;
   members: GroupBudgetMember[];
   userId: string;
+  setIsMembersDialogOpen: (isOpen: MembersInitialState) => void;
+  setIsDeleteBudgetOpen: (isOpen: DeleteBudgetInitialState) => void;
 }
 
-export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProps) => {
-  const { dispatch } = useContext(AlertContext);
-
+export const Budget = ({
+  title,
+  id,
+  href,
+  ownerId,
+  members,
+  userId,
+  setIsMembersDialogOpen,
+  setIsDeleteBudgetOpen,
+}: BudgetProps) => {
   const handleSaveInvideIdToClipboard = (id: string) => {
     navigator.clipboard.writeText(id);
     toast.success('Skopiowano ID do schowka');
@@ -44,14 +49,9 @@ export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProp
           variant="destructive"
           className="mr-2"
           onClick={() => {
-            dispatch({
-              type: 'SET_SHOW_ALERT',
-              payload: {
-                transactionCategory: 'group',
-                groupBudgetId: id,
-                transactionType: null,
-                transactionId: '',
-              },
+            setIsDeleteBudgetOpen({
+              isDeleteBudgetOpen: true,
+              groupBudgetId: id,
             });
           }}
         >
@@ -81,12 +81,10 @@ export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProp
             variant="outline"
             className="mr-2"
             onClick={() => {
-              dispatch({
-                type: 'SET_SHOW_MEMBERSHIP_ALERT',
-                payload: {
-                  groupBudgetId: id,
-                  memberAction: 'remove',
-                },
+              setIsMembersDialogOpen({
+                isMembersDialogOpen: true,
+                action: 'remove',
+                groupBudgetId: id,
               });
             }}
           >
@@ -97,12 +95,10 @@ export const Budget = ({ title, id, href, ownerId, members, userId }: BudgetProp
             variant="outline"
             className="mr-2"
             onClick={() => {
-              dispatch({
-                type: 'SET_SHOW_MEMBERSHIP_ALERT',
-                payload: {
-                  groupBudgetId: id,
-                  memberAction: 'add',
-                },
+              setIsMembersDialogOpen({
+                isMembersDialogOpen: true,
+                action: 'add',
+                groupBudgetId: id,
               });
             }}
           >
